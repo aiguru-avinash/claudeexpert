@@ -1,0 +1,334 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9d — Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9d — Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</h1>
+<blockquote>
+<p>Original practice questions; not official or leaked. Objectives quoted from Exam Guide v1.0 §6 D4.</p>
+</blockquote>
+<hr />
+<h3>Q75 · D4 · Objective: Define evaluation metrics (accuracy, latency, cost, safety, security) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A sponsor says the assistant must be "99% accurate."
+<strong>Question:</strong> What is the best architect response?
+A. Agree and promise 99% overall.
+B. Clarify what "accurate" means per task and segment, how it will be measured and on which golden set, and what an error costs; then record thresholds as acceptance criteria.
+C. Refuse to give any target.
+D. Use the vendor's benchmark score as the target.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Vague targets need operational definitions and failure-cost context before they become acceptance criteria.
+<strong>Why not the others:</strong> A over-commits blindly; C is unhelpful; D isn't specific to your use case.
+<strong>Architectural principle:</strong> Specific, measurable, relevant criteria.
+<strong>Ref:</strong> https://platform.claude.com/docs/en/test-and-evaluate/define-success</p>
+<hr />
+<h3>Q76 · D4 · Objective: Define evaluation metrics (accuracy, latency, cost, safety, security) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A candidate release scores 92% on task accuracy (threshold 90%) but yields three critical policy violations in the 500-case adversarial set (threshold: zero).
+<strong>Question:</strong> What is the right decision?
+A. Ship; accuracy passes.
+B. Ship with a note to monitor.
+C. Average the metrics and ship if the mean exceeds 90.
+D. Block the release: safety is a hard gate; fix and re-run.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Safety criteria are pass/fail gates, not tradeable against accuracy.
+<strong>Why not the others:</strong> A–C treat a gate as optional.
+<strong>Architectural principle:</strong> Multidimensional criteria with non-negotiable safety gates.
+<strong>Ref:</strong> Prep Lesson 2–3</p>
+<hr />
+<h3>Q77 · D4 · Objective: Define evaluation metrics (accuracy, latency, cost, safety, security) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The dashboard shows mean cost per request of $0.004, within budget, but finance sees occasional $0.50 requests.
+<strong>Question:</strong> What should the metrics include?
+A. Percentiles and distribution of cost and tokens (e.g., p95/p99, max), with alerts and caps on outliers.
+B. Only the mean.
+C. Only the minimum.
+D. Only monthly totals.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Tails drive budget and reliability problems that means hide.
+<strong>Why not the others:</strong> B–D hide outliers.
+<strong>Architectural principle:</strong> Measure distributions, not just averages.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q78 · D4 · Objective: Define evaluation metrics (accuracy, latency, cost, safety, security) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A legal-summary tool scores well on text-overlap metrics but lawyers say it misses obligations.
+<strong>Question:</strong> What is the best change?
+A. Add more overlap metrics.
+B. Increase summary length.
+C. Add a metric aligned to user value — e.g., obligation recall against human-labeled obligations — and use it as a gate.
+D. Ignore lawyers' feedback.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Metrics must reflect the outcome users care about.
+<strong>Why not the others:</strong> A and B don't measure what matters; D ignores the signal.
+<strong>Architectural principle:</strong> Choose metrics that map to real-world success.
+<strong>Ref:</strong> Define success criteria docs</p>
+<hr />
+<h3>Q79 · D4 · Objective: Define evaluation metrics (accuracy, latency, cost, safety, security) · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which belong in the acceptance criteria for a customer-facing agent?
+A. Task accuracy measured per customer segment on a golden set.
+B. The model's public leaderboard rank.
+C. The count of critical safety violations on an adversarial test set.
+D. The length of the system prompt.
+E. The number of tools configured.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Segment-level quality and safety gate results are outcome-oriented, measurable criteria.
+<strong>Why not the others:</strong> B, D, and E are not outcomes for your use case.
+<strong>Architectural principle:</strong> Evaluate outcomes in your context.
+<strong>Ref:</strong> Define success criteria docs</p>
+<hr />
+<h3>Q80 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> The eval set consists of 100 clean, typical questions. In production, users send typos, off-topic requests, and adversarial prompts.
+<strong>Question:</strong> What should you add?
+A. More typical questions of the same kind.
+B. Only synthetic data.
+C. Nothing; the set is representative enough.
+D. Edge cases: ambiguous, malformed, irrelevant, multilingual, and adversarial inputs, plus past incidents.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Evals must cover the failure modes seen or expected in production.
+<strong>Why not the others:</strong> A, B, and C leave gaps.
+<strong>Architectural principle:</strong> Evals include edge and adversarial cases.
+<strong>Ref:</strong> https://platform.claude.com/docs/en/test-and-evaluate/develop-tests</p>
+<hr />
+<h3>Q81 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The team iterates on prompts while reporting results on the same 150-case set, and scores keep rising, but production quality doesn't improve.
+<strong>Question:</strong> What is the likely problem and fix?
+A. The set is too small to matter.
+B. Overfitting to the tuning set; keep a held-out set that prompt authors don't tune against and refresh it from production.
+C. The model is degrading.
+D. The graders are too strict.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Repeated tuning against a visible set inflates scores.
+<strong>Why not the others:</strong> A, C, and D don't explain the divergence.
+<strong>Architectural principle:</strong> Held-out evaluation sets.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q82 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Overall accuracy is 94%, but accuracy for questions about policies updated this quarter is 61%.
+<strong>Question:</strong> What approach exposed this and should be standard?
+A. Stratified evaluation by segment (e.g., document age, intent, language) with per-segment thresholds.
+B. Averaging across all cases.
+C. Reporting only the best-performing segment.
+D. Using a larger sample of easy cases.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Averages hide weak segments.
+<strong>Why not the others:</strong> B–D conceal the issue.
+<strong>Architectural principle:</strong> Stratify and gate by segment.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q83 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> You need to scale the evaluation of open-ended response helpfulness and tone across thousands of outputs.
+<strong>Question:</strong> Which method is best?
+A. Exact string match.
+B. Count of words.
+C. An LLM judge with a clear rubric, calibrated against a human-labeled sample, with periodic human spot checks.
+D. No evaluation.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Rubric-based LLM grading scales subjective criteria when calibrated.
+<strong>Why not the others:</strong> A and B don't measure quality; D is unacceptable.
+<strong>Architectural principle:</strong> Mixed methods: code, LLM, human.
+<strong>Ref:</strong> Develop test cases docs</p>
+<hr />
+<h3>Q84 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An LLM judge consistently prefers longer answers, even when human reviewers prefer concise ones.
+<strong>Question:</strong> What is the best mitigation?
+A. Trust the judge.
+B. Revise the rubric to penalize unnecessary length, randomize presentation order in pairwise comparisons, and recalibrate against human labels, tracking agreement.
+C. Make all answers longer.
+D. Remove human review.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Judges have biases (e.g., verbosity); rubric design and calibration reduce them.
+<strong>Why not the others:</strong> A, C, and D amplify the bias.
+<strong>Architectural principle:</strong> Calibrate automated graders.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q85 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A pipeline extracts invoice totals and dates into JSON, and reference values are known.
+<strong>Question:</strong> What is the best grading method?
+A. Human review of every output.
+B. An LLM judge reading each output.
+C. A user satisfaction survey.
+D. Code-based checks: schema validity and exact value matches (with normalization).
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Objective, structured outputs should be graded deterministically — fast, cheap, reproducible.
+<strong>Why not the others:</strong> A and B are slower and costlier; C is indirect.
+<strong>Architectural principle:</strong> Use the cheapest reliable grader that fits.
+<strong>Ref:</strong> Develop test cases docs</p>
+<hr />
+<h3>Q86 · D4 · Objective: Design evaluation datasets and test frameworks using mixed methodologies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A RAG agent with tools gets low end-to-end scores, and the team can't tell where the failures originate.
+<strong>Question:</strong> Which testing structure helps most?
+A. Component-level evals (retrieval recall, tool selection and arguments, generation faithfulness) plus end-to-end task success.
+B. Only end-to-end scoring.
+C. Only manual review of ten examples.
+D. Only latency monitoring.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Component evals localize failures.
+<strong>Why not the others:</strong> B–D can't localize.
+<strong>Architectural principle:</strong> Evaluate components and the whole.
+<strong>Ref:</strong> Exam Guide D4</p>
+<hr />
+<h3>Q87 · D4 · Objective: Conduct A/B testing and iterative improvements · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A new prompt wins on offline evals. Leadership wants to know if it improves resolution rates for real customers.
+<strong>Question:</strong> What is the best next step?
+A. Ship to everyone and compare to last quarter.
+B. Declare victory based on offline results.
+C. Canary or A/B test on a share of live traffic against the baseline with guardrail metrics and predefined success and rollback criteria.
+D. Ask the sales team.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Online testing measures business outcomes; guardrails protect users.
+<strong>Why not the others:</strong> A confounds; B skips online validation; D isn't evidence.
+<strong>Architectural principle:</strong> Offline gate, then online experiment.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q88 · D4 · Objective: Conduct A/B testing and iterative improvements · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A cheaper model matches accuracy but fails two indirect-prompt-injection cases that the incumbent handles.
+<strong>Question:</strong> What should the release process do?
+A. Block promotion, add mitigations or adjust the design, and re-run the gate.
+B. Promote because costs drop 40%.
+C. Remove the injection tests.
+D. Promote to production but hide the failures from the report.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Safety/security gates must pass even when cost improves.
+<strong>Why not the others:</strong> B–D bypass or hide the gate.
+<strong>Architectural principle:</strong> Evals gate model changes.
+<strong>Ref:</strong> Prep Lesson 2–3</p>
+<hr />
+<h3>Q89 · D4 · Objective: Conduct A/B testing and iterative improvements · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A prompt tweak raises average quality by 2 points but drops one customer segment by 6 points.
+<strong>Question:</strong> What is the best decision rule?
+A. Ship; the average improved.
+B. Ship and fix later.
+C. Ignore the segment.
+D. Apply per-segment thresholds in the gate, investigate the regression, and ship only when no segment breaches tolerance.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Segment regressions can be harmful or unfair even when averages improve.
+<strong>Why not the others:</strong> A–C hide harm.
+<strong>Architectural principle:</strong> Gate on segments.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q90 · D4 · Objective: Conduct A/B testing and iterative improvements · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Three days into a planned two-week A/B test, the new variant looks better and a manager wants to stop and ship.
+<strong>Question:</strong> What is the sound practice?
+A. Pre-register the sample size or duration and decision criteria, and avoid stopping early on interim peeks unless using a valid sequential method or a safety breach.
+B. Stop immediately; early wins are real.
+C. Extend indefinitely.
+D. Pick the metric that looks best.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Peeking inflates false positives; predefine analysis plans.
+<strong>Why not the others:</strong> B invites false conclusions; C and D are unprincipled.
+<strong>Architectural principle:</strong> Experimental discipline.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q91 · D4 · Objective: Conduct A/B testing and iterative improvements · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An analyst edited the live prompt in a vendor console; quality dropped and no one can tell what changed.
+<strong>Question:</strong> What control prevents this?
+A. Ask analysts to be careful.
+B. Disable all monitoring.
+C. Manage prompts as versioned artifacts in source control with PR review, eval gates, and deployment by version, with console edits restricted.
+D. Keep a private copy of the prompt.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Change control enables audit, rollback, and gates.
+<strong>Why not the others:</strong> A, B, and D don't control change.
+<strong>Architectural principle:</strong> Evals as release gate with version control.
+<strong>Ref:</strong> Prep Lesson 2; D7</p>
+<hr />
+<h3>Q92 · D4 · Objective: Diagnose system issues (prompt failure, hallucinations, model mismatch) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> The assistant ignores a length limit that appears at the end of a 3,000-word prompt which also contains conflicting formatting instructions.
+<strong>Question:</strong> What is the likely failure type and fix?
+A. Model mismatch; buy a bigger model.
+B. Prompt failure; resolve contradictions, simplify and reorder the prompt, and test against the eval set.
+C. Retrieval failure; re-index.
+D. Network failure; retry.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Contradictory, overlong prompts cause instruction-following issues.
+<strong>Why not the others:</strong> The symptoms point to the prompt, not other layers.
+<strong>Architectural principle:</strong> Localize before changing.
+<strong>Ref:</strong> Prompt engineering overview</p>
+<hr />
+<h3>Q93 · D4 · Objective: Diagnose system issues (prompt failure, hallucinations, model mismatch) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> When retrieval returns nothing relevant, the assistant invents a plausible policy.
+<strong>Question:</strong> Which mitigation set is best?
+A. Increase temperature.
+B. Remove the retrieval step.
+C. Shorten the answer.
+D. Instruct the model to answer only from provided sources and say "I don't know" otherwise, require citations, validate that citations exist in retrieved text, and route no-evidence cases to a fallback.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Grounding, abstention, and verification reduce fabrication.
+<strong>Why not the others:</strong> A increases randomness; B removes grounding; C doesn't address fabrication.
+<strong>Architectural principle:</strong> Ground, abstain, verify.
+<strong>Ref:</strong> Reduce hallucinations docs</p>
+<hr />
+<h3>Q94 · D4 · Objective: Diagnose system issues (prompt failure, hallucinations, model mismatch) · Difficulty: Expert</h3>
+<p><strong>Scenario:</strong> Quality shifted overnight, with no code changes. Your service references a floating model alias.
+<strong>Question:</strong> What is the best long-term fix?
+A. Pin explicit model versions, and promote new versions only after passing evals with a canary and rollback.
+B. Ask the provider to freeze models.
+C. Stop using the API.
+D. Add more examples to every prompt.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Floating references can change behavior without your deployment; pinning plus gates restores control.
+<strong>Why not the others:</strong> B is not in your control; C is disproportionate; D doesn't prevent drift.
+<strong>Architectural principle:</strong> Control change: pin and gate.
+<strong>Ref:</strong> Model deprecations and versioning docs</p>
+<hr />
+<h3>Q95 · D4 · Objective: Diagnose system issues (prompt failure, hallucinations, model mismatch) · Difficulty: Advanced</h3>
+<p><strong>Question (Select TWO):</strong> Confident wrong answers began after a nightly index refresh. Which are the best first diagnostic steps?
+A. Check index freshness, document counts, and sample the retrieved chunks for known queries.
+B. Raise generation temperature.
+C. Compare retrieval results for a fixed set of test queries before and after the refresh.
+D. Rewrite the system prompt.
+E. Replace the generation model.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> The refresh is the change; test retrieval directly.
+<strong>Why not the others:</strong> B, D, and E alter unrelated layers.
+<strong>Architectural principle:</strong> Start where the change occurred.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q96 · D4 · Objective: Optimize token usage, latency, and cost-performance trade-offs · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Cost per request doubled after a prompt edit. Tokens per request rose and cache read tokens fell to near zero.
+<strong>Question:</strong> What is the most probable cause?
+A. Users asked longer questions.
+B. The provider raised prices.
+C. The edit changed prompt ordering or inserted volatile content early, breaking the cached prefix.
+D. The eval set grew.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> The dropped cache reads point to a broken prefix.
+<strong>Why not the others:</strong> The symptoms specifically implicate caching.
+<strong>Architectural principle:</strong> Monitor cache hit rate and tokens per request.
+<strong>Ref:</strong> Prompt caching docs</p>
+<hr />
+<h3>Q97 · D4 · Objective: Optimize token usage, latency, and cost-performance trade-offs · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A workflow calls three independent tools sequentially, adding latency.
+<strong>Question:</strong> What is the best optimization?
+A. Add a longer prompt.
+B. Run the independent tool calls in parallel, then continue.
+C. Use a smaller context window.
+D. Remove tools at random.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Parallelizing independent calls reduces wall-clock time.
+<strong>Why not the others:</strong> A, C, and D don't address sequential latency.
+<strong>Architectural principle:</strong> Parallelize independent work.
+<strong>Ref:</strong> Reduce latency docs</p>
+<hr />
+<h3>Q98 · D4 · Objective: Monitor system performance using logging and observability tools · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Running an LLM judge over every production output is too expensive.
+<strong>Question:</strong> Which approach keeps quality visibility at manageable cost?
+A. Stop quality monitoring.
+B. Judge only outputs from the most expensive customers.
+C. Judge only on weekends.
+D. Sample live traffic (oversampling flagged or low-confidence cases), use a smaller judge or batch processing where appropriate, cache the stable rubric, and track trends and alerts.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Sampling and cost-aware grading preserves signal.
+<strong>Why not the others:</strong> A–C create blind spots.
+<strong>Architectural principle:</strong> Cost-aware quality monitoring.
+<strong>Ref:</strong> Batch processing docs; Prep Lesson 2</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

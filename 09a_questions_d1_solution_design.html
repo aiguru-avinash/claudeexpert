@@ -1,0 +1,361 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9a — Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9a — Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</h1>
+<blockquote>
+<p><strong>Original practice questions.</strong> Not official, not leaked, not from the live item bank. Official objectives are quoted from Exam Guide v1.0 §6.
+<strong>Format note:</strong> The real exam mixes single-answer and multiple-response items, and each item states how many to select. Single-answer items here have 4 choices (A–D). Multiple-response items here have 5 choices (A–E) and say how many to select; the 5-choice format is my choice for practice, since the guide doesn't specify option counts.</p>
+</blockquote>
+<hr />
+<h3>Q1 · D1 · Objective: Translate business problems into Claude-based AI solutions · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A retailer's COO asks for "AI to cut returns fraud." The team has years of labeled structured transaction data, needs a decision in under 50 ms at checkout, and also has free-text return notes that analysts rarely read.
+<strong>Question:</strong> What is the best first move?
+A. Build an autonomous Claude agent that reviews every return and blocks suspicious ones.
+B. Assess task fit: use conventional scoring/rules for the structured, latency-critical decision, and evaluate Claude only for the unstructured return-note signal.
+C. Send each customer's full transaction history to the largest model on every return.
+D. Delay the project until models offer lower latency than 50 ms.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> The core decision is structured, labeled, and latency-bound — a classic fit for conventional ML/rules. Claude adds value on unstructured text where variability is high.
+<strong>Why not the others:</strong> A hands an irreversible, latency-critical decision to an autonomous LLM with no case for it. C is slow and costly and sends excess data. D assumes Claude must own the entire flow.
+<strong>Architectural principle:</strong> Use LLMs where input variability is high; keep deterministic or classic-ML paths where they fit better.
+<strong>Ref:</strong> Prep course Lesson 1; https://www.anthropic.com/research/building-effective-agents</p>
+<hr />
+<h3>Q2 · D1 · Objective: Align solutions to business value pillars (efficiency, transformation, productivity, cost, performance SLAs) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A hospital network has no overnight patient-intake service today. It wants Claude to offer 24/7 intake in six languages.
+<strong>Question:</strong> Which framing and metric best match the value being created?
+A. Cost: dollars saved per intake call.
+B. Productivity: nurse hours saved per week.
+C. Transformation: a capability that did not exist — measure coverage (hours/languages served), completion rate, and escalation quality.
+D. Performance SLA: average response time of the chat widget.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> The primary value is a new capability, so the success metrics should reflect coverage and outcomes of that new service rather than savings against a baseline that doesn't exist.
+<strong>Why not the others:</strong> A and B assume a baseline process being made cheaper or faster. D is a supporting NFR, not the value case.
+<strong>Architectural principle:</strong> Pick the value pillar that matches the sponsor's real objective, then choose metrics to match.
+<strong>Ref:</strong> Exam Guide §6 D1; Prep Lesson 4</p>
+<hr />
+<h3>Q3 · D1 · Objective: Translate business problems into Claude-based AI solutions · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Legal operations asks to "automate contract review." Attorneys must remain accountable; there is a clause playbook for NDAs only; a labeled sample of 200 NDAs exists.
+<strong>Question:</strong> Which scope is the most defensible first release?
+A. Flag and extract playbook-defined clause deviations in NDAs with attorney review, measured on recall against the labeled set.
+B. Negotiate and redline all contract types autonomously.
+C. Summarize every contract in the repository into one paragraph.
+D. Replace attorney review for contracts under a value threshold.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> It's a thin slice with data, a playbook, a measurable target, and human accountability.
+<strong>Why not the others:</strong> B and D remove accountability and exceed the available playbook/data. C is measurable on nothing and creates no decision value.
+<strong>Architectural principle:</strong> Scope to the thinnest slice with ground truth, measurable success, and human oversight.
+<strong>Ref:</strong> Prep Lesson 1; https://platform.claude.com/docs/en/test-and-evaluate/define-success</p>
+<hr />
+<h3>Q4 · D1 · Objective: Translate business problems into Claude-based AI solutions · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A sponsor wants contract-risk analysis of 100-page documents to be "instant, perfectly accurate, and cheap."
+<strong>Question:</strong> What should the architect do?
+A. Use the most capable model for every request and promise the sponsor all three goals.
+B. Quietly prioritize accuracy and let latency slip.
+C. Shorten documents until all three goals look attainable.
+D. Surface the conflict as explicit trade-offs and propose tiers — e.g., fast low-cost triage, plus deeper asynchronous analysis with review — quantified with measured numbers.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Conflicting NFRs must be made visible and resolved by the stakeholder, with options that map to levers (model tier, caching, async).
+<strong>Why not the others:</strong> A over-promises. B makes a hidden decision for the business. C silently changes scope.
+<strong>Architectural principle:</strong> Expose competing non-functional requirements and let the business choose among priced options.
+<strong>Ref:</strong> Prep Lesson 4; Exam Guide §6 D6</p>
+<hr />
+<h3>Q5 · D1 · Objective: Translate business problems into Claude-based AI solutions · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A team built a demo and asks which model to standardize on. There are no acceptance criteria and no test set.
+<strong>Question:</strong> What should happen before choosing a model?
+A. Choose the newest top-tier model to be safe.
+B. Define measurable acceptance criteria and build a representative eval set, then compare models against them.
+C. Ask users which model name they prefer.
+D. Pick the cheapest model and adjust prompts until the demo looks good.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Model selection is an empirical decision against criteria; without criteria there's no basis for a defensible choice.
+<strong>Why not the others:</strong> A and D substitute assumptions for evidence. C is irrelevant to measurable quality.
+<strong>Architectural principle:</strong> Evals as acceptance criteria precede model and architecture decisions.
+<strong>Ref:</strong> https://platform.claude.com/docs/en/test-and-evaluate/develop-tests</p>
+<hr />
+<h3>Q6 · D1 · Objective: Translate business problems into Claude-based AI solutions · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A tax-software vendor must produce identical results for identical inputs; calculations follow fixed published formulas; customers upload messy PDFs of source documents.
+<strong>Question:</strong> Which design is most appropriate?
+A. Have Claude compute the tax figures directly from the PDFs.
+B. Have Claude compute figures twice and accept them when both runs agree.
+C. Use Claude to extract inputs from documents with validation, and compute tax in deterministic code; optionally use Claude to explain results.
+D. Fine-tune a model on past returns so it learns the formulas.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Extraction from variable inputs suits an LLM; fixed formulas and reproducibility call for deterministic code.
+<strong>Why not the others:</strong> A and B put arithmetic and rules in a probabilistic component; agreement isn't correctness. D is an unnecessary path that still isn't deterministic.
+<strong>Architectural principle:</strong> Keep deterministic logic deterministic; use LLMs for language-heavy, variable tasks.
+<strong>Ref:</strong> Building effective agents; Prep Lesson 1</p>
+<hr />
+<h3>Q7 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A nightly process extracts eight fields from invoices that arrive in three known layouts. Nobody waits on the result.
+<strong>Question:</strong> Which pattern is best?
+A. Route by layout to a layout-specific extraction prompt, run as a non-interactive batch with schema validation.
+B. A fully autonomous agent that decides how to process each invoice.
+C. A single prompt handling all layouts, run synchronously per invoice with the largest model.
+D. A multi-agent debate among several extraction agents per invoice.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Known categories + no latency pressure = routing/workflow with batch for cost efficiency.
+<strong>Why not the others:</strong> B and D add cost and variance without need; C ignores layout-specific tuning and the cost advantage of batch.
+<strong>Architectural principle:</strong> Use the simplest pattern that meets the requirements; match processing mode to the SLA.
+<strong>Ref:</strong> Building effective agents; https://platform.claude.com/docs/build-with-claude/batch-processing</p>
+<hr />
+<h3>Q8 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An SRE team wants help diagnosing production anomalies. Investigation paths are unpredictable; every hypothesis can be checked by read-only queries to logs and metrics.
+<strong>Question:</strong> Which design is justified?
+A. A fixed five-step prompt chain that always checks the same dashboards.
+B. A single prompt with the last hour of logs pasted in.
+C. A router sending each alert to one of three canned runbooks.
+D. An agent with read-only diagnostic tools, step/token/time budgets, verifiable progress checks, and human escalation.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> The path can't be predefined but progress is verifiable, which is where agents fit — with budgets and read-only tools to bound risk.
+<strong>Why not the others:</strong> A and C assume known paths. B can't gather evidence on demand.
+<strong>Architectural principle:</strong> Use agents when flexibility is needed and progress is verifiable; bound them with budgets and least privilege.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q9 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A marketing team needs product descriptions that must satisfy a written brand rubric (tone, banned claims, length). Reviewers currently send drafts back several times.
+<strong>Question:</strong> Which workflow pattern fits best?
+A. Routing by product category.
+B. Evaluator-optimizer: generate, grade against the rubric, revise, with an iteration cap.
+C. Parallelization to produce ten drafts and pick randomly.
+D. An open-ended agent with web access.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Clear evaluation criteria and iterative refinement are the evaluator-optimizer sweet spot.
+<strong>Why not the others:</strong> A doesn't address quality iteration. C lacks a quality criterion for selection. D adds autonomy and risk with no benefit.
+<strong>Architectural principle:</strong> Use iterative refinement when criteria are explicit and revision demonstrably helps.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q10 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Support tickets fall into five categories; each needs different instructions, tools, and policy snippets. A single mega-prompt has become unwieldy and error-prone.
+<strong>Question:</strong> What is the best restructuring?
+A. Add more rules to the mega-prompt.
+B. Give the model all tools in every case.
+C. Add a routing step that classifies the ticket and dispatches to a specialized prompt/toolset per category.
+D. Convert to a multi-agent swarm that negotiates category membership.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Routing separates concerns, allows per-category prompts and least-privilege tools, and is easy to evaluate.
+<strong>Why not the others:</strong> A worsens prompt complexity. B widens capability bloat. D adds coordination overhead.
+<strong>Architectural principle:</strong> Separate concerns with routing when inputs fall into distinct categories.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q11 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A reviewer must check a document for four independent risks (privacy, export control, IP, safety claims). Latency matters, and high-stakes misses are costly.
+<strong>Question:</strong> Which design is most appropriate?
+A. Parallel independent checks (one focused prompt per risk), with an aggregation step.
+B. One long sequential chain where each step re-reads previous outputs.
+C. An agent that decides which risks to look at.
+D. Skip decomposition and ask one prompt to "find all risks."
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Independent subtasks can run in parallel, with focused prompts improving reliability and reducing wall-clock time.
+<strong>Why not the others:</strong> B adds needless latency and coupling. C introduces autonomy where the risk list is known. D reduces focus and recall.
+<strong>Architectural principle:</strong> Parallelize independent subtasks; keep prompts focused.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q12 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A research agent's costs vary wildly; some runs loop for 90 tool calls repeating similar searches.
+<strong>Question:</strong> Which change best addresses the problem?
+A. Increase <code>max_tokens</code>.
+B. Switch to the largest model so it "reasons better."
+C. Remove tool descriptions to save tokens.
+D. Add step, token, and time budgets with explicit stopping conditions and progress checks; consider a workflow if paths are actually predictable.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Agent loops need bounded autonomy and clear termination criteria. If paths are predictable, a workflow is simpler.
+<strong>Why not the others:</strong> A allows more spend. B may not stop looping and costs more. C breaks tool usage.
+<strong>Architectural principle:</strong> Bound agent autonomy with budgets and stopping conditions.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q13 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which are valid reasons to prefer a predefined workflow over an agent?
+A. The steps are well understood in advance and rarely vary.
+B. The team wants the model to choose its own tools freely.
+C. Predictable cost, latency, and easier testing matter more than flexibility.
+D. The problem is open-ended and the number of steps is unknown.
+E. The team wants to avoid writing any orchestration code.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Workflows shine for well-defined tasks needing predictability and testability.
+<strong>Why not the others:</strong> B and D describe agent-suited conditions. E is false — workflows are orchestrated in code.
+<strong>Architectural principle:</strong> Choose workflows for predictability; agents for open-ended flexibility.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q14 · D1 · Objective: Design multi-agent systems and orchestration strategies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A single research agent's context fills with raw search results and answer quality degrades after many steps.
+<strong>Question:</strong> Which redesign most directly addresses this?
+A. Increase temperature to diversify results.
+B. Delegate searching to worker agents with their own contexts that return concise, structured findings with sources to an orchestrator.
+C. Remove citations to save tokens.
+D. Ask the agent to "remember everything" via the system prompt.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Context isolation keeps the orchestrator focused while workers handle noisy exploration.
+<strong>Why not the others:</strong> A doesn't address context size. C hurts verifiability. D can't expand capacity.
+<strong>Architectural principle:</strong> Use subagents for context isolation and structured handoffs.
+<strong>Ref:</strong> Building effective agents; Prep Lesson 1</p>
+<hr />
+<h3>Q15 · D1 · Objective: Design multi-agent systems and orchestration strategies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> In a multi-agent design, all worker agents share one administrator credential for CRM access. Security objects.
+<strong>Question:</strong> What is the best response?
+A. Add a note in each worker's prompt to avoid destructive actions.
+B. Rotate the shared credential weekly.
+C. Give each worker its own identity and only the tools/scopes its task needs, enforced outside the model.
+D. Replace workers with a single agent using the same credential.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Each worker is a trust boundary; least-privilege identities limit blast radius.
+<strong>Why not the others:</strong> A relies on prompting; B leaves over-broad access; D concentrates risk.
+<strong>Architectural principle:</strong> Isolation boundaries are security boundaries — least privilege per worker.
+<strong>Ref:</strong> Exam Guide D3/D5; MCP authorization spec</p>
+<hr />
+<h3>Q16 · D1 · Objective: Design multi-agent systems and orchestration strategies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A coding assistant must implement a feature that touches an unknown number of files; the needed subtasks only become clear after reading the codebase.
+<strong>Question:</strong> Which pattern fits best?
+A. Orchestrator-workers: the orchestrator discovers subtasks dynamically and delegates to workers.
+B. A fixed three-step prompt chain.
+C. Static routing to one of three templates.
+D. A single prompt with the entire repository pasted in.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Subtasks can't be predefined; orchestrator-workers handles dynamic decomposition.
+<strong>Why not the others:</strong> B and C assume known steps; D ignores size and focus limits.
+<strong>Architectural principle:</strong> Dynamic decomposition → orchestrator-workers.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q17 · D1 · Objective: Design multi-agent systems and orchestration strategies · Difficulty: Expert</h3>
+<p><strong>Scenario:</strong> Three parallel worker agents update a shared project plan and sometimes produce conflicting edits, leaving the plan inconsistent.
+<strong>Question:</strong> Which fix is most robust?
+A. Instruct workers to "be careful about conflicts."
+B. Run them sequentially without any other change.
+C. Let the last writer win.
+D. Make workers return typed proposals with explicit ownership of sections; a single reconcile/commit step applies changes and resolves conflicts.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Clear ownership, structured handoffs, and a single writer remove race conditions while keeping parallelism for the work itself.
+<strong>Why not the others:</strong> A is not enforcement; B loses parallel benefits and doesn't define ownership; C silently drops information.
+<strong>Architectural principle:</strong> Parallelize work, serialize commits through a single authority.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q18 · D1 · Objective: Apply decomposition techniques for complex problem solving · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Generating a 40-page RFP response in one call yields uneven quality and inconsistent terminology.
+<strong>Question:</strong> Which decomposition is best?
+A. Generate the whole document in one call with a longer prompt.
+B. Generate sections with shared style/terminology context and requirement mappings, then run an assembly and consistency pass with validation.
+C. Generate each section with unrelated prompts and no shared context.
+D. Reduce the RFP to a one-page summary.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Section-level focus plus shared constraints and a consistency pass improves quality and coherence.
+<strong>Why not the others:</strong> A doesn't fix the issue; C causes inconsistency; D changes the deliverable.
+<strong>Architectural principle:</strong> Decompose along natural seams but retain shared context and a reconciliation step.
+<strong>Ref:</strong> Prep Lesson 1</p>
+<hr />
+<h3>Q19 · D1 · Objective: Apply decomposition techniques for complex problem solving · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A pipeline was split into 12 tiny prompt steps. Latency tripled; steps don't use different tools or need validation between them; accuracy didn't improve.
+<strong>Question:</strong> What is the best change?
+A. Add more steps.
+B. Move every step to the largest model.
+C. Merge steps that share tools and context and have no intermediate validation need; keep splits where validation, tools, or specialization differ.
+D. Remove validation entirely.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Over-decomposition adds latency and cost without benefit; split only where it improves reliability.
+<strong>Why not the others:</strong> A worsens latency; B raises cost; D reduces reliability.
+<strong>Architectural principle:</strong> Decompose to improve reliability or control, not for its own sake.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q20 · D1 · Objective: Apply decomposition techniques for complex problem solving · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A single prompt that extracts facts from medical-device complaints and then assesses regulatory reportability makes subtle errors in both parts.
+<strong>Question:</strong> Which redesign is best?
+A. Separate extraction (schema-bound, validated) from reportability reasoning applied to the validated facts, with different evals for each stage.
+B. Ask for chain-of-thought and trust the output.
+C. Merge both outputs into free text for readability.
+D. Use few-shot examples only.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Two-stage decomposition lets you validate intermediate facts and evaluate each stage independently.
+<strong>Why not the others:</strong> B doesn't add validation; C removes structure; D doesn't separate failure modes.
+<strong>Architectural principle:</strong> Decompose to create validation points and component-level evals.
+<strong>Ref:</strong> Prep Lesson 1; D4 evals</p>
+<hr />
+<h3>Q21 · D1 · Objective: Design end-to-end architectures (input → processing → output → feedback loops) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An assistant has been live for three months. Users can thumbs-down answers, but nothing links ratings to traces, and the eval set hasn't changed since launch.
+<strong>Question:</strong> What is the architectural gap?
+A. The output stage.
+B. The input stage.
+C. The model tier.
+D. The feedback loop: feedback isn't tied to traces or fed into evals and improvements.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> A feedback loop must connect user signals to traces, label failures, and grow the eval set.
+<strong>Why not the others:</strong> The issues described don't involve inputs, outputs, or model selection.
+<strong>Architectural principle:</strong> Close the loop: feedback → traces → evals → gated improvements.
+<strong>Ref:</strong> Exam Guide §6 D1/D4</p>
+<hr />
+<h3>Q22 · D1 · Objective: Design end-to-end architectures (input → processing → output → feedback loops) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A PoC works for five internal users with a hard-coded key, no retries, and no logging. A rollout to 5,000 users is planned.
+<strong>Question:</strong> Which set of additions best represents moving to production?
+A. A bigger model and a longer prompt.
+B. User-scoped authorization, retry/timeout/fallback handling, observability, and eval gates on production-like data with rollback.
+C. A new UI theme and onboarding video.
+D. A second PoC with different data.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Production readiness is about the system around the model: identity, reliability, observability, and release control.
+<strong>Why not the others:</strong> A doesn't address production gaps; C is cosmetic; D repeats the PoC.
+<strong>Architectural principle:</strong> PoC proves possibility; production adds identity, reliability, observability, evaluation, and ownership.
+<strong>Ref:</strong> Prep Lessons 1–2</p>
+<hr />
+<h3>Q23 · D1 · Objective: Design end-to-end architectures (input → processing → output → feedback loops) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An ADR says "Use a small model for triage," but gives no way to know when to change.
+<strong>Question:</strong> Which addition most improves the ADR?
+A. A longer description of the model's training.
+B. A list of team members.
+C. Measurable reversal triggers (e.g., switch if triage accuracy &lt; threshold on the regression set or if escalation volume exceeds a limit).
+D. A statement that the decision is final.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Defensible decisions state what evidence would change them.
+<strong>Why not the others:</strong> A, B, and D don't provide revisit criteria.
+<strong>Architectural principle:</strong> Every decision records alternatives and reversal triggers.
+<strong>Ref:</strong> Prep Lesson 1</p>
+<hr />
+<h3>Q24 · D1 · Objective: Design end-to-end architectures (input → processing → output → feedback loops) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Engineering favors an agent; operations favors a workflow; both argue strongly in a design review.
+<strong>Question:</strong> What is the best way to resolve this?
+A. Document both options against agreed criteria (accuracy, latency, cost, risk, operability) with evidence from the eval set, then record the decision with alternatives and reversal triggers.
+B. Pick the option from the more senior person.
+C. Choose the more advanced technology.
+D. Defer the decision indefinitely.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Evidence against agreed criteria makes the decision defensible and auditable.
+<strong>Why not the others:</strong> B, C, and D don't use evidence or criteria.
+<strong>Architectural principle:</strong> Decide with criteria, evidence, and recorded alternatives.
+<strong>Ref:</strong> Prep Lesson 1; ADR practice</p>
+<hr />
+<h3>Q25 · D1 · Objective: Align solutions to business value pillars (efficiency, transformation, productivity, cost, performance SLAs) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A contact center wants after-call summaries to cut agent after-call work. A baseline of 4.2 minutes exists.
+<strong>Question:</strong> Which success measurement is best?
+A. Number of summaries generated per day.
+B. Token count per summary.
+C. Agent satisfaction survey only.
+D. Change in after-call work time versus baseline, paired with a summary-quality gate on a reviewed sample.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Tie the metric to the business outcome and guard quality so speed isn't gained by poor summaries.
+<strong>Why not the others:</strong> A and B are activity measures; C lacks an objective outcome.
+<strong>Architectural principle:</strong> Measure business outcomes against a baseline with quality guardrails.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q26 · D1 · Objective: Select appropriate architectural patterns (workflow, agentic, augmented LLM) · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which statements are correct?
+A. The augmented LLM — an LLM enhanced with retrieval, tools, and memory — is the basic building block of agentic systems.
+B. In an agent, the control flow is always fixed in code in advance.
+C. Workflows are always more capable than agents.
+D. Workflows orchestrate LLMs and tools through predefined code paths.
+E. An augmented LLM requires multiple cooperating agents.
+<strong>Correct answers:</strong> A, D
+<strong>Explanation:</strong> These match Anthropic's definitions in "Building effective agents."
+<strong>Why not the others:</strong> B is the definition of a workflow, not an agent; C is false (they differ in predictability vs. flexibility); E is false.
+<strong>Architectural principle:</strong> Know the vocabulary: augmented LLM, workflow, agent.
+<strong>Ref:</strong> https://www.anthropic.com/research/building-effective-agents</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

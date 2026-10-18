@@ -1,0 +1,399 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9c — Question Bank: Domain 3, Integration (Q46–Q74) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9c — Question Bank: Domain 3, Integration (Q46–Q74)</h1>
+<blockquote>
+<p>Original practice questions; not official or leaked. Objectives quoted from Exam Guide v1.0 §6 D3. Domain 3 is the heaviest at 19%.</p>
+</blockquote>
+<hr />
+<h3>Q46 · D3 · Objective: Evaluate tool/agent configuration for capability bloat · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An internal assistant exposes 45 tools to every conversation. Traces show frequent wrong-tool choices and 7,000 tokens of tool definitions per request.
+<strong>Question:</strong> Which change is best?
+A. Increase <code>max_tokens</code>.
+B. Scope tools to the task or role and add on-demand tool discovery for the rest; re-run tool-selection evals.
+C. Add a prompt line: "Choose tools carefully."
+D. Switch to a model with a larger context.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Fewer, scoped tools reduce confusion and tokens; discovery loads detail only when needed.
+<strong>Why not the others:</strong> A and D don't reduce confusion or cost; C is not an enforcement of anything.
+<strong>Architectural principle:</strong> Least capability plus progressive discovery.
+<strong>Ref:</strong> Prep Lesson 2; Agent Skills (progressive disclosure)</p>
+<hr />
+<h3>Q47 · D3 · Objective: Evaluate tool/agent configuration for capability bloat · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A business-intelligence assistant only answers read-only questions, but its database tool runs under a role that can also INSERT and DELETE "in case we need it later."
+<strong>Question:</strong> What is the best correction?
+A. Log all write statements for later audit.
+B. Add a system-prompt rule: "Never write to the database."
+C. Ask the model to confirm before writing.
+D. Run the tool under a read-only role (and restrict tables/rows), creating a separate, gated path if writes are ever needed.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Removing unneeded privilege eliminates the risk; monitoring and prompts only compensate.
+<strong>Why not the others:</strong> A is detective; B and C depend on model compliance.
+<strong>Architectural principle:</strong> Preventive controls (least privilege) beat detective or compensating ones.
+<strong>Ref:</strong> Prep Lessons 2–3</p>
+<hr />
+<h3>Q48 · D3 · Objective: Evaluate tool/agent configuration for capability bloat · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The tool list includes <code>search_docs</code>, <code>find_documents</code>, and <code>lookup_docs</code> with nearly identical descriptions; the agent uses them inconsistently and results vary.
+<strong>Question:</strong> What should you do?
+A. Consolidate into one well-specified tool (or clearly differentiate the purposes) with precise, non-overlapping descriptions and schemas; then re-evaluate.
+B. Add more tools with other names.
+C. Randomize tool order each request.
+D. Add examples showing all three used at once.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Overlap causes ambiguous selection; consolidation or crisp differentiation improves reliability.
+<strong>Why not the others:</strong> B worsens it; C adds noise; D increases confusion.
+<strong>Architectural principle:</strong> Tool design: distinct purposes, clear contracts.
+<strong>Ref:</strong> Tool use docs</p>
+<hr />
+<h3>Q49 · D3 · Objective: Evaluate tool/agent configuration for capability bloat · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which observations most strongly indicate capability bloat in an agent?
+A. Production traces show many configured tools are never called by real workflows.
+B. A high prompt-cache hit rate.
+C. Frequent wrong-tool selections among tools with similar names and descriptions.
+D. A short system prompt.
+E. Low p95 latency.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Unused tools and confusable tools are classic symptoms of over-tooling.
+<strong>Why not the others:</strong> B, D, and E are neutral or positive signs.
+<strong>Architectural principle:</strong> Use traces to find and remove unneeded capability.
+<strong>Ref:</strong> Exam Guide D3</p>
+<hr />
+<h3>Q50 · D3 · Objective: Analyze authentication and authorization requirements to identify security gaps · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A CRM agent uses a single administrator token for all lookups. A junior rep asks about a restricted VIP account and the agent returns it.
+<strong>Question:</strong> Which is the most important fix?
+A. Add "respect permissions" to the prompt.
+B. Hide the account name in the response.
+C. Propagate the end user's identity (on-behalf-of / user-scoped tokens) so the CRM enforces that user's entitlements.
+D. Reduce the number of CRM fields the model can see.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> The shared super-user token makes the agent a confused deputy; backend enforcement per user closes the gap.
+<strong>Why not the others:</strong> A relies on the model; B and D are cosmetic or partial.
+<strong>Architectural principle:</strong> Authorize with the user's identity at the system of record.
+<strong>Ref:</strong> MCP authorization spec; Prep Lesson 3</p>
+<hr />
+<h3>Q51 · D3 · Objective: Analyze authentication and authorization requirements to identify security gaps · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A <code>get_invoices</code> tool takes <code>tenant_id</code> and <code>customer_id</code> as arguments supplied by the model.
+<strong>Question:</strong> What is the primary risk and fix?
+A. Latency; cache invoice results.
+B. The model (or an injected instruction) can request another tenant's data; derive tenant from the authenticated session and validate all arguments server-side.
+C. Token cost; shorten argument names.
+D. Formatting; require uppercase IDs.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Model-supplied identifiers are untrusted input; authorization must use authenticated context.
+<strong>Why not the others:</strong> The other options don't address cross-tenant access.
+<strong>Architectural principle:</strong> Never trust model-supplied authority; validate server-side.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q52 · D3 · Objective: Analyze authentication and authorization requirements to identify security gaps · Difficulty: Expert</h3>
+<p><strong>Scenario:</strong> An HTTP-based MCP server accepts any valid OAuth token from the company's identity provider, including tokens issued for other internal APIs, and forwards them downstream.
+<strong>Question:</strong> What is the gap and the best fix?
+A. No gap; any company token is fine.
+B. Switch the server to stdio so OAuth isn't needed.
+C. Hide the server URL.
+D. Tokens must be issued for, and validated against, the MCP server as the intended audience; the server must not pass through tokens meant for other resources, and each tool must still apply its own data authorization.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Audience binding prevents token confusion; passing tokens through breaks trust boundaries; protocol-level auth doesn't replace per-tool authorization.
+<strong>Why not the others:</strong> A ignores confused-deputy risk; B changes transport and credential handling, not the gap; C is obscurity.
+<strong>Architectural principle:</strong> Audience-bound tokens, no passthrough, and per-resource authorization.
+<strong>Ref:</strong> https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization</p>
+<hr />
+<h3>Q53 · D3 · Objective: Analyze authentication and authorization requirements to identify security gaps · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A shared vector index serves several tenants. The app retrieves top-k chunks, sends them to Claude, then removes sentences from the answer that "look confidential."
+<strong>Question:</strong> What is the most important correction?
+A. Apply tenant/ACL filters at retrieval time so unauthorized chunks never reach the model.
+B. Increase k to find more safe chunks.
+C. Add a disclaimer to the answer.
+D. Fine-tune the model to avoid confidential text.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Post-hoc filtering is unreliable and the model has already seen the data.
+<strong>Why not the others:</strong> B, C, and D don't enforce access boundaries.
+<strong>Architectural principle:</strong> Entitlement filtering before context.
+<strong>Ref:</strong> Prep Lessons 2–3</p>
+<hr />
+<h3>Q54 · D3 · Objective: Analyze authentication and authorization requirements to identify security gaps · Difficulty: Advanced</h3>
+<p><strong>Question (Select TWO):</strong> Which are authorization gaps?
+A. One shared API key embedded in the system prompt and used for every user's requests.
+B. User-scoped, short-lived tokens exchanged per request.
+C. Entitlement checks performed only after retrieved text has been sent to the model.
+D. A broker that validates tool arguments against a schema.
+E. Audit logs recording user and agent identity.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Shared embedded credentials and after-the-fact filtering both defeat least privilege.
+<strong>Why not the others:</strong> B, D, and E are good controls.
+<strong>Architectural principle:</strong> Identify where authority is granted and where it's checked.
+<strong>Ref:</strong> Exam Guide D3/D5</p>
+<hr />
+<h3>Q55 · D3 · Objective: Evaluate accuracy-latency trade-offs and justify configuration decisions · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A consumer chat feature needs the first words to appear within a second; answers are moderate in length; quality on the eval set is acceptable with a mid-tier model.
+<strong>Question:</strong> Which configuration best supports the goal?
+A. Use batch processing.
+B. Add a verification pass to every answer.
+C. Stream responses, cache the static prefix, keep <code>max_tokens</code> appropriate, and use the lowest model tier that clears quality targets.
+D. Use the largest model and rely on streaming alone.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Streaming improves perceived latency; caching and right-sizing reduce time-to-first-token and cost.
+<strong>Why not the others:</strong> A is asynchronous; B adds latency; D increases latency and cost.
+<strong>Architectural principle:</strong> Combine streaming, caching, and right-sizing for interactive latency.
+<strong>Ref:</strong> Streaming docs; prompt caching docs</p>
+<hr />
+<h3>Q56 · D3 · Objective: Evaluate accuracy-latency trade-offs and justify configuration decisions · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A second "verification" model call doubles latency. Errors in low-risk draft replies cost little; errors in refund approvals are expensive.
+<strong>Question:</strong> What is the best configuration decision?
+A. Remove verification everywhere.
+B. Apply verification (and stronger models) selectively to high-risk actions, and skip or lighten it for low-risk drafts, justified with eval data.
+C. Apply verification everywhere regardless of risk.
+D. Use verification only when the user complains.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Risk-tiered configuration spends latency/cost where errors are costly.
+<strong>Why not the others:</strong> A and C ignore risk differences; D is reactive.
+<strong>Architectural principle:</strong> Allocate accuracy effort by error cost.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q57 · D3 · Objective: Evaluate accuracy-latency trade-offs and justify configuration decisions · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Month-end spikes cause 429 errors. Retries create duplicate refund tickets in the downstream system.
+<strong>Question:</strong> Which combination is best?
+A. Increase retries to 20 with no delay.
+B. Remove retries.
+C. Ask the model not to refund twice.
+D. Exponential backoff with jitter honoring retry-after, a queue with concurrency limits, and idempotency keys on write operations.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Backoff and queuing manage load; idempotency prevents duplicate side effects on retry.
+<strong>Why not the others:</strong> A worsens the storm; B drops legitimate requests; C is not a control.
+<strong>Architectural principle:</strong> Resilience with idempotent writes.
+<strong>Ref:</strong> https://docs.claude.com/en/api/rate-limits</p>
+<hr />
+<h3>Q58 · D3 · Objective: Analyze observability challenges and select monitoring strategies at scale · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Support reports more wrong answers, yet dashboards show 99.9% availability and normal latency.
+<strong>Question:</strong> What is the monitoring gap?
+A. Add quality signals: sampled automated evals on live traffic, user feedback, retrieval and citation metrics, linked to traces.
+B. Add more uptime checks.
+C. Add a status page.
+D. Increase log retention to forever.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Availability metrics don't measure answer quality.
+<strong>Why not the others:</strong> B and C measure availability; D adds cost without insight.
+<strong>Architectural principle:</strong> Monitor quality, not just uptime.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q59 · D3 · Objective: Analyze observability challenges and select monitoring strategies at scale · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Engineers need prompts and tool arguments in logs for debugging, but they may contain personal data.
+<strong>Question:</strong> Which approach is best?
+A. Log everything raw with broad access.
+B. Disable logging.
+C. Redact or tokenize sensitive fields at the edge, limit retention and access, and keep immutable audit logs separate from debug traces.
+D. Log only on weekends.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Balances debuggability with privacy and audit requirements.
+<strong>Why not the others:</strong> A creates a privacy risk; B blinds operations; D is arbitrary.
+<strong>Architectural principle:</strong> Observability with privacy by design.
+<strong>Ref:</strong> Prep Lessons 2–3</p>
+<hr />
+<h3>Q60 · D3 · Objective: Analyze observability challenges and select monitoring strategies at scale · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> At 50M requests/day, storing full traces for all traffic is cost-prohibitive.
+<strong>Question:</strong> Which strategy is best?
+A. Store nothing.
+B. Collect metrics for all traffic; sample full traces while always retaining errors, low-confidence outputs, flagged cases, and security events.
+C. Store only the first 1,000 requests per day.
+D. Store traces only for the largest customers.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Aggregated metrics plus targeted sampling keep visibility into the cases that matter.
+<strong>Why not the others:</strong> A, C, and D create blind spots.
+<strong>Architectural principle:</strong> Sample intelligently; always keep exceptions.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q61 · D3 · Objective: Design a RAG pipeline with appropriate chunking and indexing strategies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Policy documents have headings and tables. Fixed 200-token chunks split tables mid-row, and answers cite fragments without context.
+<strong>Question:</strong> Which change is best?
+A. Increase k to 50.
+B. Use a bigger model.
+C. Remove the tables.
+D. Use structure-aware chunking (respect headings/tables) with section context and metadata attached to each chunk.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Chunks should be coherent and self-describing for both retrieval and answering.
+<strong>Why not the others:</strong> A adds noise; B doesn't fix broken chunks; C loses data.
+<strong>Architectural principle:</strong> Chunk by structure with context.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q62 · D3 · Objective: Design a RAG pipeline with appropriate chunking and indexing strategies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> After one team re-embedded new documents with a different embedding model, retrieval quality for old documents dropped.
+<strong>Question:</strong> What is the likely cause and fix?
+A. Embeddings from different models are not comparable; re-embed the corpus consistently (or maintain separate indexes per embedding model) and version the embedding config.
+B. The LLM forgot the old documents.
+C. The documents are too short.
+D. The system prompt is too long.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Mixed embedding spaces corrupt similarity search.
+<strong>Why not the others:</strong> B, C, and D don't explain a drop tied to the embedding change.
+<strong>Architectural principle:</strong> Consistent, versioned embedding and index configuration.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q63 · D3 · Objective: Design a RAG pipeline with appropriate chunking and indexing strategies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> The assistant sometimes cites a superseded benefits policy after a new one was published.
+<strong>Question:</strong> Which design addresses this?
+A. Tell users to double-check.
+B. Version documents with effective dates, remove or tombstone superseded chunks on update, and monitor index freshness.
+C. Lower retrieval k to 1.
+D. Add "use the newest policy" to the system prompt.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Freshness is an indexing responsibility; stale chunks must be retired.
+<strong>Why not the others:</strong> A shifts burden; C risks recall; D can't know which chunk is newest without metadata.
+<strong>Architectural principle:</strong> Version, tombstone, and monitor the index.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q64 · D3 · Objective: Apply retrieval strategies matched to data shape and query pattern · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Users search by exact part numbers like "AX-4410-B" and semantic search returns loosely related items. Which changes help most?
+A. Combine semantic search with keyword/BM25 (hybrid retrieval).
+B. Raise generation temperature.
+C. Use exact-match filters or a structured lookup for identifier fields.
+D. Shorten the system prompt.
+E. Switch to a larger generation model.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Identifier queries need lexical or structured matching, not purely semantic similarity.
+<strong>Why not the others:</strong> B, D, and E don't change retrieval behavior.
+<strong>Architectural principle:</strong> Match retrieval to query pattern.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q65 · D3 · Objective: Apply retrieval strategies matched to data shape and query pattern · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Analysts ask, "What was Q3 EMEA revenue by product line?" The data lives in a warehouse.
+<strong>Question:</strong> Which approach is best?
+A. Embed the warehouse rows and use vector search.
+B. Paste the full table into the prompt.
+C. Use a validated, read-only structured query path (e.g., parameterized SQL or API) with schema allow-lists and row limits, and have Claude explain the result.
+D. Ask Claude to estimate from memory.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Aggregations belong in query engines; constrained access keeps them safe.
+<strong>Why not the others:</strong> A and B are inaccurate or wasteful; D is unreliable.
+<strong>Architectural principle:</strong> Use structured retrieval for structured aggregates.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q66 · D3 · Objective: Apply retrieval strategies matched to data shape and query pattern · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Questions such as "Which suppliers of components used in Product X had incidents last year?" require following relationships across several sources.
+<strong>Question:</strong> Which retrieval approach is most appropriate?
+A. One vector search with k=3.
+B. Keyword search on the question text only.
+C. Fine-tune the model on supplier names.
+D. Iterative (agentic) retrieval or graph-style queries across sources, with budgets and citations.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Multi-hop questions need sequential retrieval steps or relationship-aware queries.
+<strong>Why not the others:</strong> A and B rarely connect hops; C doesn't solve freshness or traceability.
+<strong>Architectural principle:</strong> Multi-hop patterns need iterative or relational retrieval.
+<strong>Ref:</strong> Prep Lesson 2; Building effective agents</p>
+<hr />
+<h3>Q67 · D3 · Objective: Evaluate progressive discovery vs. monolithic context strategy · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A 40-page, rarely changing product guide is used in almost every support query.
+<strong>Question:</strong> What is the simplest effective design?
+A. Put the guide in a cached static prefix (monolithic context) and verify cache hits.
+B. Build a complex multi-index RAG system.
+C. Make the agent search the guide with an iterative tool each time.
+D. Summarize it into 200 words.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Small, stable, always-relevant content fits caching well; RAG adds complexity without benefit.
+<strong>Why not the others:</strong> B and C over-engineer; D loses detail.
+<strong>Architectural principle:</strong> Don't add retrieval complexity when caching suffices.
+<strong>Ref:</strong> Prompt caching docs</p>
+<hr />
+<h3>Q68 · D3 · Objective: Apply retrieval strategies matched to data shape and query pattern · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> End-to-end answer quality on a RAG system is 78%. You suspect retrieval but aren't sure.
+<strong>Question:</strong> What should you do first?
+A. Switch to the largest model.
+B. Measure retrieval separately (e.g., recall@k on labeled questions) before changing the generator; consider reranking or hybrid search if recall is low.
+C. Rewrite the system prompt.
+D. Increase temperature.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Component-level evals localize the bottleneck.
+<strong>Why not the others:</strong> A, C, and D change the wrong layer without evidence.
+<strong>Architectural principle:</strong> Evaluate components separately.
+<strong>Ref:</strong> Exam Guide D4</p>
+<hr />
+<h3>Q69 · D3 · Objective: Evaluate connection protocols and select the appropriate integration mechanism (MCP, API/CLI, agent-to-agent) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Three applications need the same ticketing integration now, and two more teams will add applications next quarter.
+<strong>Question:</strong> Which mechanism is best?
+A. Each app writes its own direct API wrapper.
+B. Use a CLI on developers' laptops.
+C. Expose a ticketing agent per app.
+D. Build one MCP server for ticketing with centralized authentication/authorization and shared tool definitions.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Reuse across many clients is MCP's sweet spot.
+<strong>Why not the others:</strong> A multiplies maintenance and inconsistent security; B isn't a server-side integration; C is unnecessary.
+<strong>Architectural principle:</strong> Shared, reusable integrations → MCP.
+<strong>Ref:</strong> https://modelcontextprotocol.io</p>
+<hr />
+<h3>Q70 · D3 · Objective: Evaluate connection protocols and select the appropriate integration mechanism (MCP, API/CLI, agent-to-agent) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> One internal application calls a single stable internal pricing API on the hot path; latency is tight and no other consumers exist.
+<strong>Question:</strong> Which is most appropriate?
+A. Adopt an agent-to-agent protocol.
+B. Introduce an MCP server and gateway for future flexibility.
+C. A direct tool function that calls the API with schema validation and user-scoped authorization.
+D. A shell CLI called from the model.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> One consumer and tight latency favor the simplest path with the fewest hops.
+<strong>Why not the others:</strong> A and B add hops and operations without need; D broadens risk.
+<strong>Architectural principle:</strong> Don't add integration layers without a reuse or governance benefit.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr />
+<h3>Q71 · D3 · Objective: Evaluate connection protocols and select the appropriate integration mechanism (MCP, API/CLI, agent-to-agent) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A partner exposes an autonomous claims-adjudication agent behind its own API. Your agent should delegate a goal ("assess this claim") rather than call fine-grained functions.
+<strong>Question:</strong> What is the best integration approach?
+A. Agent-to-agent delegation, with scoped identity propagation, defined input/output contracts, timeouts, result verification, and audit.
+B. Scrape the partner's UI.
+C. Copy the partner's prompts into your system.
+D. Give the partner agent your admin token.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Delegating a goal to another autonomous agent fits agent-to-agent patterns, with controls for trust and verification.
+<strong>Why not the others:</strong> B is brittle; C is infeasible and inappropriate; D violates least privilege.
+<strong>Architectural principle:</strong> Delegate with contracts, verification, and bounded identity.
+<strong>Ref:</strong> Exam Guide D3</p>
+<hr />
+<h3>Q72 · D3 · Objective: Evaluate connection protocols and select the appropriate integration mechanism (MCP, API/CLI, agent-to-agent) · Difficulty: Advanced</h3>
+<p><strong>Question (Select TWO):</strong> A developer wants to install a popular community MCP server that can read internal files. Which are appropriate steps before adopting it?
+A. Install the latest version automatically on every start.
+B. Review the source and tool descriptions, then pin a reviewed version.
+C. Give it an administrator token to avoid permission errors.
+D. Run it with least-privilege credentials, restricted file scope, and network egress limits in a sandbox.
+E. Trust it because it has many stars.
+<strong>Correct answers:</strong> B, D
+<strong>Explanation:</strong> Third-party servers are supply-chain risk; tool descriptions can carry injection; least privilege contains damage.
+<strong>Why not the others:</strong> A removes review; C violates least privilege; E is not a security control.
+<strong>Architectural principle:</strong> Vet, pin, and sandbox integrations.
+<strong>Ref:</strong> MCP security guidance; Prep Lesson 3</p>
+<hr />
+<h3>Q73 · D3 · Objective: Evaluate progressive discovery vs. monolithic context strategy · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An enterprise platform has 200 internal tools; any given task needs about five. Loading all definitions bloats prompts and confuses selection.
+<strong>Question:</strong> Which design is best?
+A. Load all 200 definitions into every request and raise the token limit.
+B. Provide a small core set plus a discovery mechanism (search/skill index) so relevant tools load on demand.
+C. Randomly sample 20 tools each time.
+D. Hard-code five tools for all tasks.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Progressive discovery scales as catalogs grow.
+<strong>Why not the others:</strong> A bloats; C risks missing needed tools; D can't serve varied tasks.
+<strong>Architectural principle:</strong> Progressive discovery for large capability catalogs.
+<strong>Ref:</strong> Agent Skills; Prep Lesson 2</p>
+<hr />
+<h3>Q74 · D3 · Objective: Evaluate progressive discovery vs. monolithic context strategy · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A focused assistant uses six stable tools that are relevant to almost every conversation.
+<strong>Question:</strong> Which design is most appropriate?
+A. Build a tool-search system with dynamic loading.
+B. Split the six tools across six agents.
+C. Load all six tool definitions directly (monolithic) and cache them in the stable prefix.
+D. Remove half the tools randomly.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> A small, stable, always-relevant set doesn't need discovery overhead.
+<strong>Why not the others:</strong> A and B add complexity; D harms capability.
+<strong>Architectural principle:</strong> Match complexity to catalog size and variability.
+<strong>Ref:</strong> Prep Lesson 2</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

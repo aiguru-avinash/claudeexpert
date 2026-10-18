@@ -1,0 +1,137 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 2 — Domain 2: Claude Models, Prompting &amp; Context Engineering (13%) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 2 — Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</h1>
+<p><em>Prep-course lesson: Claude Platform &amp; Solution Design. Official tasks: select models by trade-offs · system prompts, templates, guardrails · zero-shot/few-shot/chain-of-thought · optimize context windows and token usage · prompt reuse (caching, modular prompts, Skills).</em></p>
+<p>Topics: <strong>2.1</strong> Model selection · <strong>2.2</strong> System prompts, templates, techniques · <strong>2.3</strong> Context-window and token management · <strong>2.4</strong> Prompt reuse: caching, modular prompts, Skills</p>
+<blockquote>
+<p><strong>Verify-before-you-memorize:</strong> model names, context sizes, prices, and caching minimums change. The exam tests <em>selection logic</em>. Check https://docs.claude.com → Models overview and Pricing for current numbers.</p>
+</blockquote>
+<hr />
+<h2>2.1 Selecting Claude models on trade-offs</h2>
+<p><strong>1. Objectives.</strong> Choose a model tier for a task using capability, latency, cost, context needs, and risk; know when to route across tiers.</p>
+<p><strong>2. Prerequisites.</strong> Tokens, input vs. output pricing, latency basics.</p>
+<p><strong>3. Beginner.</strong> Claude comes in tiers. Smaller/faster tiers (Haiku) are cheap and quick for simple, high-volume work. Mid-tier (Sonnet) balances intelligence and cost for most workloads. Larger tiers (Opus; and the top Mythos-class tier, e.g., Fable) handle the hardest reasoning and long-horizon work at higher cost and latency. At the time of writing the current API strings are <code>claude-haiku-5-5</code>, <code>claude-sonnet-5-5</code>, <code>claude-opus-5-5</code>, <code>claude-fable-5-1</code>.</p>
+<p><strong>4. Advanced.</strong> Selection is an <em>empirical</em> decision against your eval set, not a brand preference. Considerations: (a) task difficulty (classification vs. multi-step reasoning); (b) latency budget (time-to-first-token vs. total); (c) cost = input + output tokens × price, plus cache and batch effects; (d) context size and output length needs; (e) feature support (tools, vision, structured outputs, thinking / effort controls — verify per model); (f) deprecation/lifecycle (pin versions, plan migrations); (g) risk (higher-stakes → more capable model <em>plus</em> controls, not instead of controls). <strong>Tiered routing</strong> (cheap model for easy cases, stronger model for hard ones, or a small model as a screen/classifier) commonly beats a single model on cost at equal quality.</p>
+<p><strong>5. Steps.</strong> (1) Build a representative eval set (D4). (2) Run candidate models with the same prompt. (3) Plot quality vs. cost vs. p95 latency. (4) Pick the cheapest model that clears acceptance criteria with margin. (5) Add a fallback/escalation tier. (6) Pin the model ID; schedule re-evaluation when new models ship.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  R[Request] --&gt; S[Small-model router / screen]
+  S -- easy --&gt; H[Haiku-class answer]
+  S -- standard --&gt; N[Sonnet-class answer]
+  S -- hard / low confidence --&gt; O[Opus-class answer]
+  H &amp; N &amp; O --&gt; V[Validate output]
+</pre>
+
+<p><strong>7. Scenario.</strong> A bank classifies 2M support messages/day into 40 intents (latency 500 ms) and also drafts replies for 3% flagged as complex. Use a small model for classification (batch for back-office tagging), a mid-tier for replies, and escalate only low-confidence cases.</p>
+<p><strong>8. Recommended/alternatives.</strong> Tiered routing. Alternative: one top-tier model everywhere (simple, 5–20× cost); smallest model everywhere (quality risk). <em>Change if</em> eval shows the small model misses accuracy thresholds, or a new model changes the Pareto frontier.</p>
+<p><strong>9. Security/governance.</strong> Model upgrades are changes: run regression + safety evals before switching; keep version pinning and rollback.</p>
+<p><strong>10. Performance/cost.</strong> Model cost dominates at volume; cache static prefixes; use batch for non-interactive work; cap <code>max_tokens</code> sensibly.</p>
+<p><strong>11. Mistakes.</strong> Picking the biggest model "to be safe"; comparing models with prompts tuned for only one; ignoring output tokens' price; auto-upgrading in production.</p>
+<p><strong>12. Scenario question.</strong> <em>Latency SLA is 800 ms for single-label classification; the top-tier model scores 97%, the smallest scores 96% on your eval.</em> → The small model (meets quality with margin, meets SLA, far cheaper).</p>
+<p><strong>13. Revision.</strong> Empirical selection; Pareto of quality/cost/latency; tiered routing; pin and re-eval.</p>
+<p><strong>14. Docs.</strong> Models overview and Pricing (docs.claude.com); Prep Lesson 1.</p>
+<hr />
+<h2>2.2 System prompts, templates, guardrails, and prompting techniques</h2>
+<p><strong>1. Objectives.</strong> Write system prompts and templates that are clear and testable; apply zero-shot, few-shot, and chain-of-thought appropriately; understand what prompt-level guardrails can and cannot do.</p>
+<p><strong>2. Prerequisites.</strong> Messages API roles (system, user, assistant).</p>
+<p><strong>3. Beginner.</strong> The <strong>system prompt</strong> sets role, rules, tone, and output format. A <strong>template</strong> has fixed instructions plus variable slots. <strong>Zero-shot</strong> = instructions only. <strong>Few-shot</strong> = include 2–5 examples. <strong>Chain-of-thought</strong> = let the model reason before the final answer (and/or use thinking features on supported models).</p>
+<p><strong>4. Advanced.</strong> Principles that hold across versions: be explicit about task, audience, constraints, and output format; separate <strong>instructions from data</strong> with delimiters or XML-style tags; place long documents before the question; give examples that are diverse and representative (and include edge cases); specify what to do when information is missing ("say you don't know", cite sources); use structured outputs/JSON schema or tool schemas for machine-consumed output. Few-shot helps with format and nuanced judgment; CoT helps multi-step reasoning but adds tokens/latency. <strong>Guardrails in prompts are guidance, not enforcement.</strong> Anthropic's guardrail docs recommend layered defenses (input screening, output validation, monitoring); authorization and data access must be enforced in code (D3, D5).</p>
+<p><strong>5. Steps.</strong> (1) Draft the prompt from success criteria. (2) Parameterize variable inputs. (3) Add 3–5 examples including a hard negative. (4) Specify output schema and refusal/uncertainty behavior. (5) Test against the eval set; iterate one change at a time. (6) Version the prompt (D7).</p>
+<p><strong>6. Executable example</strong> (illustrative structure; check current SDK/model IDs):</p>
+<pre><code class="language-python"># EXECUTABLE — requires ANTHROPIC_API_KEY
+import anthropic
+client = anthropic.Anthropic()
+
+SYSTEM = &quot;&quot;&quot;You are a claims-summary assistant for adjusters.
+Use ONLY the provided &lt;policy&gt; and &lt;notes&gt;. If coverage is unclear, say &quot;Needs review&quot; and list what is missing.
+Return JSON: {&quot;coverage_summary&quot;: str, &quot;citations&quot;: [str], &quot;needs_review&quot;: bool}.&quot;&quot;&quot;
+
+def summarize(policy: str, notes: str) -&gt; str:
+    msg = client.messages.create(
+        model=&quot;claude-sonnet-5-5&quot;,
+        max_tokens=800,
+        system=SYSTEM,
+        messages=[{&quot;role&quot;: &quot;user&quot;,
+                   &quot;content&quot;: f&quot;&lt;policy&gt;\n{policy}\n&lt;/policy&gt;\n&lt;notes&gt;\n{notes}\n&lt;/notes&gt;\nSummarize coverage.&quot;}],
+    )
+    return msg.content[0].text
+</code></pre>
+<p><strong>7. Scenario.</strong> The support bot sometimes invents refund policies. Fix: constrain to retrieved policy text, require citations, return "needs_review" when absent, validate citations in code, and test with adversarial cases.</p>
+<p><strong>8. Recommended/alternatives.</strong> Explicit instructions + schema + few-shot + code validation. Alternatives: fine-tuning (not the default path for most architects — assess availability/need); longer prose instructions (diminishing returns). <em>Change if</em> few-shot examples bloat cost → cache them or fold into a skill.</p>
+<p><strong>9. Security.</strong> "Never reveal the system prompt" or "don't call delete" in a prompt is not a control. Pair prompts with deterministic checks.</p>
+<p><strong>10. Cost/latency.</strong> Few-shot and long prompts increase input tokens (mitigate with caching); CoT increases output tokens.</p>
+<p><strong>11. Mistakes.</strong> Vague prompts; mixing instructions with untrusted data; examples that all look alike; changing several things per iteration; treating prompts as security.</p>
+<p><strong>12. Scenario question.</strong> <em>Output JSON sometimes has trailing prose that breaks the parser.</em> → Use structured outputs / tool-schema output and validate; don't just add "ONLY output JSON" in capitals.</p>
+<p><strong>13. Revision.</strong> Explicit, structured, exemplified, schema-bound, tested; prompts guide, code enforces.</p>
+<p><strong>14. Docs.</strong> Prompt engineering overview; Mitigate jailbreaks and prompt injections: https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks</p>
+<hr />
+<h2>2.3 Context windows and token management</h2>
+<p><strong>1. Objectives.</strong> Budget context; choose between stuffing, retrieval, summarization, and progressive loading; control token cost.</p>
+<p><strong>2. Prerequisites.</strong> Tokens; context window = input + conversation + output.</p>
+<p><strong>3. Beginner.</strong> The context window is everything the model can see in one request. Bigger windows allow more, but more tokens cost more and can dilute attention. Output tokens are limited by <code>max_tokens</code>.</p>
+<p><strong>4. Advanced.</strong> Strategies: <strong>(a)</strong> put only relevant context in (retrieval rather than "dump everything"); <strong>(b)</strong> <strong>progressive disclosure</strong> — give the model an index/summary and let it fetch details on demand (the same idea behind Skills and agentic search); <strong>(c)</strong> <strong>summarize/compact</strong> old conversation turns while preserving decisions and open items; <strong>(d)</strong> <strong>external memory/notes</strong> for long-running agents; <strong>(e)</strong> <strong>trim tool results</strong> (return only needed fields); <strong>(f)</strong> use <strong>token counting</strong> to pre-check size and costs. Long-context models still show quality variance across positions and distractors: measure with your own evals rather than assuming perfect recall. Rate limits are expressed in RPM, input and output tokens per minute, so token discipline is also a <em>throughput</em> issue.</p>
+<p><strong>5. Steps.</strong> (1) Measure token breakdown per request (system, tools, retrieved docs, history, output). (2) Set per-component budgets. (3) Replace broad retrieval with targeted retrieval/rerank. (4) Add compaction thresholds. (5) Monitor tokens per request in production (D4).</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart TD
+  Q[Task] --&gt; I[Small index / summary in context]
+  I --&gt; D{Need detail?}
+  D -- yes --&gt; T[Tool: fetch section / search]
+  T --&gt; I
+  D -- no --&gt; A[Answer]
+  H[Long history] --&gt; C[Compaction: decisions + open items]
+  C --&gt; I
+</pre>
+
+<p><strong>7. Scenario.</strong> A 300-page policy manual: instead of sending all pages per query, keep a table of contents + per-section summaries in the cached prefix and fetch only relevant sections.</p>
+<p><strong>8. Recommended/alternatives.</strong> Progressive disclosure + retrieval. Alternative: monolithic context (simple, works when total content is small and static and you cache it). <em>Change if</em> corpus grows beyond budget or cost/latency SLO fails.</p>
+<p><strong>9. Security.</strong> Retrieval must apply the user's entitlements <em>before</em> content enters context; a model cannot "un-see" data it was given.</p>
+<p><strong>10. Cost/latency.</strong> Tokens drive both. Prefix caching rewards stable, front-loaded content.</p>
+<p><strong>11. Mistakes.</strong> Stuffing the window "because it fits"; letting tool outputs balloon; forgetting output tokens count toward limits and cost; summaries that drop constraints.</p>
+<p><strong>12. Scenario question.</strong> <em>An agent's performance degrades after 40 turns; logs show 90% of tokens are old tool outputs.</em> → Clear/trim stale tool results and compact history; don't just switch to a bigger window.</p>
+<p><strong>13. Revision.</strong> Budget by component; retrieve, don't dump; disclose progressively; compact safely; entitlement-filter before context.</p>
+<p><strong>14. Docs.</strong> Context windows, token counting, rate limits (docs.claude.com/en/api/rate-limits).</p>
+<hr />
+<h2>2.4 Prompt reuse: prompt caching, modular prompts, and Skills</h2>
+<p><strong>1. Objectives.</strong> Apply prompt caching correctly; structure prompts as reusable modules; explain what Agent Skills are and when to use them.</p>
+<p><strong>2. Prerequisites.</strong> 2.2–2.3.</p>
+<p><strong>3. Beginner.</strong> If many requests share the same long prefix (system prompt, policy, tools, examples), <strong>prompt caching</strong> lets the platform reuse it — lowering cost and time-to-first-token. <strong>Modular prompts</strong> are assembled from versioned parts. <strong>Skills</strong> are folders of instructions/resources that Claude loads when relevant.</p>
+<p><strong>4. Advanced — caching.</strong> You mark cache breakpoints with <code>cache_control</code> (type <code>ephemeral</code>) on content blocks; the cached prefix follows the request order of tools → system → messages, so <strong>stable content must come first and dynamic content last</strong>. Reads are billed at a fraction of normal input price; writes cost a premium; default lifetime is short (minutes) with a longer option available; there is a <strong>minimum cacheable length that varies by model</strong>, so short prompts silently don't cache. A cache hit requires an <strong>identical prefix</strong> — a changing timestamp or reordered tools at the top invalidates it. Track <code>cache_creation_input_tokens</code> and <code>cache_read_input_tokens</code> in usage to verify hits. <em>(Confirm TTL options, multipliers, and minimums in the current caching docs.)</em></p>
+<p><strong>Advanced — Skills.</strong> Agent Skills package instructions, scripts, and reference files; Claude sees only lightweight metadata (name + description) up front and <strong>loads the full skill and its files on demand</strong> (progressive disclosure), keeping context small. Skills are portable across Claude surfaces (API, Claude Code, apps) and are versionable and shareable via source control. Use skills for repeatable procedures/standards; use caching for large static context you send every call; use retrieval for large, changing knowledge.</p>
+<p><strong>5. Steps.</strong> (1) Order prompt: tools, static system, static docs/examples, then dynamic user content. (2) Add <code>cache_control</code> at the end of the static block. (3) Verify via usage fields. (4) Keep volatile values (time, IDs) out of the prefix. (5) For shared procedures, create a skill with a precise description.</p>
+<p><strong>6. Executable example:</strong></p>
+<pre><code class="language-python"># EXECUTABLE — caching a long static policy (must exceed the model's minimum cacheable length)
+resp = client.messages.create(
+    model=&quot;claude-sonnet-5-5&quot;,
+    max_tokens=500,
+    system=[
+        {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: SHORT_ROLE_INSTRUCTIONS},
+        {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: LONG_POLICY_TEXT, &quot;cache_control&quot;: {&quot;type&quot;: &quot;ephemeral&quot;}},
+    ],
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_question}],
+)
+print(resp.usage.cache_creation_input_tokens, resp.usage.cache_read_input_tokens)
+</code></pre>
+<p><strong>7. Scenario (mirrors official Sample 2's logic).</strong> 8,000-token static prompt + short user turn; cost and latency both matter → static first + caching. Truncation loses policy; smallest-model-regardless risks quality; few-shot relocation doesn't create a cacheable prefix.</p>
+<p><strong>8. Recommended/alternatives.</strong> Cache static prefix; skills for procedures. Alternative: batch API (50% cheaper but async, up to 24 h — wrong for interactive); fine-tune (not about reuse). <em>Change if</em> traffic is too sparse to keep the cache warm (cost of writes &gt; savings) → consider longer TTL or drop it.</p>
+<p><strong>9. Security.</strong> Cached content is still sensitive data — treat per your data policy. Skills can contain executable scripts: review, version, and restrict sources like any code dependency.</p>
+<p><strong>10. Cost/latency.</strong> Highest-leverage optimization for repeated large prefixes; monitor hit rate.</p>
+<p><strong>11. Mistakes.</strong> Dynamic content at the top; below-minimum length; expecting cache across different prefixes/models; huge skill descriptions that bloat startup context; vague skill descriptions that never trigger.</p>
+<p><strong>12. Scenario question.</strong> <em>Cache read tokens are always 0.</em> → Check minimum length, identical prefix (no timestamps up front), <code>cache_control</code> placement, and TTL expiry.</p>
+<p><strong>13. Revision.</strong> Static-first; breakpoints; verify via usage; skills = progressive disclosure; modules versioned.</p>
+<p><strong>14. Docs.</strong> Prompt caching: https://docs.claude.com/en/docs/build-with-claude/prompt-caching · Agent Skills overview (Claude API docs) · Batch processing: https://platform.claude.com/docs/build-with-claude/batch-processing</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

@@ -1,0 +1,143 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 6 — Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 6 — Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</h1>
+<p><em>Prep-course lesson: Stakeholder Engagement, Lifecycle &amp; GTM (178 min). Official tasks: structured discovery and requirement gathering · communicate decisions and trade-offs · feedback loops and expectation alignment (incl. SLAs) · document architectures and implementation guidance · lifecycle phases (discovery, design, handoff, monitoring, iteration).</em></p>
+<p>Topics: <strong>6.1</strong> Structured discovery · <strong>6.2</strong> Communicating decisions, trade-offs, and business cases · <strong>6.3</strong> Expectations, SLAs, objections, and approvals · <strong>6.4</strong> Documentation, handoff, and lifecycle ownership</p>
+<blockquote>
+<p>Note: "Go-to-market and solution positioning" appears in the prep-course lesson title but is not called out in the Exam Guide's D6 task statements. It is included here as <strong>supplemental</strong> (6.2) — study it lightly relative to discovery, trade-off communication, SLAs, documentation, and lifecycle.</p>
+</blockquote>
+<hr />
+<h2>6.1 Structured discovery and requirement gathering</h2>
+<p><strong>1. Objectives.</strong> Run discovery that yields measurable requirements, constraints, and acceptance criteria; find hidden stakeholders and blockers.</p>
+<p><strong>2. Prerequisites.</strong> D1.1.</p>
+<p><strong>3. Beginner.</strong> Discovery = asking the right people the right questions <em>before</em> designing. People describe solutions ("we need a chatbot"); you uncover problems, constraints, and success measures.</p>
+<p><strong>4. Advanced.</strong> Map stakeholders: <strong>sponsor</strong> (funds, owns outcome), <strong>users</strong> (daily workflow), <strong>domain experts</strong> (ground truth), <strong>IT/platform</strong> (integration, ops), <strong>security/privacy/legal/compliance</strong> (approval gates), <strong>finance/procurement</strong>, <strong>support/ops</strong> (will run it). Capture: business objective and baseline; users and workflow; data (sources, quality, owners, sensitivity); systems and integrations; volume, latency, availability needs; error cost and tolerance; regulatory constraints; budget/timeline; success metrics and acceptance criteria; change-management readiness. Translate vague goals into <strong>measurable requirements</strong> ("fast" → "p95 &lt; 3 s"; "accurate" → "≥ 92% on golden set; zero critical violations"). Separate <strong>requirements</strong> from <strong>assumptions</strong> and <strong>open risks</strong>; get sign-off on scope and non-goals. Look for <strong>conflicting requirements</strong> (instant + perfect + cheap) and surface them early as trade-offs.</p>
+<p><strong>5. Sample discovery questions.</strong>
+- <em>Outcome:</em> What decision or task are we improving, for whom? What does it cost or delay today? What would make you call this a success in 6 months?
+- <em>Workflow:</em> Walk me through the last case end to end. Where do people wait, rework, or escalate?
+- <em>Data:</em> Where does the knowledge live? Who owns it? How often does it change? What can't leave your environment?
+- <em>Risk:</em> What's the worst thing this could do wrong? Who is harmed? What must a human always decide?
+- <em>Constraints:</em> Which regulations, internal policies, or contractual terms apply? Who must approve before launch, and what do they need to see?
+- <em>Systems:</em> Which systems must it read/write? Who administers them? What are the auth models and rate limits?
+- <em>Operations:</em> Who will run it after launch? What are your uptime/SLA expectations? How will you measure value?
+- <em>Adoption:</em> Who might resist, and why? What training is needed?</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  S[Stakeholder map] --&gt; I[Interviews / workshops]
+  I --&gt; R[Requirements: functional, NFR, compliance]
+  R --&gt; C{Conflicts?}
+  C -- yes --&gt; T[Trade-off decision with sponsor]
+  C -- no --&gt; A[Acceptance criteria + scope + non-goals]
+  T --&gt; A
+  A --&gt; SO[Sign-off]
+</pre>
+
+<p><strong>7. Scenario.</strong> Sponsor: "Make support instant and perfect." Discovery shows refunds &gt;$200 need a manager; knowledge base is outdated; security requires EU data residency. Requirements recorded as measurable targets with a phased scope.</p>
+<p><strong>8. Recommended/alternatives.</strong> Structured, multi-stakeholder discovery with written acceptance criteria. Alternative: build from the sponsor's first description (rework, late security blocks).</p>
+<p><strong>9. Governance.</strong> Identify approvers (security, legal, privacy, risk) in discovery, not at launch week.</p>
+<p><strong>10. Cost/latency.</strong> Elicit volumes to size cost; elicit SLAs to choose architecture.</p>
+<p><strong>11. Mistakes.</strong> Talking only to the sponsor; accepting solutions as requirements; no baseline; no non-goals; discovering compliance blockers late.</p>
+<p><strong>12. Scenario question.</strong> <em>The sponsor asks for "an AI agent" but gives no metrics.</em> → Ask about the outcome, baseline, and error cost; convert to measurable acceptance criteria before choosing a pattern.</p>
+<p><strong>13. Revision.</strong> Stakeholder map; problem not solution; measurable requirements; surface conflicts; sign-off.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 4; Exam Guide §6 D6.</p>
+<hr />
+<h2>6.2 Communicating decisions, trade-offs, and business cases</h2>
+<p><strong>1. Objectives.</strong> Present architecture trade-offs in business language; build a defensible business case; communicate risk plainly.</p>
+<p><strong>2. Prerequisites.</strong> 6.1; D1 ADRs.</p>
+<p><strong>3. Beginner.</strong> Executives decide on outcomes, risks, cost, and time — not model names. Show options, what each costs, what each risks, and your recommendation.</p>
+<p><strong>4. Advanced.</strong> Structure: <strong>context → options → trade-offs → recommendation → risks/mitigations → decision needed → next steps.</strong> Express trade-offs as <strong>business levers</strong>: faster vs. cheaper vs. more accurate; autonomy vs. control; build vs. buy; phased vs. big-bang. Use a <strong>decision matrix</strong> with weighted criteria agreed with stakeholders. <strong>Cost estimate:</strong> requests × (input + output tokens) × price, adjusted for caching/batch, plus retrieval/infra, evaluation, people, and ops; present ranges and sensitivities (volume, prompt length). <strong>Benefit:</strong> hours saved × loaded cost, deflection, cycle-time, revenue lift — tied to baseline measurements; avoid inflated ROI. <strong>Risk language:</strong> "1 in N drafts may contain an error; a human reviews before sending; residual risk is X" instead of "hallucination". Tailor per audience: executives (outcome, risk, cost), security (controls, evidence), engineers (design details), operations (runbooks, SLAs).</p>
+<p><strong>5. Executive summary template.</strong></p>
+<pre><code>Title: Claims Coverage-Summary Assistant — Decision Request
+Problem: Adjusters spend ~40% of handling time reading notes/policies (baseline: 52 min/claim).
+Recommendation: Deploy a draft-only assistant for adjusters (human decides), phase 1 in two regions.
+Expected value: 15–20 min/claim saved (pilot-based range), ~$X/yr; cost ~$Y/yr at current volume.
+Options considered: (A) draft-only assistant [recommended]; (B) autonomous decisions [rejected: regulatory/error cost]; (C) status quo.
+Key risks &amp; controls: inaccurate summaries → citations + adjuster review; data exposure → least-privilege access + audit logs; cost drift → budgets/alerts.
+Evidence so far: pilot eval 94% fidelity on 300 claims; 0 critical violations in red-team set.
+Decision needed by: &lt;date&gt; — approve phase 1 budget and security review start.
+</code></pre>
+<p><strong>6. Architecture review presentation outline (10–12 slides).</strong> (1) Problem &amp; goals (2) Success criteria (3) Constraints (4) Architecture overview with trust boundaries (5) Key decisions &amp; alternatives (6) Safety/compliance controls (7) Evaluation evidence (8) Cost &amp; latency model (9) Risks &amp; mitigations (10) Rollout plan &amp; ownership (11) Decisions requested.</p>
+<p><strong>7. GTM/positioning (supplemental).</strong> For partners/consultancies: position the offer around a business outcome and a repeatable delivery pattern (e.g., "knowledge assistant in 8 weeks with eval gates"), sized pilot → scale, with reference architectures, clear scope/exclusions, and measurable value; avoid overclaiming capabilities.</p>
+<p><strong>8. Recommended/alternatives.</strong> Outcome-first communication with evidence. Alternative: tech-first deep dives (lose decision-makers).</p>
+<p><strong>9. Governance.</strong> Document risk acceptances with the <em>named</em> accountable executive.</p>
+<p><strong>10. Cost.</strong> Provide ranges and what drives them; show how caching/batch/model-tiering change costs.</p>
+<p><strong>11. Mistakes.</strong> Jargon; single option; ROI without baseline; hiding risks; promising "100% accuracy".</p>
+<p><strong>12. Scenario question.</strong> <em>A VP asks why the assistant can't be both instant and perfect.</em> → Explain levers: latency vs. accuracy vs. cost; offer options (faster tier for simple cases, review step for high-stakes) with measured numbers.</p>
+<p><strong>13. Revision.</strong> Context→options→trade-offs→recommendation→risks→decision; business levers; honest ranges.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 4; Messages pricing pages for cost inputs.</p>
+<hr />
+<h2>6.3 Managing expectations, SLAs, stakeholder feedback, objections, and approvals</h2>
+<p><strong>1. Objectives.</strong> Align expectations, define SLAs/SLOs honestly for probabilistic systems, handle objections, and obtain security/legal/operational approval.</p>
+<p><strong>2. Prerequisites.</strong> 6.1–6.2; D3.6.</p>
+<p><strong>3. Beginner.</strong> LLM systems aren't deterministic. Promise outcomes you can measure, define what happens when it's wrong, and set up feedback loops.</p>
+<p><strong>4. Advanced.</strong> <strong>SLAs/SLOs:</strong> availability (depends on provider and your stack), latency percentiles, quality targets on defined test sets (an SLO, not a guarantee per response), escalation time, support hours, data-retention commitments. Be explicit about <strong>dependencies</strong> (model provider availability, rate limits, downstream systems) and <strong>degradation modes</strong>. <strong>Feedback loops:</strong> in-product ratings, reviewer corrections, escalation reasons → feed eval sets and backlog; share a <strong>monthly scorecard</strong> (quality, latency, cost, incidents, adoption). <strong>Objection handling:</strong> <em>"It might hallucinate."</em> → controls + measured rates + human review. <em>"Data privacy?"</em> → data flow diagram, minimization, retention, vendor terms, tests. <em>"Too expensive."</em> → cost model, caching/batch/tiering, phased scope. <em>"Will it replace us?"</em> → augmentation framing, role changes, training. <strong>Approvals:</strong> prepare a <strong>package</strong> per approver — security (threat model, control register, pen-test/red-team results), legal/privacy (data map, DPIA, vendor terms), operations (runbooks, monitoring, on-call), finance (cost model). Start early; track findings to closure.</p>
+<p><strong>5. Steps.</strong> (1) Define SLOs with measurement methods. (2) Publish expectations ("what it does, doesn't do, and how errors are handled"). (3) Set feedback cadence. (4) Build approval packages. (5) Track objections and decisions.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  P[Pilot results + control evidence] --&gt; SEC[Security review]
+  P --&gt; LEG[Legal/privacy review]
+  P --&gt; OPS[Ops readiness review]
+  SEC &amp; LEG &amp; OPS --&gt; G{All approvals?}
+  G -- findings --&gt; FIX[Remediate + re-review]
+  G -- yes --&gt; GO[Production go-live]
+  GO --&gt; FB[Scorecard + feedback loop]
+</pre>
+
+<p><strong>7. Scenario.</strong> Legal blocks launch two days before go-live for lack of a data-flow diagram and retention policy. Prevention: involve legal in discovery; supply the package with the design.</p>
+<p><strong>8. Recommended/alternatives.</strong> Early, parallel approvals with evidence packages. Alternative: sequential approvals at the end (schedule risk).</p>
+<p><strong>9. Governance.</strong> Keep decision logs: who approved what, based on which evidence.</p>
+<p><strong>10. Reliability.</strong> Never promise availability above your weakest dependency without redundancy/fallbacks.</p>
+<p><strong>11. Mistakes.</strong> Promising deterministic accuracy; SLA without measurement; ignoring operations/support; late security engagement.</p>
+<p><strong>12. Scenario question.</strong> <em>Stakeholders demand a 99.99% availability SLA.</em> → Clarify scope (feature vs. platform), analyze dependencies, propose tiered SLOs with fallback modes, and price the redundancy.</p>
+<p><strong>13. Revision.</strong> Honest SLOs; scorecards; objection→evidence; approval packages; early engagement.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 4; Exam Guide §6 D6.</p>
+<hr />
+<h2>6.4 Documentation, handoff, and lifecycle ownership</h2>
+<p><strong>1. Objectives.</strong> Produce architecture documentation and implementation guidance; run lifecycle phases (discovery → design → handoff → monitoring → iteration); design a handoff that survives your absence.</p>
+<p><strong>2. Prerequisites.</strong> 6.1–6.3; D7 enablement.</p>
+<p><strong>3. Beginner.</strong> The system must outlive you. Document what it does, why it's built this way, how to run it, and who owns what.</p>
+<p><strong>4. Advanced — lifecycle:</strong> <strong>Discovery</strong> (requirements, risks) → <strong>Design</strong> (architecture, ADRs, eval plan) → <strong>Build &amp; pilot</strong> (evals, controls) → <strong>Production approval</strong> (readiness review) → <strong>Handoff</strong> (training, runbooks, ownership matrix) → <strong>Monitoring</strong> (scorecards, incidents) → <strong>Iteration</strong> (feedback → backlog → gated releases) → <strong>Retirement/migration</strong> (model deprecations, data deletion). <strong>Documentation set:</strong> solution overview; architecture diagrams with trust boundaries; ADR log; data-flow and data-classification; control register and risk register; prompt/config catalog with versions; eval plan and latest results; runbooks; cost model; SLOs and escalation paths; ownership (RACI); change/release process; known limitations. <strong>Handoff:</strong> shadowing, runbook drills, a "break-glass" scenario test, and a defined <strong>hypercare</strong> period; ownership is named people/teams, not "the AI team".</p>
+<p><strong>5. Production-readiness checklist.</strong>
+- [ ] Acceptance criteria met on held-out eval (quality, latency, cost)
+- [ ] Safety/security tests passed; red-team findings closed or risk-accepted
+- [ ] AuthZ verified with low-privilege and cross-tenant tests
+- [ ] Observability: dashboards, alerts, audit logs, cost alerts
+- [ ] Rollback tested; prompt/model/config versions pinned
+- [ ] Rate-limit, timeout, retry, fallback behaviors load-tested
+- [ ] Data protection: minimization, retention, deletion process verified
+- [ ] Approvals recorded (security, legal/privacy, operations, business owner)
+- [ ] Runbooks, on-call rota, escalation paths in place
+- [ ] Training delivered; support team can reproduce/triage
+- [ ] Monitoring/improvement cadence scheduled; model-deprecation plan noted</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  D[Discovery] --&gt; DS[Design + ADRs] --&gt; B[Build + pilot + evals] --&gt; RR[Readiness review]
+  RR --&gt; H[Handoff + hypercare] --&gt; M[Monitor] --&gt; IT[Iterate via gated releases]
+  IT --&gt; M
+  M --&gt; RT[Migrate/retire]
+</pre>
+
+<p><strong>7. Scenario.</strong> The architect leaves; the system breaks when a model version is deprecated and nobody owns the migration. Prevention: ownership matrix, deprecation calendar, runbook, eval suite to validate migration.</p>
+<p><strong>8. Recommended/alternatives.</strong> Documented handoff with owners and drills. Alternative: wiki dump with no ownership.</p>
+<p><strong>9. Governance.</strong> Keep ADRs, approvals, and evaluations versioned as audit evidence.</p>
+<p><strong>10. Cost.</strong> Include ongoing run costs (eval runs, monitoring, review labor) in the business case.</p>
+<p><strong>11. Mistakes.</strong> Handoff = a meeting; no named owner; no runbook testing; ignoring deprecations; no iteration budget.</p>
+<p><strong>12. Scenario question.</strong> <em>Production go-live is next week; the team has never executed the rollback.</em> → Not ready: rehearse rollback and incident response before launch.</p>
+<p><strong>13. Revision.</strong> Lifecycle phases; documentation set; readiness checklist; named owners; drills; hypercare.</p>
+<p><strong>14. Docs.</strong> Prep Lessons 4–5; Model deprecations page (platform docs).</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

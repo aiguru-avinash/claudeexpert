@@ -1,0 +1,1457 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9 — Question Register (Q1–Q150) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9 — Question Register (Q1–Q150)</h1>
+<p>All 150 questions are original practice items written for this guide. They are <strong>not</strong> official Anthropic exam questions and were not taken from any leaked material. The three official sample questions in Exam Guide v1.0 were studied for style only and not reproduced.</p>
+<h2>Completeness and uniqueness checks</h2>
+<ul>
+<li>Numbers Q1–Q150 present exactly once (verified by script): <strong>150 of 150</strong>.</li>
+<li>Single-answer items have 4 choices; multiple-response items have 5 choices and state <em>Select TWO</em>, matching the exam guide's statement that each item says how many to select.</li>
+<li>Multi-response items (15): Q13, Q26, Q42, Q49, Q54, Q64, Q72, Q79, Q95, Q103, Q111, Q115, Q127, Q137, Q147.</li>
+<li>Each question tests a distinct scenario; the Scenario column below is the duplicate check (no two rows describe the same situation).</li>
+</ul>
+<h2>Distribution vs. official blueprint (63-item exam)</h2>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Official weight</th>
+<th>Questions here</th>
+<th>Share</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>17%</td>
+<td>26</td>
+<td>17%</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>13%</td>
+<td>19</td>
+<td>13%</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>19%</td>
+<td>29</td>
+<td>19%</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>16%</td>
+<td>24</td>
+<td>16%</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>14%</td>
+<td>21</td>
+<td>14%</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>14%</td>
+<td>21</td>
+<td>14%</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>7%</td>
+<td>10</td>
+<td>7%</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>100%</td>
+<td>150</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Note: the requested 30/35/35/30/20 split was replaced by the official 7-domain weights, as the master prompt allows when the blueprint differs.</p>
+<h2>Answer-letter balance (single-answer items)</h2>
+<p>A: 30 · B: 36 · C: 34 · D: 35</p>
+<h2>Register</h2>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Domain</th>
+<th>Difficulty</th>
+<th>Answer</th>
+<th>Objective</th>
+<th>Scenario (uniqueness key)</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Translate business problems into Claude-based AI solutions</td>
+<td>A retailer's COO asks for "AI to cut returns fraud." The team has years of labeled structu</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>2</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Align solutions to business value pillars (efficiency, transformation,</td>
+<td>A hospital network has no overnight patient-intake service today. It wants Claude to offer</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Translate business problems into Claude-based AI solutions</td>
+<td>Legal operations asks to "automate contract review." Attorneys must remain accountable; th</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>4</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Translate business problems into Claude-based AI solutions</td>
+<td>A sponsor wants contract-risk analysis of 100-page documents to be "instant, perfectly acc</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>5</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Translate business problems into Claude-based AI solutions</td>
+<td>A team built a demo and asks which model to standardize on. There are no acceptance criter</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>6</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Translate business problems into Claude-based AI solutions</td>
+<td>A tax-software vendor must produce identical results for identical inputs; calculations fo</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>7</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td>A nightly process extracts eight fields from invoices that arrive in three known layouts.</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>8</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td>An SRE team wants help diagnosing production anomalies. Investigation paths are unpredicta</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>9</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td>A marketing team needs product descriptions that must satisfy a written brand rubric (tone</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>10</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td>Support tickets fall into five categories; each needs different instructions, tools, and p</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>11</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td>A reviewer must check a document for four independent risks (privacy, export control, IP,</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>12</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td>A research agent's costs vary wildly; some runs loop for 90 tool calls repeating similar s</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>13</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td><strong>Question (Select TWO):</strong> Which are valid reasons to prefer a predefined workflow over an</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>14</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Design multi-agent systems and orchestration strategies</td>
+<td>A single research agent's context fills with raw search results and answer quality degrade</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>15</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Design multi-agent systems and orchestration strategies</td>
+<td>In a multi-agent design, all worker agents share one administrator credential for CRM acce</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>16</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Design multi-agent systems and orchestration strategies</td>
+<td>A coding assistant must implement a feature that touches an unknown number of files; the n</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>17</td>
+<td>D1</td>
+<td>Expert</td>
+<td>D</td>
+<td>Design multi-agent systems and orchestration strategies</td>
+<td>Three parallel worker agents update a shared project plan and sometimes produce conflictin</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>18</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Apply decomposition techniques for complex problem solving</td>
+<td>Generating a 40-page RFP response in one call yields uneven quality and inconsistent termi</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>19</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Apply decomposition techniques for complex problem solving</td>
+<td>A pipeline was split into 12 tiny prompt steps. Latency tripled; steps don't use different</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>20</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Apply decomposition techniques for complex problem solving</td>
+<td>A single prompt that extracts facts from medical-device complaints and then assesses regul</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>21</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Design end-to-end architectures (input → processing → output → feedbac</td>
+<td>An assistant has been live for three months. Users can thumbs-down answers, but nothing li</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>22</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Design end-to-end architectures (input → processing → output → feedbac</td>
+<td>A PoC works for five internal users with a hard-coded key, no retries, and no logging. A r</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>23</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Design end-to-end architectures (input → processing → output → feedbac</td>
+<td>An ADR says "Use a small model for triage," but gives no way to know when to change.</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>24</td>
+<td>D1</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Design end-to-end architectures (input → processing → output → feedbac</td>
+<td>Engineering favors an agent; operations favors a workflow; both argue strongly in a design</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>25</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Align solutions to business value pillars (efficiency, transformation,</td>
+<td>A contact center wants after-call summaries to cut agent after-call work. A baseline of 4.</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>26</td>
+<td>D1</td>
+<td>Intermediate</td>
+<td>A, D</td>
+<td>Select appropriate architectural patterns (workflow, agentic, augmente</td>
+<td><strong>Question (Select TWO):</strong> Which statements are correct?</td>
+<td>09a</td>
+</tr>
+<tr>
+<td>27</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Select appropriate Claude models based on trade-offs</td>
+<td>A bank labels 2M customer messages per day into 40 intents with a 500 ms latency budget. O</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>28</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Select appropriate Claude models based on trade-offs</td>
+<td>An assistant answers many simple FAQ questions but occasionally receives complex multi-doc</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>29</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Select appropriate Claude models based on trade-offs</td>
+<td>A newer, cheaper model is released. A manager asks you to switch production traffic immedi</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>30</td>
+<td>D2</td>
+<td>Expert</td>
+<td>B</td>
+<td>Select appropriate Claude models based on trade-offs</td>
+<td>A legal-reasoning workflow fails on multi-step cases. You have already clarified the promp</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>31</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Select appropriate Claude models based on trade-offs</td>
+<td>A team concludes "Model X is worse" after running a prompt carefully tuned for Model Y on</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>32</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Design system prompts, templates, and guardrails</td>
+<td>A summarizer receives user-pasted emails that sometimes contain instructions like "disrega</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>33</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Design system prompts, templates, and guardrails</td>
+<td>A compensation assistant's system prompt says "Never reveal salary data of other employees</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>34</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Design system prompts, templates, and guardrails</td>
+<td>A downstream parser fails about 3% of the time because the model adds a sentence before th</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>35</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Design system prompts, templates, and guardrails</td>
+<td>Three teams copy-paste a shared prompt and edit it locally; behavior diverges and no one k</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>36</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Apply prompt engineering techniques (zero-shot, few-shot, chain-of-tho</td>
+<td>A classifier handles common categories well but mislabels two subtle edge categories that</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>37</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Apply prompt engineering techniques (zero-shot, few-shot, chain-of-tho</td>
+<td>Two features: (1) a latency-critical 6-class routing step; (2) an offline multi-step finan</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>38</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Apply prompt engineering techniques (zero-shot, few-shot, chain-of-tho</td>
+<td>Five few-shot examples add 3,000 tokens to every request and raise cost and latency; quali</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>39</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Optimize context windows and manage token usage</td>
+<td>An agent degrades after about 40 turns. Logs show 90% of tokens are old tool outputs that</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>40</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Optimize context windows and manage token usage</td>
+<td>Employees query a 300-page policy manual that changes quarterly.</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>41</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Optimize context windows and manage token usage</td>
+<td>Monitoring shows rising cost per request. Tokens are: system 1,200; tool definitions 6,500</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>42</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Optimize context windows and manage token usage</td>
+<td><strong>Question (Select TWO):</strong> Which actions reduce token cost without dropping information th</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>43</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Implement prompt reuse strategies (caching, modular prompts, Skills)</td>
+<td>You added <code>cache_control</code> after a 6,000-token static policy, but usage shows zero cache re</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>44</td>
+<td>D2</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Implement prompt reuse strategies (caching, modular prompts, Skills)</td>
+<td>Workload 1: an interactive chat with a long static policy and many users. Workload 2: a ni</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>45</td>
+<td>D2</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Implement prompt reuse strategies (caching, modular prompts, Skills)</td>
+<td>A team has twelve occasionally needed procedures (release notes, incident reports, code re</td>
+<td>09b</td>
+</tr>
+<tr>
+<td>46</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Evaluate tool/agent configuration for capability bloat</td>
+<td>An internal assistant exposes 45 tools to every conversation. Traces show frequent wrong-t</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>47</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Evaluate tool/agent configuration for capability bloat</td>
+<td>A business-intelligence assistant only answers read-only questions, but its database tool</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>48</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Evaluate tool/agent configuration for capability bloat</td>
+<td>The tool list includes <code>search_docs</code>, <code>find_documents</code>, and <code>lookup_docs</code> with nearly iden</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>49</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Evaluate tool/agent configuration for capability bloat</td>
+<td><strong>Question (Select TWO):</strong> Which observations most strongly indicate capability bloat in a</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>50</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Analyze authentication and authorization requirements to identify secu</td>
+<td>A CRM agent uses a single administrator token for all lookups. A junior rep asks about a r</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>51</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Analyze authentication and authorization requirements to identify secu</td>
+<td>A <code>get_invoices</code> tool takes <code>tenant_id</code> and <code>customer_id</code> as arguments supplied by the mod</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>52</td>
+<td>D3</td>
+<td>Expert</td>
+<td>D</td>
+<td>Analyze authentication and authorization requirements to identify secu</td>
+<td>An HTTP-based MCP server accepts any valid OAuth token from the company's identity provide</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>53</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Analyze authentication and authorization requirements to identify secu</td>
+<td>A shared vector index serves several tenants. The app retrieves top-k chunks, sends them t</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>54</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>A, C</td>
+<td>Analyze authentication and authorization requirements to identify secu</td>
+<td><strong>Question (Select TWO):</strong> Which are authorization gaps?</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>55</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Evaluate accuracy-latency trade-offs and justify configuration decisio</td>
+<td>A consumer chat feature needs the first words to appear within a second; answers are moder</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>56</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Evaluate accuracy-latency trade-offs and justify configuration decisio</td>
+<td>A second "verification" model call doubles latency. Errors in low-risk draft replies cost</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>57</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Evaluate accuracy-latency trade-offs and justify configuration decisio</td>
+<td>Month-end spikes cause 429 errors. Retries create duplicate refund tickets in the downstre</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>58</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Analyze observability challenges and select monitoring strategies at s</td>
+<td>Support reports more wrong answers, yet dashboards show 99.9% availability and normal late</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>59</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Analyze observability challenges and select monitoring strategies at s</td>
+<td>Engineers need prompts and tool arguments in logs for debugging, but they may contain pers</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>60</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Analyze observability challenges and select monitoring strategies at s</td>
+<td>At 50M requests/day, storing full traces for all traffic is cost-prohibitive.</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>61</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Design a RAG pipeline with appropriate chunking and indexing strategie</td>
+<td>Policy documents have headings and tables. Fixed 200-token chunks split tables mid-row, an</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>62</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Design a RAG pipeline with appropriate chunking and indexing strategie</td>
+<td>After one team re-embedded new documents with a different embedding model, retrieval quali</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>63</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Design a RAG pipeline with appropriate chunking and indexing strategie</td>
+<td>The assistant sometimes cites a superseded benefits policy after a new one was published.</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>64</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Apply retrieval strategies matched to data shape and query pattern</td>
+<td><strong>Question (Select TWO):</strong> Users search by exact part numbers like "AX-4410-B" and semanti</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>65</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Apply retrieval strategies matched to data shape and query pattern</td>
+<td>Analysts ask, "What was Q3 EMEA revenue by product line?" The data lives in a warehouse.</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>66</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Apply retrieval strategies matched to data shape and query pattern</td>
+<td>Questions such as "Which suppliers of components used in Product X had incidents last year</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>67</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Evaluate progressive discovery vs. monolithic context strategy</td>
+<td>A 40-page, rarely changing product guide is used in almost every support query.</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>68</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Apply retrieval strategies matched to data shape and query pattern</td>
+<td>End-to-end answer quality on a RAG system is 78%. You suspect retrieval but aren't sure.</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>69</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Evaluate connection protocols and select the appropriate integration m</td>
+<td>Three applications need the same ticketing integration now, and two more teams will add ap</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>70</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Evaluate connection protocols and select the appropriate integration m</td>
+<td>One internal application calls a single stable internal pricing API on the hot path; laten</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>71</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Evaluate connection protocols and select the appropriate integration m</td>
+<td>A partner exposes an autonomous claims-adjudication agent behind its own API. Your agent s</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>72</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>B, D</td>
+<td>Evaluate connection protocols and select the appropriate integration m</td>
+<td><strong>Question (Select TWO):</strong> A developer wants to install a popular community MCP server tha</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>73</td>
+<td>D3</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Evaluate progressive discovery vs. monolithic context strategy</td>
+<td>An enterprise platform has 200 internal tools; any given task needs about five. Loading al</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>74</td>
+<td>D3</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Evaluate progressive discovery vs. monolithic context strategy</td>
+<td>A focused assistant uses six stable tools that are relevant to almost every conversation.</td>
+<td>09c</td>
+</tr>
+<tr>
+<td>75</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Define evaluation metrics (accuracy, latency, cost, safety, security)</td>
+<td>A sponsor says the assistant must be "99% accurate."</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>76</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Define evaluation metrics (accuracy, latency, cost, safety, security)</td>
+<td>A candidate release scores 92% on task accuracy (threshold 90%) but yields three critical</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>77</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Define evaluation metrics (accuracy, latency, cost, safety, security)</td>
+<td>The dashboard shows mean cost per request of $0.004, within budget, but finance sees occas</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>78</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Define evaluation metrics (accuracy, latency, cost, safety, security)</td>
+<td>A legal-summary tool scores well on text-overlap metrics but lawyers say it misses obligat</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>79</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Define evaluation metrics (accuracy, latency, cost, safety, security)</td>
+<td><strong>Question (Select TWO):</strong> Which belong in the acceptance criteria for a customer-facing a</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>80</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>The eval set consists of 100 clean, typical questions. In production, users send typos, of</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>81</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>The team iterates on prompts while reporting results on the same 150-case set, and scores</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>82</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>Overall accuracy is 94%, but accuracy for questions about policies updated this quarter is</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>83</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>You need to scale the evaluation of open-ended response helpfulness and tone across thousa</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>84</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>An LLM judge consistently prefers longer answers, even when human reviewers prefer concise</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>85</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>A pipeline extracts invoice totals and dates into JSON, and reference values are known.</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>86</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Design evaluation datasets and test frameworks using mixed methodologi</td>
+<td>A RAG agent with tools gets low end-to-end scores, and the team can't tell where the failu</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>87</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Conduct A/B testing and iterative improvements</td>
+<td>A new prompt wins on offline evals. Leadership wants to know if it improves resolution rat</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>88</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Conduct A/B testing and iterative improvements</td>
+<td>A cheaper model matches accuracy but fails two indirect-prompt-injection cases that the in</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>89</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Conduct A/B testing and iterative improvements</td>
+<td>A prompt tweak raises average quality by 2 points but drops one customer segment by 6 poin</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>90</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Conduct A/B testing and iterative improvements</td>
+<td>Three days into a planned two-week A/B test, the new variant looks better and a manager wa</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>91</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Conduct A/B testing and iterative improvements</td>
+<td>An analyst edited the live prompt in a vendor console; quality dropped and no one can tell</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>92</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Diagnose system issues (prompt failure, hallucinations, model mismatch</td>
+<td>The assistant ignores a length limit that appears at the end of a 3,000-word prompt which</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>93</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Diagnose system issues (prompt failure, hallucinations, model mismatch</td>
+<td>When retrieval returns nothing relevant, the assistant invents a plausible policy.</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>94</td>
+<td>D4</td>
+<td>Expert</td>
+<td>A</td>
+<td>Diagnose system issues (prompt failure, hallucinations, model mismatch</td>
+<td>Quality shifted overnight, with no code changes. Your service references a floating model</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>95</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>A, C</td>
+<td>Diagnose system issues (prompt failure, hallucinations, model mismatch</td>
+<td><strong>Question (Select TWO):</strong> Confident wrong answers began after a nightly index refresh. Wh</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>96</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Optimize token usage, latency, and cost-performance trade-offs</td>
+<td>Cost per request doubled after a prompt edit. Tokens per request rose and cache read token</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>97</td>
+<td>D4</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Optimize token usage, latency, and cost-performance trade-offs</td>
+<td>A workflow calls three independent tools sequentially, adding latency.</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>98</td>
+<td>D4</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Monitor system performance using logging and observability tools</td>
+<td>Running an LLM judge over every production output is too expensive.</td>
+<td>09d</td>
+</tr>
+<tr>
+<td>99</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Implement guardrails and safety controls</td>
+<td>An email-triage agent reads inbound customer emails and can send external emails. A penetr</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>100</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Implement guardrails and safety controls</td>
+<td>An assistant fetches web pages and passes their text to Claude.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>101</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Implement guardrails and safety controls</td>
+<td>A public chatbot sees attempts to jailbreak it. You want an inexpensive pre-filter.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>102</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Implement guardrails and safety controls</td>
+<td>An agent can write files and call external URLs. A review flags exfiltration risk.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>103</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Implement guardrails and safety controls</td>
+<td><strong>Question (Select TWO):</strong> Which are <em>preventive</em> controls?</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>104</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Implement guardrails and safety controls</td>
+<td>A support bot occasionally echoes customers' full card numbers from tool results into repl</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>105</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Identify risks, limitations, and failure modes of LLM systems</td>
+<td>An assistant has a tool that can delete customer accounts. A prompt injection triggers it.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>106</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Identify risks, limitations, and failure modes of LLM systems</td>
+<td>A crafted document causes an agent to loop through thousands of tool calls, creating a sur</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>107</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Identify risks, limitations, and failure modes of LLM systems</td>
+<td>Reviewers accept AI recommendations 99% of the time and rarely read evidence.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>108</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Apply human-in-the-loop validation strategies</td>
+<td>A procurement agent has low confidence on a $40,000 vendor change that cannot be easily re</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>109</td>
+<td>D5</td>
+<td>Expert</td>
+<td>B</td>
+<td>Apply human-in-the-loop validation strategies</td>
+<td>A design auto-approves actions when Claude states "confidence: 95%."</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>110</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Apply human-in-the-loop validation strategies</td>
+<td>The safety-screening service times out during a traffic spike.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>111</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>A, C</td>
+<td>Apply human-in-the-loop validation strategies</td>
+<td><strong>Question (Select TWO):</strong> Which changes best reduce rubber-stamp approvals?</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>112</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP)</td>
+<td>A payer wants an assistant to summarize member calls containing PHI. Design freeze is next</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>113</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP)</td>
+<td>A user in the EU requests erasure of their personal data. The system stores it in a CRM, a</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>114</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP)</td>
+<td>A federal agency requires services authorized at a specific FedRAMP impact level.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>115</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP)</td>
+<td><strong>Question (Select TWO):</strong> Which implement the principle of data minimization?</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>116</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP)</td>
+<td>An auditor asks you to demonstrate that access controls work.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>117</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Address ethical AI considerations (bias, fairness, transparency)</td>
+<td>A résumé-screening assistant ranks identical resumes differently when applicant names chan</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>118</td>
+<td>D5</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Address ethical AI considerations (bias, fairness, transparency)</td>
+<td>A benefits assistant influences eligibility guidance.</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>119</td>
+<td>D5</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Address ethical AI considerations (bias, fairness, transparency)</td>
+<td>Overall accuracy is 95%, but it is 82% for one language group; the acceptance policy requi</td>
+<td>09e</td>
+</tr>
+<tr>
+<td>120</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Elicit and clarify business requirements through discovery</td>
+<td>A VP says, "We need an AI agent for customer support." No metrics, volumes, or constraints</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>121</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Elicit and clarify business requirements through discovery</td>
+<td>Two executives give conflicting goals: Operations wants minimum cost per ticket; Legal wan</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>122</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Communicate trade-offs and set realistic expectations</td>
+<td>A stakeholder asks for "100% accuracy" on policy answers.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>123</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Communicate trade-offs and set realistic expectations</td>
+<td>Finance asks why the pilot's cost per resolved case is above projections. Analysis shows l</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>124</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Build a business case and communicate value</td>
+<td>You must write an executive summary for a steering committee.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>125</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Build a business case and communicate value</td>
+<td>A business case claims "$3M savings" based on automating 100% of tickets.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>126</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Define SLAs and manage approvals/objections</td>
+<td>The business asks for "99.99% availability and 1-second responses" for an agent that makes</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>127</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>A, C</td>
+<td>Define SLAs and manage approvals/objections</td>
+<td><strong>Question (Select TWO):</strong> A security team objects that the agent could leak data. Which r</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>128</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Define SLAs and manage approvals/objections</td>
+<td>A change to the system prompt could alter customer-facing tone. Compliance requires approv</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>129</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Manage the solution lifecycle from PoC to production</td>
+<td>A PoC with ten curated examples impressed the sponsor, who wants to go live next week.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>130</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Manage the solution lifecycle from PoC to production</td>
+<td>A pilot serves 5% of traffic. Quality is on target, but cost per case is rising with usage</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>131</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Manage the solution lifecycle from PoC to production</td>
+<td>The provider announces that the model version you use will be deprecated in 90 days.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>132</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Produce documentation and handoff artifacts</td>
+<td>The client's team will operate the solution after launch.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>133</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Produce documentation and handoff artifacts</td>
+<td>Six months later, nobody remembers why a prompt uses a particular retrieval cutoff.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>134</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Produce documentation and handoff artifacts</td>
+<td>A production-readiness review is scheduled.</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>135</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Elicit and clarify business requirements through discovery</td>
+<td>Discovery reveals the target process is deterministic, with stable rules and structured in</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>136</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>D</td>
+<td>Communicate trade-offs and set realistic expectations</td>
+<td>The sponsor wants to launch broadly after an impressive pilot, but metrics show weak perfo</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>137</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>A, C</td>
+<td>Manage the solution lifecycle from PoC to production</td>
+<td><strong>Question (Select TWO):</strong> Which are appropriate post-launch lifecycle practices?</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>138</td>
+<td>D6</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Define SLAs and manage approvals/objections</td>
+<td>A customer's contract requires that a human review all legal-risk responses within 4 hours</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>139</td>
+<td>D6</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Build a business case and communicate value</td>
+<td>After launch, the sponsor asks, "Is it working?"</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>140</td>
+<td>D6</td>
+<td>Expert</td>
+<td>D</td>
+<td>Produce documentation and handoff artifacts</td>
+<td>A regulated client requires evidence that changes were reviewed, tested, and approved befo</td>
+<td>09f</td>
+</tr>
+<tr>
+<td>141</td>
+<td>D7</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Configure shared team tooling and standards</td>
+<td>A 40-engineer team uses Claude Code. Each developer re-explains build commands, convention</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>142</td>
+<td>D7</td>
+<td>Advanced</td>
+<td>C</td>
+<td>Configure shared team tooling and standards</td>
+<td>Security wants to prevent the coding agent from reading secrets files or running destructi</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>143</td>
+<td>D7</td>
+<td>Intermediate</td>
+<td>C</td>
+<td>Establish developer workflows with AI assistance</td>
+<td>A developer asks the agent to refactor a large module in one request. The result is a huge</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>144</td>
+<td>D7</td>
+<td>Advanced</td>
+<td>D</td>
+<td>Establish developer workflows with AI assistance</td>
+<td>The team wants an agent to review pull requests in CI.</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>145</td>
+<td>D7</td>
+<td>Intermediate</td>
+<td>B</td>
+<td>Create operational runbooks and support processes</td>
+<td>At 2 a.m. the on-call engineer sees a spike in refusals and escalations from the productio</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>146</td>
+<td>D7</td>
+<td>Advanced</td>
+<td>A</td>
+<td>Create operational runbooks and support processes</td>
+<td>The assistant's behavior changed after a "minor" prompt tweak, and nobody can tell which v</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>147</td>
+<td>D7</td>
+<td>Intermediate</td>
+<td>A, C</td>
+<td>Train and onboard teams</td>
+<td><strong>Question (Select TWO):</strong> Which practices best onboard a team to a new AI-assisted workfl</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>148</td>
+<td>D7</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Configure shared team tooling and standards</td>
+<td>Teams want to reuse a standard code-review procedure with reference checklists and scripts</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>149</td>
+<td>D7</td>
+<td>Intermediate</td>
+<td>A</td>
+<td>Establish developer workflows with AI assistance</td>
+<td>A team wants a deterministic action every time the agent edits a file, such as running the</td>
+<td>09g</td>
+</tr>
+<tr>
+<td>150</td>
+<td>D7</td>
+<td>Advanced</td>
+<td>B</td>
+<td>Create operational runbooks and support processes</td>
+<td>Leadership asks how to know whether the AI-assisted workflow improves engineering outcomes</td>
+<td>09g</td>
+</tr>
+</tbody>
+</table>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

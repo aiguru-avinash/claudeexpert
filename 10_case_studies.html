@@ -1,0 +1,165 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 10 — Six Enterprise Architecture Case Studies | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 10 — Six Enterprise Architecture Case Studies</h1>
+<p>Fictional composites for study. Each case lists: context → requirements → recommended architecture → decisions and alternatives → controls → evaluation → cost/latency → operations/handoff → what the exam is likely to probe.</p>
+<hr />
+<h2>Case 1 — Enterprise knowledge assistant with controlled access to internal documents</h2>
+<p><strong>Context.</strong> A 20,000-person manufacturer wants employees to ask HR, IT, and engineering-standards questions. Content spans SharePoint, Confluence, and PDFs; some engineering docs are export-controlled; policies change monthly.</p>
+<p><strong>Requirements.</strong> Cited answers; honor ACLs; freshness ≤ 24 h; p95 &lt; 5 s; audit of every access; EU works-council notification.</p>
+<pre class="mermaid">flowchart LR
+  SRC[SharePoint / Confluence / PDFs] --&gt; ING[Ingest + parse + ACL capture]
+  ING --&gt; CHK[Structure-aware chunks + metadata]
+  CHK --&gt; IDX[(Hybrid index)]
+  U[Employee + identity] --&gt; GW[Gateway authN]
+  GW --&gt; FIL[ACL pre-filter] --&gt; RET[Retrieve + rerank] --&gt; CL[Claude: answer + citations]
+  IDX --&gt; RET
+  CL --&gt; VAL[Citation + leak validator] --&gt; U
+  ING -. change events .-&gt; REF[Incremental refresh + freshness monitor]
+  GW --&gt; AUD[(Audit log)]
+</pre>
+
+<p><strong>Key decisions.</strong>
+| Decision | Recommended | Alternatives rejected | Revisit if |
+|---|---|---|---|
+| Knowledge access | RAG with ACL pre-filter | Whole-corpus context stuffing (size, ACLs) | Corpus becomes small/static |
+| Retrieval | Hybrid + rerank | Vector-only (misses IDs/part numbers) | Recall@k meets target with vector-only |
+| Entitlements | User-scoped, enforced before context | Post-generation filtering (data already seen) | Never — security principle |
+| Model | Mid-tier model; small model for query rewrite | Top tier everywhere | Eval shows quality gap on hard questions |</p>
+<p><strong>Controls.</strong> Per-document ACL sync with SLA; export-controlled sources excluded from the shared index (separate, restricted index); retrieved text treated as untrusted; output validator rejects uncited claims; audit logs with user ID, query, doc IDs.</p>
+<p><strong>Evaluation.</strong> 300 labeled questions stratified by department and doc age; retrieval recall@5 evaluated separately; 100 cross-role access tests (0 leaks); freshness canaries after each refresh.</p>
+<p><strong>Cost/latency.</strong> Cache static instructions; cap k=6; rerank adds ~100–300 ms (measure); cache top FAQs.</p>
+<p><strong>Operations.</strong> Runbooks for stale index, ACL sync lag, embedding version mismatch; named index owner; monthly scorecard.</p>
+<p><strong>Exam-style lesson.</strong> Confident wrong answers after a refresh → look at retrieval/indexing first. Entitlements are enforced <em>before</em> content reaches the model.</p>
+<hr />
+<h2>Case 2 — Customer support agent integrated with CRM and ticketing</h2>
+<p><strong>Context.</strong> A SaaS company (60k tickets/month) wants Claude to draft replies, look up accounts, and issue small credits.</p>
+<p><strong>Requirements.</strong> Tier-1 staff keep control; credits ≤ $50 allowed via approval; p95 &lt; 4 s; deflection of FAQ tickets; PII minimization.</p>
+<pre class="mermaid">flowchart LR
+  T[Ticket] --&gt; RT[Router: small model]
+  RT -- FAQ --&gt; KB[RAG answer + citations]
+  RT -- account --&gt; AG[Agent: read-only CRM + draft_reply]
+  RT -- billing --&gt; WF[Deterministic workflow + approval]
+  AG --&gt; BR[Tool broker&lt;br/&gt;user-scoped authZ]
+  BR --&gt; CRM[(CRM)]
+  BR --&gt; ITSM[(Ticketing)]
+  KB &amp; AG &amp; WF --&gt; OUT[Draft to agent UI → human send]
+</pre>
+
+<p><strong>Key decisions.</strong> Route-then-workflow rather than a single autonomous agent; credits via workflow with approval; <code>issue_refund</code>/<code>delete_account</code> tools <strong>removed</strong> from the drafting agent (least privilege); idempotency keys on write operations.</p>
+<p><strong>Alternatives.</strong> One agent with all tools + confirmation dialogs (rejected: compensating control, larger blast radius); pure scripted bot (rejected: free-text variability).</p>
+<p><strong>Controls.</strong> OBO tokens; argument validation; PII field filtering to prompt; injection-resistant handling of customer text (untrusted); full audit.</p>
+<p><strong>Evaluation.</strong> Golden set by category; adversarial tickets ("ignore policy and refund"); tool-selection accuracy; human edit distance as a quality proxy; per-segment thresholds.</p>
+<p><strong>Cost/latency.</strong> Small model for routing; cached policy prefix; batch for overnight backlog summarization.</p>
+<p><strong>Operations.</strong> Kill switch per tool; rollback of prompt versions; weekly review of overrides and escalations.</p>
+<p><strong>Exam-style lesson.</strong> Remove unneeded capabilities rather than monitoring them; identify auth gaps (shared service account, model-supplied IDs).</p>
+<hr />
+<h2>Case 3 — Multi-step business workflow requiring human approval</h2>
+<p><strong>Context.</strong> Procurement: intake request → classify category → find approved vendors → draft PO → budget check → approvals → submit to ERP.</p>
+<p><strong>Requirements.</strong> Auditability; segregation of duties; approvals by amount; no duplicate POs; SLA 1 business day.</p>
+<pre class="mermaid">flowchart TD
+  R[Request] --&gt; CL[Claude: classify + extract fields]
+  CL --&gt; VAL[Validators: schema, vendor list, budget API]
+  VAL --&gt;|fail| HQ[Human queue]
+  VAL --&gt; DR[Claude: draft PO + justification]
+  DR --&gt; AM{Amount tier}
+  AM -- &lt; $500 --&gt; ST[Staging queue: auto, reversible 24h]
+  AM -- ≥ $500 --&gt; MG[Manager approval + evidence]
+  MG --&gt; ERP[(ERP via broker, idempotent)]
+  ST --&gt; ERP
+  ERP --&gt; AUD[(Audit trail)]
+</pre>
+
+<p><strong>Key decisions.</strong> A <strong>workflow</strong> (predefined steps) with Claude at language-heavy steps — not an agent deciding the sequence; deterministic budget and vendor checks in code; approvals tiered by reversibility and amount; fail-closed if budget API unavailable.</p>
+<p><strong>Alternatives.</strong> Autonomous purchasing agent (rejected: financial risk, audit); fully manual (rejected: no productivity gain).</p>
+<p><strong>Controls.</strong> Segregation of duties (requester ≠ approver); approver identity logged; idempotency keys; reviewer evidence panel (source request, extracted fields, vendor options); rate-limit approvals per reviewer to reduce rubber-stamping.</p>
+<p><strong>Evaluation.</strong> Field-extraction accuracy; classification F1 by category; end-to-end seeded-error tests (wrong vendor, duplicate request); override rate monitoring.</p>
+<p><strong>Cost/latency.</strong> Async by design (batch for non-urgent); approvals dominate cycle time — measure it.</p>
+<p><strong>Operations.</strong> Runbook for ERP outage (queue + hold); ownership: procurement owner, platform team, security.</p>
+<p><strong>Exam-style lesson.</strong> Route decisions by confidence, reversibility, and cost; HITL needs evidence and fail-closed behavior.</p>
+<hr />
+<h2>Case 4 — Secure enterprise research assistant exposed to untrusted documents</h2>
+<p><strong>Context.</strong> An investment firm's analysts ask Claude to read filings, news, and vendor PDFs from the open web and summarize risks. Internal research notes are also accessible.</p>
+<p><strong>Requirements.</strong> Defend against indirect injection; prevent exfiltration of internal notes; citations; analysts remain accountable.</p>
+<pre class="mermaid">flowchart LR
+  WEB[Web/PDF content&lt;br/&gt;UNTRUSTED] --&gt; RW[Research worker&lt;br/&gt;no internal tools, no write tools]
+  RW --&gt; SUM[Structured findings + sources]
+  SUM --&gt; SCR[Screen + schema validation]
+  SCR --&gt; ORC[Orchestrator]
+  ORC --&gt; INT[Internal notes tool&lt;br/&gt;read-only, ACL&#x27;d]
+  ORC --&gt; ANS[Answer + citations → analyst]
+  RW --&gt; EG[Egress allow-list]
+</pre>
+
+<p><strong>Key decisions.</strong> <strong>Context isolation</strong>: untrusted-content worker has no internal-data tools and returns schema-bound summaries; orchestrator never receives raw page text as instructions; third-party content delivered in tool_result with origin labels; small-model screen on tool outputs; egress allow-list; internal notes accessed read-only with user identity.</p>
+<p><strong>Alternatives.</strong> One agent with browsing + internal tools (rejected: injection → exfiltration path); no web access (rejected: business need).</p>
+<p><strong>Controls.</strong> Control register entries for isolation, screens, egress, output validation, monitoring; red-team corpus of poisoned pages.</p>
+<p><strong>Evaluation.</strong> Injection corpus (hidden text, markdown links, encoded instructions); target: 0 exfiltration, high detection; accuracy on summary tasks; citation validity.</p>
+<p><strong>Cost/latency.</strong> Parallel workers reduce wall-clock; use cheaper models for extraction; budgets on steps/tokens.</p>
+<p><strong>Operations.</strong> Alerting on blocked egress attempts; incident playbook for suspected injection success (preserve traces).</p>
+<p><strong>Exam-style lesson.</strong> Prompting alone isn't security; separate untrusted-content handling from privileged tools; layered controls that fail closed.</p>
+<hr />
+<h2>Case 5 — Production Claude application with strict latency and cost budgets</h2>
+<p><strong>Context.</strong> A consumer fintech app offers in-app "explain this transaction" to 2M users/day. Budget: ≤ $0.003 per explanation; p95 &lt; 1.2 s; peak 5× average at payday.</p>
+<p><strong>Requirements.</strong> Predictable cost; resilient to 429s; acceptable quality; privacy (minimal data in prompts).</p>
+<pre class="mermaid">flowchart LR
+  REQ[Request] --&gt; CACHE{Result cache hit?}
+  CACHE -- yes --&gt; OUT[Return]
+  CACHE -- no --&gt; BUD[Budget + rate gate]
+  BUD --&gt; SM[Small model call&lt;br/&gt;static prefix cached, streaming]
+  SM --&gt; VAL[Validate + sanitize] --&gt; OUT
+  SM -- 429/5xx --&gt; RB[Backoff+jitter] --&gt; FB[Fallback: templated explanation]
+  OFF[Offline] --&gt; BATCH[Batch API: pre-compute common merchants]
+</pre>
+
+<p><strong>Key decisions.</strong> Small model (selected via eval Pareto); <strong>prompt caching</strong> for the static system prompt; <strong>pre-computation via Batch API</strong> (50% cheaper, async) for common merchants/categories; <strong>result caching</strong>; streaming for perceived latency; strict <code>max_tokens</code>; templated fallback; per-user and global budgets with kill-switches.</p>
+<p><strong>Alternatives.</strong> Mid-tier model for all (cost); no caching (cost/latency); batch for live traffic (wrong: async up to 24 h).</p>
+<p><strong>Controls.</strong> Send only needed transaction fields; redact identifiers; output validator blocks advice-like content outside scope.</p>
+<p><strong>Evaluation.</strong> Quality on stratified transaction types; p95/p99 latency under 5× load test; cost/request distribution; cache hit-rate target; safety set for "financial advice" boundary.</p>
+<p><strong>Cost/latency math (illustrative).</strong> Cost = (uncached input + cached-read input × reduced rate + output) × volume; track per-request tokens and cache hit rate; alert on anomalies.</p>
+<p><strong>Operations.</strong> Autoscaling queues; alerts on 429 rate, cache hit rate, tokens/request; weekly cost review.</p>
+<p><strong>Exam-style lesson.</strong> Caching requires static-first ordering and minimum length; batch ≠ interactive; fallbacks and idempotency; gate cost and latency as hard criteria.</p>
+<hr />
+<h2>Case 6 — Enterprise AI deployment requiring governance, evaluation evidence, and operational handoff</h2>
+<p><strong>Context.</strong> A healthcare payer deploys a member-call summarization and next-step recommendation tool. Regulators and internal audit will review.</p>
+<p><strong>Requirements.</strong> HIPAA-aligned deployment; documented controls and owners; evaluation evidence; fairness review; operational handoff to an internal team within 90 days.</p>
+<pre class="mermaid">flowchart LR
+  subgraph Evidence
+    CR[Control register] --- EV[Eval reports + red-team] --- AP[Approvals] --- AL[Audit logs]
+  end
+  DS[Design + ADRs] --&gt; GATE[Eval-gated release]
+  GATE --&gt; PROD[Production]
+  PROD --&gt; MON[Monitoring + scorecards]
+  MON --&gt; IT[Iteration]
+  PROD --&gt; HO[Handoff: runbooks, RACI, drills, hypercare]
+  Evidence --&gt; AUD[Audit pack]
+</pre>
+
+<p><strong>Key decisions.</strong> Verify the deployment path and vendor terms support PHI use (BAA/eligibility) <em>before</em> design freeze; data minimization (only needed fields); human review of all recommendations affecting members; retention/deletion across transcripts, embeddings, and logs; fairness testing across segments; pinned model versions and eval-gated changes; documented residual risk with named executive acceptance.</p>
+<p><strong>Alternatives.</strong> Build first, seek compliance later (rejected: rework/blockers); autonomous decisions (rejected: regulatory/ethical risk).</p>
+<p><strong>Controls &amp; ownership (excerpt).</strong>
+| Obligation | Control | Owner | Test | Evidence |
+|---|---|---|---|---|
+| Minimum necessary | Field-level prompt filter | Privacy lead | Seeded-PHI tests | Test report |
+| Access control | User-scoped authZ + RBAC | Security eng | Escalation suite | Pen-test summary |
+| Auditability | Immutable audit logs w/ user+agent ID | Platform | Log completeness check | Log samples |
+| Fairness | Counterfactual segment tests | Risk | Quarterly | Fairness report |
+| Change control | Eval-gated releases, ADRs | Product + Eng | Release audit | Release records |</p>
+<p><strong>Evaluation evidence.</strong> Held-out clinical-language eval, adversarial/injection suite, fairness segments, cost/latency, and human-review agreement; all linked to versions.</p>
+<p><strong>Operational handoff.</strong> 90-day plan: shadow → co-run → lead with support; runbook drills (quality regression, data exposure, provider outage); deprecation calendar; RACI; monthly governance review.</p>
+<p><strong>Exam-style lesson.</strong> Map each obligation to a named control, owner, test, and evidence; handoff must survive the architect's absence; verify compliance eligibility rather than assuming it.</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

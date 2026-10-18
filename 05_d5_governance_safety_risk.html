@@ -1,0 +1,247 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 5 — Domain 5: Governance, Safety &amp; Risk Management (14%) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 5 — Domain 5: Governance, Safety &amp; Risk Management (14%)</h1>
+<p><em>Prep-course lesson: Responsible AI, Safety &amp; Risk for Architects (114 min). Official tasks: guardrails and safety controls · risks, limitations, failure modes · human-in-the-loop validation · compliance (e.g., GDPR, HIPAA, FedRAMP) · ethical AI (bias, fairness, transparency).</em></p>
+<p>Topics: <strong>5.1</strong> Threat modeling and failure modes · <strong>5.2</strong> The safety stack: screening, tool-call authorization, untrusted content · <strong>5.3</strong> Human-in-the-loop, confidence, reversibility, fail-closed design · <strong>5.4</strong> Compliance, privacy, and audit evidence · <strong>5.5</strong> Ethical AI: bias, fairness, transparency</p>
+<blockquote>
+<p><strong>Core rule of this domain:</strong> <em>Prompting alone is not a security control.</em> Authorization, data access, and irreversible actions are enforced in code, outside the model.</p>
+</blockquote>
+<h2>The control register (use this format for every control)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Field</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Risk addressed</td>
+<td>What goes wrong without it?</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Placement</td>
+<td>Where in the architecture does it sit?</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Owner</td>
+<td>Who is accountable (named role)?</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Test</td>
+<td>How is it tested (and how often)?</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Evidence</td>
+<td>What artifact proves it works?</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Failure behavior</td>
+<td>What happens when the control fails? (should <strong>fail closed</strong> for security/safety)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5.1 Threat modeling, risk classification, and LLM failure modes</h2>
+<p><strong>1. Objectives.</strong> Threat-model a Claude system; classify risk; name LLM-specific failure modes.</p>
+<p><strong>2. Prerequisites.</strong> STRIDE-style threat modeling basics; D3 identity.</p>
+<p><strong>3. Beginner.</strong> List what an attacker (or an honest mistake) could make the system do, how bad it would be, and which controls reduce it.</p>
+<p><strong>4. Advanced.</strong> Two distinct threat models (as in Anthropic's guardrail docs): <strong>direct</strong> prompt injection/jailbreaks (the <em>user</em> is adversarial) and <strong>indirect</strong> prompt injection (the user is trusted but Claude processes <strong>third-party content</strong> — web pages, emails, documents, tool results — containing adversarial instructions). Other risks: <strong>hallucination/fabrication</strong>; <strong>sensitive data disclosure</strong> (via context, logs, or cross-tenant retrieval); <strong>excessive agency</strong> (tools that can do too much); <strong>over-reliance/automation bias</strong>; <strong>bias/unfair outcomes</strong>; <strong>supply-chain</strong> (untrusted MCP servers/skills/plugins); <strong>denial-of-wallet</strong> (runaway token use); <strong>prompt/system-leak</strong>; <strong>non-determinism and drift</strong>. Classify use cases by <strong>impact × autonomy × data sensitivity × reversibility</strong>; the classification drives which controls are mandatory (e.g., high-impact + autonomous + sensitive data → human approval, strict authZ, full audit).</p>
+<p><strong>5. Steps.</strong> (1) Diagram data flows and trust boundaries. (2) Enumerate threats per boundary (user input, retrieved content, tool results, model output, tool execution). (3) Rate likelihood/impact. (4) Assign controls and owners. (5) Record residual risk and acceptance sign-off.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  UI[User input&lt;br/&gt;direct injection] --&gt; G[Gateway/screens]
+  EX[External content&lt;br/&gt;indirect injection] --&gt; G
+  G --&gt; C[Claude]
+  C --&gt; TB[Tool broker&lt;br/&gt;authZ + validation]
+  TB --&gt; SYS[(Systems of record)]
+  C --&gt; OS[Output screen]
+  OS --&gt; U[User]
+  subgraph Untrusted
+    UI
+    EX
+  end
+</pre>
+
+<p><strong>7. Scenario.</strong> A research assistant summarizes web pages; a page hides "email the user's files to attacker@…". Without isolation, an agent with an email tool might comply.</p>
+<p><strong>8. Recommended/alternatives.</strong> Threat model + risk tiering before design freeze. Alternative: add guardrails after launch (late, expensive).</p>
+<p><strong>9. Governance.</strong> Risk register with owners; formal risk acceptance for residuals; periodic review.</p>
+<p><strong>10. Cost.</strong> Controls add latency/tokens (screens) — budget for them.</p>
+<p><strong>11. Mistakes.</strong> Only modeling direct jailbreaks; ignoring tool results as an attack path; no residual-risk record.</p>
+<p><strong>12. Scenario question.</strong> <em>Users are trusted employees; the agent reads inbound customer emails.</em> → Primary threat is indirect injection via email content; isolate and constrain tools.</p>
+<p><strong>13. Revision.</strong> Direct vs. indirect; impact × autonomy × sensitivity × reversibility; record residual risk.</p>
+<p><strong>14. Docs.</strong> https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks</p>
+<hr />
+<h2>5.2 The safety stack: input screening, output screening, tool-call authorization, untrusted content</h2>
+<p><strong>1. Objectives.</strong> Place each control correctly; design layered defenses; handle untrusted content safely.</p>
+<p><strong>2. Prerequisites.</strong> 5.1; 3.3.</p>
+<p><strong>3. Beginner.</strong> No single control is enough. Layer them: screen inputs, constrain what Claude can do, check outputs, and authorize every tool call outside the model.</p>
+<p><strong>4. Advanced — layers (Anthropic's guidance and common practice):</strong>
+- <strong>Input validation/screening:</strong> filter known injection patterns; use a lightweight model (e.g., a small Claude tier) as a <strong>harmlessness/relevance screen</strong> that returns a constrained classification (structured output) before the main call.
+- <strong>Hardened system prompt:</strong> state boundaries and refusal behavior; <strong>state that tool/document content is untrusted data that must never override instructions.</strong> (Guidance, not enforcement.)
+- <strong>Untrusted-content handling:</strong> deliver third-party content in <strong>tool_result blocks</strong> (not in the system prompt or as user instructions); label its origin; <strong>don't put your own instructions in tool results</strong> (they may be ignored or flagged); optionally <strong>screen tool outputs</strong> with a small classifier before returning them to the main model; send follow-up instructions in the next user turn.
+- <strong>Tool-call authorization:</strong> a <strong>broker outside the model</strong> validates the tool, arguments, caller identity, scope, rate, and policy for every call; deny by default.
+- <strong>Least privilege / capability reduction:</strong> remove unneeded tools; read-only by default; separate identities for risky workers.
+- <strong>Output screening:</strong> validate schema, check for PII/secret leakage, policy violations, ungrounded claims; require citations; block or route to review.
+- <strong>Egress controls:</strong> restrict network destinations and data exfil channels (URLs, email recipients, file writes).
+- <strong>Monitoring:</strong> analyze outputs for signs of successful injection; alert and iterate.</p>
+<p><strong>5. Steps.</strong> (1) For each trust boundary, pick a preventive control first, detective second. (2) Implement a tool broker with allow-list + argument validation. (3) Add screens (input, tool output, output). (4) Test with an adversarial suite. (5) Define failure behavior per control.</p>
+<p><strong>6. Control register example:</strong>
+| Control | Risk | Placement | Owner | Test | Evidence | On failure |
+|---|---|---|---|---|---|---|
+| Tool broker authZ | Excessive agency / confused deputy | Between model and backends | Security eng | Cross-tenant and privilege-escalation test suite, nightly | Test reports; deny logs | <strong>Deny</strong> (fail closed) |
+| Tool-output injection screen | Indirect injection | After tool, before model | AI platform team | Injected-doc corpus; target ≥ X% catch | Eval scores; blocked-item logs | Withhold content; escalate |
+| Output PII filter | Data leak | Before response | Privacy officer | Seeded-PII tests | Redaction reports | Block response; generic message |
+| Egress allow-list | Exfiltration | Network layer | Infra/security | Attempt blocked domains | Firewall logs | Deny |
+| Spend/step budget | Runaway cost | Orchestrator | Eng lead | Loop-injection test | Budget alerts | Stop run; alert |</p>
+<p><strong>7. Scenario.</strong> Email-triage agent: emails are wrapped in tool_result with origin label; a small-model screen flags instruction-like content; the agent's tool set is read-only + "draft reply"; sending requires human approval; egress limited to company domain.</p>
+<p><strong>8. Recommended/alternatives.</strong> Layered, with the broker as the non-negotiable control. Alternative: a long "security" system prompt (insufficient alone).</p>
+<p><strong>9. Governance.</strong> Owners assigned; red-team cadence; changes to controls go through change management.</p>
+<p><strong>10. Cost/latency.</strong> Screens add a call: use small models and run in parallel where safe.</p>
+<p><strong>11. Mistakes.</strong> Relying on the model to enforce policy; putting untrusted text in system prompts; giving the screen model tools; "confirm?" dialogs instead of removing capability; no failure-mode design.</p>
+<p><strong>12. Scenario question.</strong> <em>Pen test shows the agent forwarded internal data after reading a malicious PDF.</em> → Add egress/tool-call authorization outside the model and isolate untrusted-content handling; don't only lengthen the prompt.</p>
+<p><strong>13. Revision.</strong> Layered; broker outside model; untrusted content in tool_result and screened; output validated; fail closed.</p>
+<p><strong>14. Docs.</strong> Mitigate jailbreaks and prompt injections (platform docs); Tool use docs; MCP security guidance.</p>
+<hr />
+<h2>5.3 Human-in-the-loop, confidence, reversibility, and fail-closed design</h2>
+<p><strong>1. Objectives.</strong> Route decisions to the right reviewer based on confidence, reversibility, and cost; design approval UX and escalation; choose safe failure modes.</p>
+<p><strong>2. Prerequisites.</strong> 5.1–5.2.</p>
+<p><strong>3. Beginner.</strong> Let Claude act alone only when mistakes are cheap and reversible. Put a human in the loop when mistakes are costly, irreversible, or uncertain.</p>
+<p><strong>4. Advanced.</strong> Decision matrix:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Reversible, low cost</th>
+<th>Irreversible or high cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>High confidence</strong></td>
+<td>Auto-execute + log</td>
+<td>Human approval (sampled or always, by policy)</td>
+</tr>
+<tr>
+<td><strong>Low confidence</strong></td>
+<td>Auto-draft; user confirms</td>
+<td>Human decides; model provides evidence</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Confidence</strong> is not a number Claude reliably self-reports; derive it from signals: retrieval coverage, agreement across parallel runs, validator results, classifier scores, rule hits. <strong>Calibrate</strong> against labeled outcomes. HITL patterns: <strong>approval gate</strong> (before action), <strong>review queue</strong> (after, sampled), <strong>escalation</strong> (on uncertainty or policy hit), <strong>dual control</strong> for high-risk. Design for <strong>automation bias</strong>: show evidence and alternatives, not just the answer; track reviewer override rates; avoid rubber-stamping (rate-limit approvals per reviewer, rotate sampling). <strong>Fail closed</strong>: if a control (auth service, safety screen, validator) is unavailable, <strong>deny/hold</strong> rather than proceed; reserve fail-open for non-critical enrichments. Prefer <strong>reversible designs</strong> (drafts, staged changes, soft delete, undo windows).</p>
+<p><strong>5. Steps.</strong> (1) Classify each action by reversibility and impact. (2) Define thresholds and routing. (3) Build approval UI with evidence. (4) Measure override and error rates. (5) Test failure of each control.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart TD
+  A[Proposed action] --&gt; R{Reversible and low-cost?}
+  R -- yes --&gt; V{Validators pass +&lt;br/&gt;confidence ≥ τ?}
+  V -- yes --&gt; X[Auto-execute + audit log]
+  V -- no --&gt; RV[Review queue]
+  R -- no --&gt; HA[Human approval with evidence]
+  HA -- approve --&gt; X
+  HA -- reject --&gt; E[Escalate / abort]
+  CF[[Control unavailable]] --&gt; DENY[Fail closed: hold + alert]
+</pre>
+
+<p><strong>7. Scenario.</strong> Procurement agent drafts purchase orders: &lt;$500 auto-submitted to a staging queue (reversible for 24 h); ≥$500 requires manager approval with the supporting quotes displayed.</p>
+<p><strong>8. Recommended/alternatives.</strong> Risk-tiered gates. Alternative: approve everything (reviewer fatigue; no throughput) or approve nothing (risk).</p>
+<p><strong>9. Governance.</strong> Define who can approve; log approver identity and rationale; separation of duties.</p>
+<p><strong>10. Performance.</strong> HITL adds latency: set SLAs for review queues; async UX.</p>
+<p><strong>11. Mistakes.</strong> Trusting self-reported confidence; confirmation prompts replacing capability removal; no evidence shown; fail-open on safety checks.</p>
+<p><strong>12. Scenario question.</strong> <em>The moderation service times out.</em> → Fail closed (hold content/escalate) rather than publishing unscreened output.</p>
+<p><strong>13. Revision.</strong> Reversibility × impact × confidence → routing; derive confidence from signals; fail closed.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 3; Anthropic guidance on agents and human oversight.</p>
+<hr />
+<h2>5.4 Compliance obligations, privacy, and audit evidence</h2>
+<p><strong>1. Objectives.</strong> Map regulations to controls, owners, and evidence artifacts; design for data minimization and auditability.</p>
+<p><strong>2. Prerequisites.</strong> Basic privacy and security-compliance concepts.</p>
+<p><strong>3. Beginner.</strong> Regulations tell you what you must protect and prove. Architects turn each obligation into a <em>named control, owner, and evidence artifact</em>.</p>
+<p><strong>4. Advanced.</strong> The exam guide names <strong>GDPR, HIPAA, FedRAMP</strong> as examples. Architect-level mapping (not legal advice — involve counsel/compliance):</p>
+<table>
+<thead>
+<tr>
+<th>Regime</th>
+<th>Typical architect concerns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GDPR</strong> (EU personal data)</td>
+<td>Lawful basis and purpose limitation; <strong>data minimization</strong> (send only needed fields to the model); data-subject rights (access, erasure) across prompts, logs, vector stores; DPIA for high-risk processing; cross-border transfer mechanisms; rules on solely automated decisions with significant effects (human involvement); processor agreements</td>
+</tr>
+<tr>
+<td><strong>HIPAA</strong> (US PHI)</td>
+<td>Business Associate Agreement with vendors handling PHI; minimum-necessary access; audit controls; encryption; confirm which Claude offerings/platforms are eligible under a BAA before sending PHI</td>
+</tr>
+<tr>
+<td><strong>FedRAMP</strong> (US federal cloud)</td>
+<td>Use only services authorized at the required impact level; boundary and data-residency considerations; continuous monitoring; confirm the authorization status of the specific deployment path (e.g., through a cloud provider)</td>
+</tr>
+</tbody>
+</table>
+<p>For all: <strong>data classification</strong>, <strong>encryption in transit/at rest</strong>, <strong>retention and deletion</strong> (including logs and embeddings), <strong>PII redaction</strong> before logging/indexing, <strong>access reviews</strong>, <strong>vendor due diligence</strong> (security attestations, data-handling terms — verify current Anthropic/cloud-provider documentation rather than assuming). <strong>Evidence</strong> examples: control-test results, access logs, DPIA, architecture diagrams with data flows, eval and red-team reports, approval records, change history. Keep <strong>audit logs</strong> tamper-evident with user+agent identity.</p>
+<p><strong>5. Steps.</strong> (1) Classify data and determine applicable regimes. (2) Build an obligation→control→owner→evidence matrix. (3) Design data flows to minimize and segregate regulated data. (4) Verify vendor eligibility/terms. (5) Run control tests; collect evidence. (6) Schedule periodic reviews.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  O[Obligation e.g., minimum necessary] --&gt; C[Control: field-level filter before prompt]
+  C --&gt; OW[Owner: Privacy lead]
+  C --&gt; T[Test: seeded-PHI cases]
+  T --&gt; E[Evidence: test report + log sample]
+  E --&gt; A[Audit pack]
+</pre>
+
+<p><strong>7. Scenario.</strong> A health insurer's assistant summarizes member calls. Controls: confirm BAA-eligible deployment, redact identifiers not needed for the task, restrict retrieval by member consent, retention limits on transcripts and embeddings, audit logs of every access.</p>
+<p><strong>8. Recommended/alternatives.</strong> Compliance-by-design with evidence. Alternative: policy documents without tests (no proof).</p>
+<p><strong>9. Governance.</strong> Control ownership is explicit (privacy, security, product); exceptions require documented risk acceptance.</p>
+<p><strong>10. Cost.</strong> Compliant deployment paths can constrain regions/models/features — factor into architecture and cost.</p>
+<p><strong>11. Mistakes.</strong> Assuming "the vendor is compliant" covers your use; forgetting logs/vector stores in deletion; sending full records when a few fields suffice; no evidence trail.</p>
+<p><strong>12. Scenario question.</strong> <em>A user exercises their right to erasure.</em> → Locate and delete data across source systems, indexes/embeddings, logs, and caches per policy; this must be designed in advance.</p>
+<p><strong>13. Revision.</strong> Obligation → control → owner → test → evidence; minimize data; verify eligibility; design deletion.</p>
+<p><strong>14. Docs.</strong> Exam Guide §6 D5; Anthropic trust/security documentation and your cloud provider's compliance pages (verify current status).</p>
+<hr />
+<h2>5.5 Ethical AI: bias, fairness, transparency</h2>
+<p><strong>1. Objectives.</strong> Identify bias risks; design fairness testing and transparency measures.</p>
+<p><strong>2. Prerequisites.</strong> 4.2 (stratified evals).</p>
+<p><strong>3. Beginner.</strong> LLM outputs can treat groups differently or hide how decisions were made. You test for it and tell users when AI is involved.</p>
+<p><strong>4. Advanced.</strong> <strong>Bias sources:</strong> training data, prompt wording, retrieval content, few-shot examples, evaluation sets that under-represent groups. <strong>Fairness testing:</strong> stratified evals across relevant segments; paired/counterfactual tests (swap names/attributes and compare outputs); measure outcome gaps and refusal/over-refusal differences. <strong>Mitigations:</strong> reduce reliance on sensitive attributes, calibrated rubrics, human review for consequential decisions, diverse examples, ongoing monitoring. <strong>Transparency:</strong> disclose AI use; provide citations/sources; explain limits; offer human escalation and appeal for consequential outcomes; document model/prompt versions and known limitations (model cards/system cards for your system). Avoid using LLMs as the sole decision-maker for high-stakes eligibility decisions without validation and oversight.</p>
+<p><strong>5. Steps.</strong> (1) Identify affected groups and decision impact. (2) Create counterfactual test sets. (3) Measure gaps; set thresholds. (4) Add mitigations and human review. (5) Publish user-facing disclosures. (6) Monitor in production.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  T[Counterfactual pairs] --&gt; S[System under test]
+  S --&gt; M[Compare outputs/outcomes by segment]
+  M --&gt; D{Gap ≤ threshold?}
+  D -- no --&gt; MI[Mitigate + retest]
+  D -- yes --&gt; R[Release + monitor]
+</pre>
+
+<p><strong>7. Scenario.</strong> Résumé-screening assistant: swapping applicant names changes recommendations. Remove names, test counterfactuals, keep human decisions, document limits.</p>
+<p><strong>8. Recommended/alternatives.</strong> Measure, mitigate, disclose. Alternative: assert "the model is neutral".</p>
+<p><strong>9. Governance.</strong> Ethics/risk owner signs off; periodic audit.</p>
+<p><strong>10. Cost.</strong> Fairness test sets and reviews add cost; justify by risk.</p>
+<p><strong>11. Mistakes.</strong> Only aggregate metrics; hiding AI involvement; no appeal path.</p>
+<p><strong>12. Scenario question.</strong> <em>Overall accuracy is 95% but is 82% for one language group.</em> → Segment-level threshold failure; investigate and fix before launch.</p>
+<p><strong>13. Revision.</strong> Test by segment; counterfactuals; disclose; human oversight for consequential decisions.</p>
+<p><strong>14. Docs.</strong> Exam Guide §6 D5; Prep Lesson 3.</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

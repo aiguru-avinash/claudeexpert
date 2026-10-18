@@ -1,0 +1,152 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9g — Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9g — Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</h1>
+<blockquote>
+<p>Original practice questions; not official or leaked. Claude Code settings change often: verify specifics in current docs. Q147 is multi-response (Select TWO, 5 choices).</p>
+</blockquote>
+<hr />
+<h3>Q141 · D7 · Objective: Configure shared team tooling and standards · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A 40-engineer team uses Claude Code. Each developer re-explains build commands, conventions, and test rules every session.
+<strong>Question:</strong> What is the best fix?
+A. Maintain a project-level CLAUDE.md in version control with build/test commands, conventions, architecture notes, and "do not" rules, reviewed like code.
+B. Ask each developer to paste a long prompt each session.
+C. Store the guidance in a wiki no one links to.
+D. Rely on the model remembering previous sessions.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Shared, versioned project memory gives every session consistent context.
+<strong>Why not the others:</strong> B is manual and inconsistent; C isn't loaded into context; D is unreliable.
+<strong>Architectural principle:</strong> Encode team knowledge where the tool reads it.
+<strong>Ref:</strong> Claude Code docs: memory / CLAUDE.md</p>
+<hr />
+<h3>Q142 · D7 · Objective: Configure shared team tooling and standards · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Security wants to prevent the coding agent from reading secrets files or running destructive shell commands, for every developer.
+<strong>Question:</strong> What is the strongest approach?
+A. Add "don't read secrets" to CLAUDE.md only.
+B. Trust developers to deny prompts.
+C. Commit shared permission rules (deny for secret paths and dangerous commands, allow-list for routine ones), and use managed or organization-level settings where policy must not be overridden; add hooks for enforcement and audit.
+D. Disable the tool for the team.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Deterministic permission rules and managed policy enforce what instructions can only request.
+<strong>Why not the others:</strong> A is advisory; B is inconsistent; D abandons the productivity goal.
+<strong>Architectural principle:</strong> Enforce with configuration, not advice.
+<strong>Ref:</strong> Claude Code docs: permissions, settings, hooks</p>
+<hr />
+<h3>Q143 · D7 · Objective: Establish developer workflows with AI assistance · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A developer asks the agent to refactor a large module in one request. The result is a huge, hard-to-review diff with subtle regressions.
+<strong>Question:</strong> Which workflow is better?
+A. Accept the diff without review because tests exist.
+B. Run the same request again.
+C. Plan first, make small incremental changes with tests run at each step, review diffs, and commit in reviewable units.
+D. Disable tests to speed up.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Small verified steps keep changes reviewable and errors contained.
+<strong>Why not the others:</strong> A removes review; B repeats the problem; D removes the safety net.
+<strong>Architectural principle:</strong> Incremental, verified change.
+<strong>Ref:</strong> Claude Code best practices</p>
+<hr />
+<h3>Q144 · D7 · Objective: Establish developer workflows with AI assistance · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The team wants an agent to review pull requests in CI.
+<strong>Question:</strong> Which design is most appropriate?
+A. Let the agent merge PRs automatically.
+B. Give the CI job broad production credentials.
+C. Skip human review once the agent approves.
+D. Run it with read-only repo access and minimal scoped credentials, post comments for humans to act on, treat PR content as untrusted input, and keep human approval required for merge.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Least privilege plus untrusted-input handling and human approval limit risk.
+<strong>Why not the others:</strong> A and C remove oversight; B violates least privilege.
+<strong>Architectural principle:</strong> Least privilege and human gate in automation.
+<strong>Ref:</strong> Claude Code docs (headless/CI); Prep Lesson 5</p>
+<hr />
+<h3>Q145 · D7 · Objective: Create operational runbooks and support processes · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> At 2 a.m. the on-call engineer sees a spike in refusals and escalations from the production assistant.
+<strong>Question:</strong> Which runbook content helps most?
+A. A general description of how LLMs work.
+B. Symptom-based triage steps: check recent prompt/model/retrieval changes, provider status, rate-limit and error dashboards; mitigation (rollback, fallback, feature flag); escalation contacts; and post-incident steps.
+C. The vendor's marketing page.
+D. A list of all prompts.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Runbooks should enable fast diagnosis and safe mitigation.
+<strong>Why not the others:</strong> A, C, and D don't guide action.
+<strong>Architectural principle:</strong> Operational documentation is action-oriented.
+<strong>Ref:</strong> Prep Lesson 5</p>
+<hr />
+<h3>Q146 · D7 · Objective: Create operational runbooks and support processes · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The assistant's behavior changed after a "minor" prompt tweak, and nobody can tell which version is live.
+<strong>Question:</strong> What practice would have prevented the confusion?
+A. Version prompts and configuration, tag each release, log the version with every request, and maintain a changelog and rollback path.
+B. Edit prompts in the admin UI without records.
+C. Keep prompts in personal notes.
+D. Avoid logging versions for privacy.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Traceable versions allow correlating behavior with changes and rolling back.
+<strong>Why not the others:</strong> B–D remove traceability.
+<strong>Architectural principle:</strong> Version everything that changes behavior.
+<strong>Ref:</strong> Prep Lesson 5</p>
+<hr />
+<h3>Q147 · D7 · Objective: Train and onboard teams · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which practices best onboard a team to a new AI-assisted workflow?
+A. Provide a short guided path with hands-on exercises on the team's real repos and a documented "what to trust, what to verify" guide.
+B. Mandate usage without training.
+C. Create feedback channels and a champions group to collect issues, share patterns, and update standards.
+D. Forbid asking questions to save time.
+E. Remove all documentation to keep it flexible.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Practice on real work and a feedback loop create adoption and shared standards.
+<strong>Why not the others:</strong> B, D, and E hinder learning.
+<strong>Architectural principle:</strong> Enable through practice and feedback.
+<strong>Ref:</strong> Prep Lesson 5</p>
+<hr />
+<h3>Q148 · D7 · Objective: Configure shared team tooling and standards · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Teams want to reuse a standard code-review procedure with reference checklists and scripts, loaded only when relevant to avoid bloating context.
+<strong>Question:</strong> Which mechanism fits best?
+A. Put the whole procedure in every prompt.
+B. Package it as an Agent Skill, using progressive disclosure so only the short description is loaded until needed.
+C. Email the procedure to everyone.
+D. Paste it into each conversation by hand.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Skills load details on demand, keeping context small and sharing consistent procedures.
+<strong>Why not the others:</strong> A bloats context; C and D are manual.
+<strong>Architectural principle:</strong> Progressive disclosure for reusable procedures.
+<strong>Ref:</strong> Agent Skills docs</p>
+<hr />
+<h3>Q149 · D7 · Objective: Establish developer workflows with AI assistance · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A team wants a deterministic action every time the agent edits a file, such as running the formatter, which must not depend on the model remembering.
+<strong>Question:</strong> Which feature is most suitable?
+A. A hook configured to run on the relevant tool event.
+B. A line in CLAUDE.md asking nicely.
+C. A reminder in chat.
+D. A weekly manual run.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Hooks run deterministically at lifecycle events.
+<strong>Why not the others:</strong> B and C depend on model compliance; D is not per-edit.
+<strong>Architectural principle:</strong> Use deterministic mechanisms for guaranteed behavior.
+<strong>Ref:</strong> Claude Code docs: hooks</p>
+<hr />
+<h3>Q150 · D7 · Objective: Create operational runbooks and support processes · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Leadership asks how to know whether the AI-assisted workflow improves engineering outcomes, without incentivizing gaming.
+<strong>Question:</strong> Which approach is best?
+A. Count lines of code generated.
+B. Track balanced outcome measures (cycle time, review rework, defect escape rate, developer satisfaction) against a pre-adoption baseline, and review them with qualitative feedback.
+C. Count prompts per developer.
+D. Rely on anecdotes.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Balanced outcome metrics against a baseline show real impact and resist gaming.
+<strong>Why not the others:</strong> A and C measure activity; D lacks rigor.
+<strong>Architectural principle:</strong> Measure outcomes, not activity.
+<strong>Ref:</strong> Prep Lesson 5</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

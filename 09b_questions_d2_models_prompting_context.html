@@ -1,0 +1,269 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9b — Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9b — Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</h1>
+<blockquote>
+<p>Original practice questions; not official or leaked. Objectives quoted from Exam Guide v1.0 §6 D2.</p>
+</blockquote>
+<hr />
+<h3>Q27 · D2 · Objective: Select appropriate Claude models based on trade-offs · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A bank labels 2M customer messages per day into 40 intents with a 500 ms latency budget. On your eval set, a small model scores 96.1%, a mid-tier model 96.8%, and the top-tier model 97.0%. Acceptance threshold is 95%.
+<strong>Question:</strong> Which model should you choose?
+A. The top-tier model, because it scores highest.
+B. The mid-tier model as a compromise between all three.
+C. The small model, because it meets the threshold with margin, fits the latency budget, and is far cheaper at this volume.
+D. Whichever model has the longest context window.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Choose the cheapest, fastest model that clears acceptance criteria with margin; a 1-point gain rarely justifies large cost at 2M requests/day.
+<strong>Why not the others:</strong> A and B overpay for marginal gains; D ignores the actual constraints (context length isn't the issue).
+<strong>Architectural principle:</strong> Empirical selection on a quality–cost–latency Pareto frontier.
+<strong>Ref:</strong> Models overview (docs.claude.com); https://platform.claude.com/docs/en/test-and-evaluate/develop-tests</p>
+<hr />
+<h3>Q28 · D2 · Objective: Select appropriate Claude models based on trade-offs · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An assistant answers many simple FAQ questions but occasionally receives complex multi-document questions. Using the top-tier model for all traffic exceeds budget; using the small model for all hurts hard cases.
+<strong>Question:</strong> Which design best balances cost and quality?
+A. A tiered design: a small model (or classifier) triages; simple cases are answered by a small/mid-tier model; hard or low-confidence cases escalate to a stronger tier, validated by evals.
+B. Randomly assign half the traffic to each model.
+C. Use the top-tier model but cap <code>max_tokens</code> very low.
+D. Use the small model and tell users to rephrase hard questions.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Routing by difficulty or confidence captures most savings while preserving quality where it matters.
+<strong>Why not the others:</strong> B ignores difficulty; C truncates answers; D pushes the problem onto users.
+<strong>Architectural principle:</strong> Tiered routing across model sizes.
+<strong>Ref:</strong> Models overview; Building effective agents (routing)</p>
+<hr />
+<h3>Q29 · D2 · Objective: Select appropriate Claude models based on trade-offs · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A newer, cheaper model is released. A manager asks you to switch production traffic immediately.
+<strong>Question:</strong> What is the best approach?
+A. Switch everything now; newer models are always better.
+B. Switch only a small share of users and wait for complaints.
+C. Switch only the prompts that mention the old model.
+D. Run the full regression, safety, cost, and latency evals on the candidate; if gates pass, canary with rollback criteria, with the model ID pinned in config.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> A model change is a system change. Evidence and staged rollout protect quality and safety.
+<strong>Why not the others:</strong> A and B skip gates (B waits for harm to surface); C misunderstands the change.
+<strong>Architectural principle:</strong> Eval-gated model changes with pinned versions and rollback.
+<strong>Ref:</strong> Prep Lesson 2; Model deprecations docs</p>
+<hr />
+<h3>Q30 · D2 · Objective: Select appropriate Claude models based on trade-offs · Difficulty: Expert</h3>
+<p><strong>Scenario:</strong> A legal-reasoning workflow fails on multi-step cases. You have already clarified the prompt, added varied examples, and verified retrieval returns the right clauses. A stronger tier succeeds on the failed cases in testing.
+<strong>Question:</strong> What is the most likely diagnosis and next step?
+A. Retrieval failure; re-index.
+B. Model mismatch for this task's difficulty; evaluate the stronger tier (or decompose the task) and compare quality/cost.
+C. The temperature is too low; raise it.
+D. The context window has shrunk.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> With prompt and retrieval verified, the evidence points to capability mismatch.
+<strong>Why not the others:</strong> A contradicts the verification; C and D have no support in the symptoms.
+<strong>Architectural principle:</strong> Diagnose systematically; change the variable the evidence implicates.
+<strong>Ref:</strong> Exam Guide D4 (diagnose model mismatch)</p>
+<hr />
+<h3>Q31 · D2 · Objective: Select appropriate Claude models based on trade-offs · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A team concludes "Model X is worse" after running a prompt carefully tuned for Model Y on both.
+<strong>Question:</strong> What is the flaw, and the fix?
+A. No flaw; the comparison is fair.
+B. The eval set is too large.
+C. Models should never be compared.
+D. The result is confounded by prompt tuning; evaluate each model with prompts reasonably tuned for it (same eval set and criteria) before deciding.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> A prompt tuned for one model biases the comparison.
+<strong>Why not the others:</strong> A ignores the bias; B is irrelevant; C is false.
+<strong>Architectural principle:</strong> Fair comparisons control for prompt-tuning effects.
+<strong>Ref:</strong> Prompt engineering overview</p>
+<hr />
+<h3>Q32 · D2 · Objective: Design system prompts, templates, and guardrails · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A summarizer receives user-pasted emails that sometimes contain instructions like "disregard the above." The prompt currently concatenates instructions and email text in one paragraph.
+<strong>Question:</strong> Which prompt change is best (as one layer)?
+A. Put the email at the very top without delimiters.
+B. Tell the user not to paste instructions.
+C. Increase the length of instructions.
+D. Separate the email with clear delimiters/tags and state that its contents are data to summarize, never instructions.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Delimiting and labeling untrusted data reduces confusion; it's one layer, not a guarantee.
+<strong>Why not the others:</strong> A worsens separation; B is unenforceable; C doesn't separate data from instructions.
+<strong>Architectural principle:</strong> Separate instructions from data; treat prompts as guidance, not enforcement.
+<strong>Ref:</strong> https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks</p>
+<hr />
+<h3>Q33 · D2 · Objective: Design system prompts, templates, and guardrails · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A compensation assistant's system prompt says "Never reveal salary data of other employees," yet the retrieval tool returns all employees' records into context.
+<strong>Question:</strong> What is the correct fix?
+A. Strengthen the prompt with capital letters and repeat the rule.
+B. Add an apology template if the model slips.
+C. Enforce access in code so unauthorized records never enter the context; keep the prompt rule as an additional layer.
+D. Switch to a larger model that follows instructions better.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Data the model never sees can't leak. Authorization belongs in code, not prompts.
+<strong>Why not the others:</strong> A, B, and D rely on model compliance for a security requirement.
+<strong>Architectural principle:</strong> Don't assume prompting alone enforces security or authorization.
+<strong>Ref:</strong> Exam Guide D5; MCP/authorization guidance</p>
+<hr />
+<h3>Q34 · D2 · Objective: Design system prompts, templates, and guardrails · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A downstream parser fails about 3% of the time because the model adds a sentence before the JSON.
+<strong>Question:</strong> What is the most robust remedy?
+A. Use structured outputs or a tool/JSON schema for the response and validate it in code, with a repair/retry or review path.
+B. Add "OUTPUT ONLY JSON!!!" to the prompt in capitals.
+C. Ask the model to apologize less.
+D. Strip the first sentence with a regex and hope.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Schema-constrained output plus validation is deterministic where prompt wording is not.
+<strong>Why not the others:</strong> B and D are brittle; C is irrelevant.
+<strong>Architectural principle:</strong> Constrain and validate machine-consumed output.
+<strong>Ref:</strong> Structured outputs docs</p>
+<hr />
+<h3>Q35 · D2 · Objective: Design system prompts, templates, and guardrails · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Three teams copy-paste a shared prompt and edit it locally; behavior diverges and no one knows which version is deployed.
+<strong>Question:</strong> What is the best fix?
+A. Keep prompts as modular, versioned templates in source control with review, a changelog, and eval gates; deploy by version.
+B. Ask teams to coordinate in chat.
+C. Put the prompt in a shared document.
+D. Allow console edits for speed.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Prompts are production artifacts; version control and gates provide auditability and rollback.
+<strong>Why not the others:</strong> B, C, and D lack control and traceability.
+<strong>Architectural principle:</strong> Prompt reuse through modular, versioned templates.
+<strong>Ref:</strong> Exam Guide D2 (modular prompts); D7</p>
+<hr />
+<h3>Q36 · D2 · Objective: Apply prompt engineering techniques (zero-shot, few-shot, chain-of-thought) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A classifier handles common categories well but mislabels two subtle edge categories that differ by nuance.
+<strong>Question:</strong> Which technique most directly helps?
+A. Remove all examples to keep the prompt short.
+B. Raise <code>max_tokens</code>.
+C. Add a longer role description.
+D. Add few-shot examples that include those edge categories and hard negatives, then re-run the evals.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Representative examples communicate nuanced boundaries that instructions struggle to describe.
+<strong>Why not the others:</strong> A removes signal; B and C don't target the confusion.
+<strong>Architectural principle:</strong> Few-shot for nuanced judgment and format.
+<strong>Ref:</strong> Prompt engineering overview</p>
+<hr />
+<h3>Q37 · D2 · Objective: Apply prompt engineering techniques (zero-shot, few-shot, chain-of-thought) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Two features: (1) a latency-critical 6-class routing step; (2) an offline multi-step financial reasoning task where accuracy matters more than speed.
+<strong>Question:</strong> Which application of reasoning techniques is most appropriate?
+A. Use step-by-step reasoning for both.
+B. Avoid reasoning for both.
+C. Skip extended reasoning for the routing step; use chain-of-thought or thinking features (where supported) for the offline reasoning task, validated by evals.
+D. Use reasoning only for routing.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Reasoning improves multi-step tasks at the cost of tokens/latency; simple routing rarely needs it.
+<strong>Why not the others:</strong> A adds latency to routing; B hurts the reasoning task; D inverts the logic.
+<strong>Architectural principle:</strong> Spend reasoning tokens where they pay for themselves.
+<strong>Ref:</strong> Prompt engineering overview; extended thinking docs</p>
+<hr />
+<h3>Q38 · D2 · Objective: Apply prompt engineering techniques (zero-shot, few-shot, chain-of-thought) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Five few-shot examples add 3,000 tokens to every request and raise cost and latency; quality gains are real.
+<strong>Question:</strong> What is the best optimization?
+A. Delete the examples.
+B. Keep the examples but place them in the static prefix and use prompt caching (verifying minimum length and cache hits).
+C. Randomly drop two examples each request.
+D. Move examples to the end of the user message.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Caching makes stable, reused examples cheap and fast while preserving quality.
+<strong>Why not the others:</strong> A loses quality; C adds variance; D prevents a stable cached prefix.
+<strong>Architectural principle:</strong> Cache stable prefixes; put dynamic content last.
+<strong>Ref:</strong> https://docs.claude.com/en/docs/build-with-claude/prompt-caching</p>
+<hr />
+<h3>Q39 · D2 · Objective: Optimize context windows and manage token usage · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An agent degrades after about 40 turns. Logs show 90% of tokens are old tool outputs that are no longer relevant.
+<strong>Question:</strong> What is the best fix?
+A. Clear or trim stale tool results and compact the history while preserving decisions and open items.
+B. Move to a model with a larger context and change nothing else.
+C. Remove the system prompt.
+D. Increase temperature.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Context hygiene addresses the actual cause; larger windows alone keep cost and noise.
+<strong>Why not the others:</strong> B postpones the problem; C removes needed instructions; D doesn't reduce noise.
+<strong>Architectural principle:</strong> Budget and curate context; compaction preserves what matters.
+<strong>Ref:</strong> Context management guidance; Prep Lesson 1</p>
+<hr />
+<h3>Q40 · D2 · Objective: Optimize context windows and manage token usage · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> Employees query a 300-page policy manual that changes quarterly.
+<strong>Question:</strong> Which approach is best?
+A. Paste the entire manual in every request.
+B. Hope the model memorizes it.
+C. Summarize the manual to one paragraph.
+D. Provide an index/summaries and retrieve or load only relevant sections on demand (retrieval or progressive disclosure), citing sources.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Targeted loading reduces tokens, supports citations, and handles updates.
+<strong>Why not the others:</strong> A is costly and noisy; B is impossible; C loses detail.
+<strong>Architectural principle:</strong> Retrieve or disclose progressively instead of dumping.
+<strong>Ref:</strong> Prep Lesson 1–2; Agent Skills (progressive disclosure)</p>
+<hr />
+<h3>Q41 · D2 · Objective: Optimize context windows and manage token usage · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Monitoring shows rising cost per request. Tokens are: system 1,200; tool definitions 6,500; retrieved docs 3,000; history 1,500; output 400.
+<strong>Question:</strong> What should you examine first?
+A. The output length.
+B. The system prompt wording.
+C. The tool definitions — 6,500 tokens per request suggests capability bloat or overly verbose schemas; trim, scope, or discover on demand (and cache the stable portion).
+D. The user's typing speed.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Measure the breakdown; the largest, least necessary component is the best lever.
+<strong>Why not the others:</strong> A and B are small; D is irrelevant.
+<strong>Architectural principle:</strong> Budget tokens by component and attack the biggest waste.
+<strong>Ref:</strong> Exam Guide D3 (capability bloat); D2 (token usage)</p>
+<hr />
+<h3>Q42 · D2 · Objective: Optimize context windows and manage token usage · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which actions reduce token cost without dropping information the task needs?
+A. Return only the needed fields from tool results.
+B. Delete the system prompt.
+C. Cache a large static prefix reused across requests (when it meets the model's minimum cacheable length).
+D. Increase <code>max_tokens</code> to the maximum.
+E. Place a changing timestamp at the very start of the prompt.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Trimming tool output and caching stable prefixes reduce billed tokens while preserving needed content.
+<strong>Why not the others:</strong> B removes instructions; D increases potential spend; E breaks cache prefixes.
+<strong>Architectural principle:</strong> Reduce waste, preserve signal.
+<strong>Ref:</strong> Prompt caching docs</p>
+<hr />
+<h3>Q43 · D2 · Objective: Implement prompt reuse strategies (caching, modular prompts, Skills) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> You added <code>cache_control</code> after a 6,000-token static policy, but usage shows zero cache reads. The prompt begins with "Current time: <timestamp>" followed by the static policy.
+<strong>Question:</strong> What is the most likely cause and fix?
+A. Caching only works for tool calls.
+B. The policy is too long; shorten it.
+C. The model doesn't support text caching.
+D. The changing timestamp at the start breaks the identical-prefix requirement; move volatile values after the cached block.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Cache hits require an identical prefix up to the breakpoint; a changing token at the front invalidates it.
+<strong>Why not the others:</strong> A and C are incorrect; B — long prompts are what caching is for (minimum length is a lower bound).
+<strong>Architectural principle:</strong> Stable content first, dynamic last.
+<strong>Ref:</strong> https://docs.claude.com/en/docs/build-with-claude/prompt-caching</p>
+<hr />
+<h3>Q44 · D2 · Objective: Implement prompt reuse strategies (caching, modular prompts, Skills) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Workload 1: an interactive chat with a long static policy and many users. Workload 2: a nightly job summarizing 500,000 documents with no one waiting.
+<strong>Question:</strong> Which pairing is best?
+A. Workload 1: prompt caching with synchronous calls; Workload 2: Batch API (asynchronous, discounted).
+B. Workload 1: Batch API; Workload 2: synchronous calls.
+C. Both: Batch API.
+D. Both: synchronous calls with no caching.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Interactive needs low latency; batch trades latency (up to 24 hours) for a 50% cost reduction.
+<strong>Why not the others:</strong> B inverts; C and D ignore workload characteristics.
+<strong>Architectural principle:</strong> Match processing mode to the latency requirement.
+<strong>Ref:</strong> https://platform.claude.com/docs/build-with-claude/batch-processing</p>
+<hr />
+<h3>Q45 · D2 · Objective: Implement prompt reuse strategies (caching, modular prompts, Skills) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A team has twelve occasionally needed procedures (release notes, incident reports, code review checklists). Putting all in the system prompt bloats every request.
+<strong>Question:</strong> What is the best approach?
+A. Keep everything in the system prompt.
+B. Package each as a Skill with a precise description so Claude loads the full instructions only when relevant (progressive disclosure).
+C. Ask users to paste procedures each time.
+D. Delete the procedures and rely on memory.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Skills expose lightweight metadata up front and load details on demand.
+<strong>Why not the others:</strong> A bloats context; C is error-prone; D loses standards.
+<strong>Architectural principle:</strong> Progressive disclosure for reusable procedures.
+<strong>Ref:</strong> Agent Skills overview (Claude API docs)</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

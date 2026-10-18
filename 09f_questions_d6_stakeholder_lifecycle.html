@@ -1,0 +1,295 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9f — Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9f — Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</h1>
+<blockquote>
+<p>Original practice questions; not official or leaked. Objectives paraphrase the D6 task statements in Exam Guide v1.0 (see 00_Exam_Scope_and_Study_Plan.md). Multi-response items (Q127, Q137) say "(Select TWO)" and have 5 choices.</p>
+</blockquote>
+<hr />
+<h3>Q120 · D6 · Objective: Elicit and clarify business requirements through discovery · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A VP says, "We need an AI agent for customer support." No metrics, volumes, or constraints have been shared.
+<strong>Question:</strong> What should the architect do first?
+A. Start building a prototype with the most capable model.
+B. Run discovery: the target workflow, baseline volumes and costs, success metrics, data sources, risk tolerance, and constraints, then confirm the problem is a fit for an LLM solution.
+C. Select a vector database.
+D. Write the system prompt.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Without a defined problem and measurable success criteria, every downstream choice is a guess.
+<strong>Why not the others:</strong> A, C, and D are solution steps taken before requirements exist.
+<strong>Architectural principle:</strong> Problem and metrics before solution.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q121 · D6 · Objective: Elicit and clarify business requirements through discovery · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Two executives give conflicting goals: Operations wants minimum cost per ticket; Legal wants zero unreviewed customer-facing statements.
+<strong>Question:</strong> What is the best approach?
+A. Pick the more senior executive's goal silently.
+B. Build to cost and handle Legal later.
+C. Surface the conflict, translate both goals into measurable constraints, propose options with trade-offs (e.g., draft-only for regulated categories, auto-send for low-risk ones), and get a documented decision.
+D. Promise both goals will be fully met.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Conflicting requirements are resolved explicitly with options and recorded decisions.
+<strong>Why not the others:</strong> A and B hide the conflict; D overpromises.
+<strong>Architectural principle:</strong> Make trade-offs explicit and decided.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q122 · D6 · Objective: Communicate trade-offs and set realistic expectations · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A stakeholder asks for "100% accuracy" on policy answers.
+<strong>Question:</strong> What is the best response?
+A. Agree; the model will be accurate.
+B. Refuse the project.
+C. Say accuracy cannot be discussed.
+D. Reframe into measurable targets (e.g., grounded-answer rate on a labeled set, escalation for low confidence), explain residual risk, and show how controls and review manage it.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> LLM systems are probabilistic; set measurable targets and managed residual risk rather than absolutes.
+<strong>Why not the others:</strong> A overpromises; B and C don't help the stakeholder decide.
+<strong>Architectural principle:</strong> Replace absolutes with measurable, managed risk.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q123 · D6 · Objective: Communicate trade-offs and set realistic expectations · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Finance asks why the pilot's cost per resolved case is above projections. Analysis shows long, uncached system prompts and a top-tier model on simple intents.
+<strong>Question:</strong> Which message to Finance is best?
+A. "LLMs are expensive."
+B. A breakdown of cost drivers with measured evidence, plus a prioritized plan (routing simple intents to a smaller model, prompt caching, batching non-urgent work), the expected savings, and the quality guardrails verified by evals.
+C. "We will reduce quality to save money."
+D. A request for a larger budget without analysis.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Credible cost communication connects drivers, actions, expected impact, and quality safeguards.
+<strong>Why not the others:</strong> A, C, and D lack evidence or a plan.
+<strong>Architectural principle:</strong> Evidence-based cost communication.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q124 · D6 · Objective: Build a business case and communicate value · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> You must write an executive summary for a steering committee.
+<strong>Question:</strong> Which structure fits best?
+A. A detailed token-level description of the prompt.
+B. A model benchmark comparison.
+C. The problem and impact, the recommended solution at a high level, expected value with assumptions, key risks and mitigations, cost, timeline, and the decision requested.
+D. A list of every API feature used.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Executives need the decision, value, risk, and cost, not implementation detail.
+<strong>Why not the others:</strong> A, B, and D are technical detail without a decision frame.
+<strong>Architectural principle:</strong> Lead with the decision and the value.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q125 · D6 · Objective: Build a business case and communicate value · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A business case claims "$3M savings" based on automating 100% of tickets.
+<strong>Question:</strong> What is the most significant weakness?
+A. The currency format.
+B. The title.
+C. The use of the word "savings."
+D. The assumption of 100% automation and ignoring review costs, escalation, quality risk, and run costs; it should use ranges, a sensitivity analysis, and phased adoption.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Unrealistic assumptions undermine credibility; honest ranges build trust.
+<strong>Why not the others:</strong> A–C are cosmetic.
+<strong>Architectural principle:</strong> Defensible assumptions and sensitivity analysis.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q126 · D6 · Objective: Define SLAs and manage approvals/objections · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The business asks for "99.99% availability and 1-second responses" for an agent that makes multiple model and tool calls.
+<strong>Question:</strong> What should the architect do?
+A. Accept the targets.
+B. Decompose the request into measurable SLOs per path (e.g., p95 latency for the interactive path, with streaming; async for long tasks), identify dependencies' limits, and negotiate achievable targets with fallbacks.
+C. Reject all targets.
+D. Promise targets and fix them later.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> SLAs must reflect dependency behavior and be defined per workflow path.
+<strong>Why not the others:</strong> A and D overpromise; C avoids negotiation.
+<strong>Architectural principle:</strong> SLOs grounded in the architecture.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q127 · D6 · Objective: Define SLAs and manage approvals/objections · Difficulty: Advanced</h3>
+<p><strong>Question (Select TWO):</strong> A security team objects that the agent could leak data. Which responses are most effective?
+A. Present the threat model, controls (least privilege, egress limits, output screening), and test evidence.
+B. Tell them the model is safe.
+C. Offer a limited pilot with monitoring, rollback criteria, and agreed exit conditions.
+D. Escalate to executives to override the objection.
+E. Postpone all security review until after launch.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Evidence and a bounded, reversible rollout address the concern directly.
+<strong>Why not the others:</strong> B asserts; D bypasses; E defers risk.
+<strong>Architectural principle:</strong> Address objections with evidence and bounded risk.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q128 · D6 · Objective: Define SLAs and manage approvals/objections · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A change to the system prompt could alter customer-facing tone. Compliance requires approval for such changes.
+<strong>Question:</strong> What process fits?
+A. Edit production prompts directly.
+B. Treat prompts as versioned artifacts: change request, eval run against the regression suite, compliance sign-off, staged rollout, and rollback plan.
+C. Email the new prompt to the team.
+D. Skip approval for small edits.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Prompts are production code and need change control.
+<strong>Why not the others:</strong> A, C, and D bypass control.
+<strong>Architectural principle:</strong> Version, test, approve, roll out.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q129 · D6 · Objective: Manage the solution lifecycle from PoC to production · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A PoC with ten curated examples impressed the sponsor, who wants to go live next week.
+<strong>Question:</strong> What gap should the architect highlight?
+A. None; the demo worked.
+B. The font in the demo.
+C. Missing production-readiness evidence: representative eval data, security review, load and failure testing, monitoring, cost model, and operational ownership.
+D. The model name.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> PoC success on curated cases does not establish production readiness.
+<strong>Why not the others:</strong> A ignores risk; B and D are irrelevant.
+<strong>Architectural principle:</strong> Exit criteria between lifecycle stages.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q130 · D6 · Objective: Manage the solution lifecycle from PoC to production · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A pilot serves 5% of traffic. Quality is on target, but cost per case is rising with usage.
+<strong>Question:</strong> Before expanding to 50%, what should be done?
+A. Expand immediately.
+B. Remove monitoring.
+C. Lower the eval bar.
+D. Investigate the cost trend, apply optimizations (routing, caching, context trimming), re-validate quality, and set expansion gates on quality, cost, and incident criteria.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Scale only after cost and quality gates are met.
+<strong>Why not the others:</strong> A, B, and C ignore the signal.
+<strong>Architectural principle:</strong> Gated, metric-driven rollout.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q131 · D6 · Objective: Manage the solution lifecycle from PoC to production · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> The provider announces that the model version you use will be deprecated in 90 days.
+<strong>Question:</strong> What is the best plan?
+A. Wait until it stops working.
+B. Switch the next day without testing.
+C. Plan migration now: run your eval suite on the successor, compare quality, cost, and latency, adjust prompts, canary, and keep a rollback until stable.
+D. Freeze the product permanently.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Model changes need eval-driven migration with staged rollout.
+<strong>Why not the others:</strong> A and B risk outages or regressions; D is impractical.
+<strong>Architectural principle:</strong> Treat model version change as a release.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q132 · D6 · Objective: Produce documentation and handoff artifacts · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> The client's team will operate the solution after launch.
+<strong>Question:</strong> Which handoff package is most complete?
+A. The source code only.
+B. Architecture and decision records, runbooks, eval suite and how to run it, monitoring dashboards and alerts, known limitations, security controls, cost model, and escalation contacts.
+C. A slide deck.
+D. A recorded demo.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Operators need the means to run, evaluate, troubleshoot, and evolve the system.
+<strong>Why not the others:</strong> A, C, and D omit operations.
+<strong>Architectural principle:</strong> Handoff enables independent operation.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q133 · D6 · Objective: Produce documentation and handoff artifacts · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Six months later, nobody remembers why a prompt uses a particular retrieval cutoff.
+<strong>Question:</strong> What documentation practice prevents this?
+A. Ask the original developer.
+B. Re-derive it each time.
+C. Architecture Decision Records capturing context, options, decision, trade-offs, and review date, linked to eval results.
+D. Comments in chat.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> ADRs preserve rationale and evidence.
+<strong>Why not the others:</strong> A–B depend on memory; D is not durable.
+<strong>Architectural principle:</strong> Record decisions with evidence.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q134 · D6 · Objective: Produce documentation and handoff artifacts · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A production-readiness review is scheduled.
+<strong>Question:</strong> Which item is a legitimate launch blocker?
+A. The logo is not final.
+B. Documentation uses two heading styles.
+C. No rollback procedure and no alerting on error rate or cost.
+D. A meeting is not scheduled.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Without rollback and alerting, incidents cannot be contained.
+<strong>Why not the others:</strong> A, B, and D are minor.
+<strong>Architectural principle:</strong> Operability is a launch criterion.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q135 · D6 · Objective: Elicit and clarify business requirements through discovery · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Discovery reveals the target process is deterministic, with stable rules and structured inputs.
+<strong>Question:</strong> What should the architect recommend?
+A. Use an LLM agent anyway.
+B. Use deterministic automation (rules or code) and reserve Claude for the unstructured parts, explaining the simpler, cheaper, more reliable option.
+C. Use the largest model.
+D. Cancel the project.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Use the simplest solution that meets requirements; LLMs where ambiguity or language is the problem.
+<strong>Why not the others:</strong> A adds cost and risk; C is unjustified; D discards the value.
+<strong>Architectural principle:</strong> Simplest effective solution.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q136 · D6 · Objective: Communicate trade-offs and set realistic expectations · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> The sponsor wants to launch broadly after an impressive pilot, but metrics show weak performance on one customer segment.
+<strong>Question:</strong> What should the architect communicate?
+A. Only the overall average.
+B. That the segment is unimportant.
+C. Nothing, to avoid delaying.
+D. The segment finding with its business impact, options (targeted fix, human routing for that segment, phased launch), and a recommendation.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Transparent findings with options let stakeholders decide.
+<strong>Why not the others:</strong> A–C hide a material risk.
+<strong>Architectural principle:</strong> Honest reporting with options.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q137 · D6 · Objective: Manage the solution lifecycle from PoC to production · Difficulty: Advanced</h3>
+<p><strong>Question (Select TWO):</strong> Which are appropriate post-launch lifecycle practices?
+A. Monitor quality, cost, latency, and safety signals against agreed thresholds.
+B. Stop evaluating after launch.
+C. Feed production failures into the eval set and review them on a regular cadence.
+D. Never change prompts or models.
+E. Disable alerting to reduce noise.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Continuous monitoring and an evolving eval set keep quality controlled.
+<strong>Why not the others:</strong> B, D, and E remove feedback or adaptability.
+<strong>Architectural principle:</strong> Operate, measure, improve.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q138 · D6 · Objective: Define SLAs and manage approvals/objections · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A customer's contract requires that a human review all legal-risk responses within 4 hours.
+<strong>Question:</strong> Which design best supports this commitment?
+A. Hope reviewers are available.
+B. Route flagged items to a review queue with priority and timers, staffing coverage, escalation on aging, and dashboards tracking time-to-review against the SLA.
+C. Auto-approve after 4 hours.
+D. Remove flagged items from reporting.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> The SLA needs workflow, staffing, and measurement.
+<strong>Why not the others:</strong> A lacks controls; C violates the requirement; D hides breaches.
+<strong>Architectural principle:</strong> Operationalize commitments.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q139 · D6 · Objective: Build a business case and communicate value · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> After launch, the sponsor asks, "Is it working?"
+<strong>Question:</strong> What should the architect present?
+A. Anecdotes from happy users.
+B. The number of API calls.
+C. A baseline-versus-current comparison on the agreed success metrics (resolution, quality, cost, escalation, satisfaction), with confidence and known limitations.
+D. A list of features.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Value is shown against baselines using agreed metrics.
+<strong>Why not the others:</strong> A, B, and D are not outcome measures.
+<strong>Architectural principle:</strong> Measure outcomes against baselines.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr />
+<h3>Q140 · D6 · Objective: Produce documentation and handoff artifacts · Difficulty: Expert</h3>
+<p><strong>Scenario:</strong> A regulated client requires evidence that changes were reviewed, tested, and approved before release.
+<strong>Question:</strong> Which artifact set provides this?
+A. A verbal confirmation from the team.
+B. Release notes only.
+C. A chat transcript.
+D. A change record linking the version diff, eval results, reviewer approvals, rollout plan, and rollback outcome, stored immutably and retrievable by release.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Traceable change records give auditable evidence.
+<strong>Why not the others:</strong> A–C are incomplete or unverifiable.
+<strong>Architectural principle:</strong> Auditable change management.
+<strong>Ref:</strong> Prep Lesson 4</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

@@ -1,0 +1,248 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 3 — Domain 3: Integration (19%) — the heaviest domain | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 3 — Domain 3: Integration (19%) — the heaviest domain</h1>
+<p><em>Prep-course lesson: Enterprise Integration &amp; Production. Official tasks: capability bloat · authN/authZ gaps · accuracy–latency trade-offs · observability at scale · RAG pipelines (chunking/indexing) · retrieval matched to data shape and query pattern · integration mechanism (MCP, API/CLI, agent-to-agent) · progressive discovery vs. monolithic context.</em></p>
+<p>Topics: <strong>3.1</strong> Choosing the integration mechanism · <strong>3.2</strong> Tool configuration, capability bloat, progressive discovery · <strong>3.3</strong> Authentication, authorization, identity boundaries · <strong>3.4</strong> RAG pipeline design · <strong>3.5</strong> Retrieval strategy by data shape · <strong>3.6</strong> Reliability, accuracy–latency, rate limits · <strong>3.7</strong> Observability at scale</p>
+<hr />
+<h2>3.1 Choosing the integration mechanism: MCP, direct API/CLI, agent-to-agent</h2>
+<p><strong>1. Objectives.</strong> Select among MCP, direct API/CLI tool calls, and agent-to-agent protocols for a given system, and defend the choice.</p>
+<p><strong>2. Prerequisites.</strong> Tool use (function calling); JSON schemas; MCP intro course.</p>
+<p><strong>3. Beginner.</strong> <em>Tool use</em>: you describe functions to Claude; Claude asks you to call them; you run them and return results. <strong>MCP (Model Context Protocol)</strong> is an open standard that lets Claude-capable clients discover and call tools/resources/prompts from MCP servers in a uniform way. <strong>Direct API/CLI</strong> means your own code (or a shell tool) calls a system without an MCP layer. <strong>Agent-to-agent</strong> protocols let independently owned agents delegate to each other.</p>
+<p><strong>4. Advanced.</strong> Decision criteria:
+- <strong>MCP</strong> when many clients/agents need the same integration, tools should be discoverable and reusable, a vendor already ships an MCP server, or you want a standard auth/transport story. Cost: another hop to operate/secure; tool descriptions consume context; third-party servers are a supply-chain risk.
+- <strong>Direct API / tool function</strong> when it's one app calling one internal service, you need tight control over validation/latency, or the surface is tiny. Lowest overhead; least reusable.
+- <strong>CLI/shell</strong> for developer/agent workflows on trusted machines where mature CLIs exist (e.g., <code>git</code>, cloud CLIs). Powerful but broad blast radius; sandbox it.
+- <strong>Agent-to-agent</strong> when another team/vendor owns an autonomous capability behind its own agent; you delegate a <em>goal</em> instead of calling a function. Cost: opaque behavior, harder SLAs/evals, trust and identity propagation.
+Transport matters: MCP over HTTP can use the spec's OAuth-based authorization; local stdio servers rely on environment credentials and are outside that authorization flow.</p>
+<p><strong>5. Steps.</strong> (1) List capabilities needed and their owners. (2) Count consumers (one app vs. many). (3) Check for existing MCP servers and their trust level. (4) Decide per integration; document in an ADR. (5) Define the auth path end-to-end (3.3). (6) Load-test and token-count tool definitions.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart TD
+  N[Need: Claude must use system X] --&gt; A{Many consumers or&lt;br/&gt;existing MCP server?}
+  A -- yes --&gt; M[MCP server&lt;br/&gt;+ gateway/authZ]
+  A -- no --&gt; B{Other team&#x27;s autonomous agent?}
+  B -- yes --&gt; AA[Agent-to-agent&lt;br/&gt;delegate goal, verify result]
+  B -- no --&gt; C{Trusted dev environment,&lt;br/&gt;mature CLI?}
+  C -- yes --&gt; CLI[CLI tool, sandboxed]
+  C -- no --&gt; D[Direct API tool&lt;br/&gt;with schema validation]
+</pre>
+
+<p><strong>7. Scenario.</strong> A company has a CRM, an ITSM, and a document store, used by a support agent, a sales assistant, and an internal chatbot. Expose each system once as an MCP server behind an auth gateway, instead of three bespoke integrations per app.</p>
+<p><strong>8. Recommended/alternatives.</strong> MCP for shared enterprise systems; direct tools for one-off internal calls. <em>Change if</em> only one consumer exists and the MCP hop adds unacceptable latency or ops burden.</p>
+<p><strong>9. Security.</strong> Treat MCP servers like any dependency: allow-list, pin versions, review tool descriptions (they're prompt-injection vectors), and enforce authZ server-side.</p>
+<p><strong>10. Performance.</strong> Each tool definition costs tokens; each hop adds latency; cache tool lists where possible.</p>
+<p><strong>11. Mistakes.</strong> "MCP everywhere" by default; installing unvetted servers; assuming MCP authorization is mandatory or covers tool-level data permissions (it doesn't — your tools must still authorize).</p>
+<p><strong>12. Scenario question.</strong> <em>Three apps need the same ticketing integration; two other teams will add apps next quarter.</em> → Build one MCP server with centralized auth rather than N direct integrations.</p>
+<p><strong>13. Revision.</strong> Reuse → MCP; one-off → direct; trusted dev → CLI; delegated goal → A2A; authZ is always yours.</p>
+<p><strong>14. Docs.</strong> MCP specification (modelcontextprotocol.io, including the authorization section); Intro to MCP course; Tool use docs.</p>
+<hr />
+<h2>3.2 Tool configuration, capability bloat, and progressive discovery</h2>
+<p><strong>1. Objectives.</strong> Detect over-tooled agents; apply least capability; choose progressive discovery vs. a monolithic tool/context load.</p>
+<p><strong>2. Prerequisites.</strong> 3.1; 2.3.</p>
+<p><strong>3. Beginner.</strong> Every tool you give an agent adds description tokens, more choices (more mistakes), and more ways to cause harm. <strong>Capability bloat</strong> = tools or permissions the agent doesn't need.</p>
+<p><strong>4. Advanced.</strong> Symptoms: wrong tool selection, long prompts, slow responses, and unexpected actions. Remedies: (a) <strong>remove</strong> unneeded tools (the official Sample 1 logic: removal beats logging or confirmations); (b) <strong>scope by role/task</strong> — different agents/workflows get different tool sets; (c) <strong>consolidate</strong> overlapping tools and write precise, non-overlapping descriptions; (d) <strong>progressive discovery</strong> — expose a small set of core tools plus a discovery mechanism (search tools, skills, on-demand MCP tool loading) so detail enters context only when needed; (e) design tool outputs to be small and high-signal. <strong>Monolithic</strong> loading is acceptable when the toolset is small, stable, and always relevant; it fails as the catalog grows.</p>
+<p><strong>5. Steps.</strong> (1) Inventory tools and map each to a real user need. (2) Remove or gate the rest. (3) Measure tool-selection accuracy in evals. (4) If the catalog &gt; ~dozens or varies by task, introduce discovery. (5) Re-test token cost and accuracy.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  subgraph Monolithic
+    A1[Agent] --- T1[60 tool definitions&lt;br/&gt;always in context]
+  end
+  subgraph Progressive
+    A2[Agent] --- C[5 core tools]
+    A2 --&gt; D[search_tools / skill index]
+    D -.loads on demand.-&gt; X[Relevant 3 tools]
+  end
+</pre>
+
+<p><strong>7. Scenario.</strong> Support agent has read-ticket, draft-reply, issue-refund, delete-account. Staff only need the first two. Remove the others from that agent entirely; create a separate, approval-gated workflow for refunds.</p>
+<p><strong>8. Recommended/alternatives.</strong> Least-capability config + progressive discovery as catalogs grow. Alternative: keep all tools and add guard prompts (prompts aren't enforcement). <em>Change if</em> the role truly needs the capability → keep it behind authZ + approval.</p>
+<p><strong>9. Security.</strong> Capability reduction shrinks attack surface; it's a <em>preventive</em> control, stronger than detective (logging) or compensating (confirmation) controls.</p>
+<p><strong>10. Cost.</strong> Fewer tool definitions → fewer input tokens; with caching, tool lists can sit in the stable prefix.</p>
+<p><strong>11. Mistakes.</strong> "Just in case" tools; overlapping descriptions; returning huge tool results; adding confirmation dialogs instead of removing the tool.</p>
+<p><strong>12. Scenario question.</strong> <em>An agent has 45 tools and often picks the wrong one.</em> → Reduce/scope tools per task and consider on-demand discovery, then re-run tool-selection evals.</p>
+<p><strong>13. Revision.</strong> Least capability; remove &gt; monitor; discover on demand; small tool outputs.</p>
+<p><strong>14. Docs.</strong> Tool use docs; Agent Skills (progressive disclosure); MCP tools spec.</p>
+<hr />
+<h2>3.3 Authentication, authorization, and identity boundaries</h2>
+<p><strong>1. Objectives.</strong> Identify authN/authZ gaps in Claude integrations; design identity propagation; apply least privilege.</p>
+<p><strong>2. Prerequisites.</strong> OAuth 2.x basics, RBAC/ABAC.</p>
+<p><strong>3. Beginner.</strong> <em>AuthN</em> = who are you? <em>AuthZ</em> = what may you do? The model is <strong>not</strong> a security boundary: it can be tricked, so access decisions must be made by your code/services.</p>
+<p><strong>4. Advanced.</strong> Principles: (1) <strong>Authorize at the tool/service, using the end user's identity</strong> (on-behalf-of / token exchange), not a shared super-user service account — otherwise the agent becomes a <strong>confused deputy</strong>. (2) Validate <strong>token audience/scope</strong> per resource. (3) Enforce <strong>row/document-level entitlements before retrieval</strong> returns content. (4) <strong>Short-lived, narrowly scoped credentials</strong>; never put secrets in prompts or logs. (5) Separate identities for the agent, each worker, and human approvers; record both <strong>user and agent identity</strong> in audit logs. (6) For MCP over HTTP, use the spec's OAuth-based authorization (protected-resource metadata, resource-bound tokens); remember MCP authorization is optional at the protocol level and doesn't replace a tool's own data permissions; stdio servers use environment credentials. Common <strong>gaps</strong> to spot: shared API keys in the agent; tools that accept <code>user_id</code> as a model-supplied argument; broad scopes "for convenience"; no tenant isolation in vector stores; credentials visible in tool results.</p>
+<p><strong>5. Steps.</strong> (1) Draw identities and trust boundaries. (2) For each tool: required permission, who can invoke, which identity executes. (3) Implement OBO/token exchange. (4) Add server-side validation of every model-supplied parameter. (5) Test with a low-privilege user and cross-tenant attempts. (6) Log decisions.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">sequenceDiagram
+  participant U as User
+  participant App as App (authN)
+  participant C as Claude
+  participant B as Tool broker (authZ)
+  participant S as Backend API
+  U-&gt;&gt;App: Request (user token)
+  App-&gt;&gt;C: Prompt (no secrets)
+  C--&gt;&gt;App: tool_use(get_case, case_id)
+  App-&gt;&gt;B: call + user identity
+  B-&gt;&gt;B: check scope, entitlements, args
+  B-&gt;&gt;S: call with user-scoped token
+  S--&gt;&gt;B: data (filtered)
+  B--&gt;&gt;App: result
+  App-&gt;&gt;C: tool_result
+</pre>
+
+<p><strong>7. Scenario.</strong> Agent uses one admin token for the CRM. A junior rep asks about a VIP account they can't normally see; the agent returns it. Fix: user-scoped tokens; CRM enforces entitlements.</p>
+<p><strong>8. Recommended/alternatives.</strong> OBO with per-tool authZ. Alternative: "tell the model to respect permissions" — not acceptable. <em>Change if</em> the backend can't accept user tokens → put an authorization proxy in front.</p>
+<p><strong>9. Governance.</strong> Owner: security/IAM + service owner. Evidence: access-test results, audit logs showing user+agent IDs.</p>
+<p><strong>10. Performance.</strong> Token exchange adds latency — cache short-lived tokens safely.</p>
+<p><strong>11. Mistakes.</strong> Shared service accounts; trusting model-provided IDs; entitlement checks after retrieval; secrets in system prompts.</p>
+<p><strong>12. Scenario question.</strong> <em>A tool takes <code>tenant_id</code> from the model's arguments.</em> → Derive tenant from the authenticated session; ignore/verify model-supplied values.</p>
+<p><strong>13. Revision.</strong> The model isn't a boundary; user-scoped identity; server-side checks; filter before context.</p>
+<p><strong>14. Docs.</strong> MCP authorization spec; Tool use best practices; Prep Lesson 2–3.</p>
+<hr />
+<h2>3.4 Designing a RAG pipeline: chunking and indexing</h2>
+<p><strong>1. Objectives.</strong> Design ingestion, chunking, embedding, indexing, and refresh for a RAG system; diagnose stale/irrelevant retrieval.</p>
+<p><strong>2. Prerequisites.</strong> Embeddings and vector search basics.</p>
+<p><strong>3. Beginner.</strong> RAG = retrieve relevant passages from your knowledge base and give them to Claude with the question, so answers are grounded in your data and can cite sources.</p>
+<p><strong>4. Advanced.</strong> Pipeline: <strong>ingest</strong> (connectors, parsing PDFs/tables) → <strong>clean/normalize</strong> → <strong>chunk</strong> → <strong>embed</strong> → <strong>index</strong> (+ metadata: source, ACL, date, version) → <strong>retrieve</strong> → <strong>rerank</strong> → <strong>assemble context</strong> → <strong>generate with citations</strong> → <strong>evaluate/monitor</strong>. Chunking: match chunk size to question granularity; respect structure (headings, tables, code); use modest overlap; attach parent/section context so a chunk is understandable alone; consider contextual enrichment (prepend a short document/section description) to reduce ambiguity. Indexing: store ACL metadata for pre-filtering; version documents and <strong>re-index on change</strong>; delete tombstoned docs; keep embedding model/version consistent (mixed embeddings corrupt similarity). <strong>Refresh failures are a classic root cause</strong>: confident wrong answers right after a document refresh → investigate retrieval/indexing first (the official Sample 3).</p>
+<p><strong>5. Steps.</strong> (1) Inventory sources, formats, owners, ACLs, update frequency. (2) Choose chunking per doc type. (3) Build a labeled query→relevant-chunk set. (4) Measure retrieval (recall@k, precision) <em>separately</em> from generation quality. (5) Add reranking/hybrid search if recall is weak. (6) Automate re-index with versioning and health checks.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  S[Sources] --&gt; P[Parse/clean] --&gt; CH[Chunk + metadata + ACL]
+  CH --&gt; E[Embed] --&gt; IX[(Index)]
+  Q[Query + user identity] --&gt; F[Filter by ACL] --&gt; R[Retrieve top-k] --&gt; RR[Rerank]
+  IX --&gt; R
+  RR --&gt; G[Claude: answer + citations]
+  G --&gt; M[Monitor: retrieval hit rate, citation validity]
+</pre>
+
+<p><strong>7. Scenario.</strong> HR knowledge assistant over policies updated monthly; after a refresh, answers cite old leave policy. Root cause: failed re-index left stale chunks plus mixed embedding versions.</p>
+<p><strong>8. Recommended/alternatives.</strong> Structure-aware chunking + hybrid retrieval + rerank + ACL pre-filter. Alternative: long-context stuffing of the whole corpus (works for small static corpora; poor for large/changing/ACL-bound data). <em>Change if</em> corpus is small enough to cache whole.</p>
+<p><strong>9. Security.</strong> Enforce entitlements in retrieval; treat retrieved text as untrusted (indirect injection); redact sensitive fields at ingest where required.</p>
+<p><strong>10. Cost/latency.</strong> Embedding + search + rerank add latency; cache frequent queries; cap k.</p>
+<p><strong>11. Mistakes.</strong> One-size chunking; no metadata; no eval of retrieval; silent index failures; no citations validation.</p>
+<p><strong>12. Scenario question.</strong> <em>Answers are fluent but wrong after an ingestion job ran.</em> → Check index freshness, chunk integrity, embedding consistency, before touching prompts or the model.</p>
+<p><strong>13. Revision.</strong> Ingest→chunk→embed→index→retrieve→rerank→generate; test retrieval separately; version and re-index.</p>
+<p><strong>14. Docs.</strong> Anthropic docs on embeddings/retrieval patterns and citations; Prep Lesson 2.</p>
+<hr />
+<h2>3.5 Matching retrieval strategy to data shape and query pattern</h2>
+<p><strong>1. Objectives.</strong> Choose among semantic, keyword/BM25, hybrid, metadata-filtered, structured (SQL/graph), and agentic search.</p>
+<p><strong>2. Prerequisites.</strong> 3.4.</p>
+<p><strong>3. Beginner.</strong> Different data and questions need different retrieval. Exact IDs and error codes want keyword search; fuzzy conceptual questions want semantic search; "total sales by region" wants SQL, not text retrieval.</p>
+<p><strong>4. Advanced.</strong> Map <strong>data shape</strong> (unstructured prose, semi-structured docs, tables, code, knowledge graph, time series) × <strong>query pattern</strong> (lookup, conceptual, multi-hop, aggregation, comparative):</p>
+<table>
+<thead>
+<tr>
+<th>Query/data</th>
+<th>Best-fit retrieval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exact identifiers, codes, names</td>
+<td>Keyword/BM25 or exact filter</td>
+</tr>
+<tr>
+<td>Conceptual questions over prose</td>
+<td>Semantic (embeddings) + rerank</td>
+</tr>
+<tr>
+<td>Mixed</td>
+<td><strong>Hybrid</strong> (keyword + semantic)</td>
+</tr>
+<tr>
+<td>Aggregations over tables</td>
+<td><strong>Text-to-SQL / structured API</strong> with validated queries</td>
+</tr>
+<tr>
+<td>Relationships/multi-hop</td>
+<td>Graph queries or iterative (agentic) retrieval</td>
+</tr>
+<tr>
+<td>Code repos</td>
+<td>Search tools (grep/symbol) + file reads, often agentic</td>
+</tr>
+<tr>
+<td>Small, stable corpus</td>
+<td>Cached full-context</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agentic search</strong> lets Claude issue and refine queries via tools; it improves multi-hop recall at the cost of latency, tokens, and variance. <strong>Progressive discovery</strong> (search → skim → open) beats pre-stuffing for large corpora.</p>
+<p><strong>5. Steps.</strong> (1) Classify top 50 real queries by pattern. (2) Choose the retrieval per class; route if classes differ. (3) Evaluate retrieval per class. (4) For SQL, use read-only roles, schema allow-lists, row limits.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart TD
+  Q[Query] --&gt; R{Router}
+  R -- identifier --&gt; K[Keyword / exact]
+  R -- conceptual --&gt; V[Semantic + rerank]
+  R -- aggregate --&gt; SQL[Validated read-only SQL]
+  R -- multi-hop --&gt; AG[Agentic iterative search]
+</pre>
+
+<p><strong>7. Scenario.</strong> Finance analyst assistant: "What was Q3 EMEA revenue?" (SQL), "Summarize risks in the 10-K" (semantic), "Find error E-4021 runbook" (keyword).</p>
+<p><strong>8. Recommended/alternatives.</strong> Router + per-class retrieval. Alternative: one vector index for everything (poor for IDs and aggregates).</p>
+<p><strong>9. Security.</strong> Text-to-SQL: least-privilege DB role, parameterization, allow-listed tables, query validation/limits.</p>
+<p><strong>10. Cost.</strong> Hybrid + rerank costs more per query but often cheaper than model retries/bad answers.</p>
+<p><strong>11. Mistakes.</strong> Using vectors for exact lookups; letting the model write unrestricted SQL; ignoring metadata filters.</p>
+<p><strong>12. Scenario question.</strong> <em>Users search by invoice numbers and get unrelated semantic matches.</em> → Add keyword/exact matching (hybrid).</p>
+<p><strong>13. Revision.</strong> Shape × pattern → strategy; hybrid for mixed; SQL for aggregates; agentic for multi-hop.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 2; Tool use docs.</p>
+<hr />
+<h2>3.6 Reliability, accuracy–latency trade-offs, rate limits, and cost control</h2>
+<p><strong>1. Objectives.</strong> Justify configuration decisions balancing accuracy, latency, and cost; implement timeouts, retries, rate-limit handling, and graceful degradation.</p>
+<p><strong>2. Prerequisites.</strong> HTTP semantics; 2.1–2.4.</p>
+<p><strong>3. Beginner.</strong> More thinking, bigger models, and more retrieval improve accuracy but slow responses and increase cost. Systems must also survive failures and traffic spikes.</p>
+<p><strong>4. Advanced — levers:</strong> model tier; thinking/effort settings (on models that support them); retrieval depth; verification passes; <strong>streaming</strong> (improves perceived latency; doesn't reduce total time); <strong>prompt caching</strong>; <strong>batch API</strong> (asynchronous, 50% cost reduction; wrong for interactive); <code>max_tokens</code>; parallel tool calls. <strong>Reliability patterns:</strong> per-call <strong>timeouts</strong>; <strong>retries with exponential backoff + jitter</strong> for transient errors (e.g., 429, 5xx) honoring <code>retry-after</code>; <strong>idempotency keys</strong> for write tools so retries don't duplicate side effects; <strong>circuit breakers</strong>; <strong>fallback tiers</strong> (smaller model, cached answer, human handoff); <strong>queueing</strong> and backpressure; <strong>cost budgets</strong> (per request, per user, per day) with kill-switches. Rate limits are measured in RPM, input and output tokens per minute (token-bucket behavior), so bursts can trigger 429s even under average limits. The Python/TypeScript SDKs include built-in retry logic.</p>
+<p><strong>5. Steps.</strong> (1) Define SLOs (p95 latency, availability, cost/request). (2) Budget latency across steps. (3) Add timeouts/retries/idempotency. (4) Define degradation modes. (5) Load-test, including 429 behavior. (6) Alert on SLO burn.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  R[Request] --&gt; Q[Queue + budget check]
+  Q --&gt; C[Claude call&lt;br/&gt;timeout + retry/backoff]
+  C -- 429/5xx --&gt; B[Backoff + jitter] --&gt; C
+  C -- exhausted --&gt; F[Fallback: smaller model / cached / human]
+  C -- ok --&gt; V[Validate] --&gt; O[Respond]
+</pre>
+
+<p><strong>7. Scenario.</strong> Month-end spike triggers 429s; refunds retried and duplicated. Fix: backoff with jitter, idempotency keys on the refund tool, queue with concurrency cap, and batch for non-urgent summaries.</p>
+<p><strong>8. Recommended/alternatives.</strong> Layered resilience + caching/batch where fit. Alternative: raise rate limits only (doesn't fix duplicates or cost). <em>Change if</em> SLA demands sub-second and the fallback quality is unacceptable → pre-compute.</p>
+<p><strong>9. Security/governance.</strong> Fail <strong>closed</strong> for authorization/safety checks (deny when the checker is down); fail <strong>open/soft</strong> only for non-critical enrichments.</p>
+<p><strong>10. Cost.</strong> Track tokens per request; alert on anomalies; use the token-counting endpoint for estimates.</p>
+<p><strong>11. Mistakes.</strong> Retrying non-idempotent writes; infinite retries; no timeout on tool calls; using batch for chat; streaming as a "fix" for slow backends.</p>
+<p><strong>12. Scenario question.</strong> <em>Retried refund calls created duplicate refunds.</em> → Idempotency keys on write operations, not fewer retries alone.</p>
+<p><strong>13. Revision.</strong> SLOs → budgets → timeouts/retries/idempotency → degradation; safety fails closed.</p>
+<p><strong>14. Docs.</strong> Rate limits: https://docs.claude.com/en/api/rate-limits · Batch processing · Streaming · Errors (API reference).</p>
+<hr />
+<h2>3.7 Observability and monitoring at scale</h2>
+<p><strong>1. Objectives.</strong> Select logging/tracing/metrics strategies for LLM systems; handle privacy, volume, and cost.</p>
+<p><strong>2. Prerequisites.</strong> Distributed tracing basics.</p>
+<p><strong>3. Beginner.</strong> You can't fix what you can't see. For LLM apps, capture what went in, what came out, which tools ran, how long, how many tokens, and whether users were satisfied.</p>
+<p><strong>4. Advanced.</strong> Instrument at three levels: <strong>request trace</strong> (trace ID across gateway → prompt assembly → retrieval → model → tools → response; span per step), <strong>metrics</strong> (latency p50/p95/p99, time-to-first-token, tokens in/out, cache hit rate, error and 429 rates, tool success rate, cost/request, escalation rate), and <strong>quality signals</strong> (user feedback, human-review outcomes, automated eval scores on sampled traffic, citation validity). At scale: <strong>sample</strong> traces (always keep errors, low-confidence, flagged cases), <strong>redact/tokenize PII</strong> before logging, <strong>retention limits</strong>, and separate operational logs from <strong>audit logs</strong> (immutable, with user+agent identity, tool, parameters (redacted), decision, outcome). Track <strong>drift</strong>: input distribution, retrieval quality, and model behavior after provider updates. Treat logged tool parameters as sensitive.</p>
+<p><strong>5. Steps.</strong> (1) Define a trace schema and IDs. (2) Add spans and metrics. (3) Redaction at the edge. (4) Dashboards per SLO. (5) Alerts on quality and cost, not just uptime. (6) Replay capability: store inputs needed to reproduce failures within policy.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  A[App spans] --&gt; OT[Trace pipeline]
+  M[Metrics] --&gt; OT
+  Q[Sampled eval scores&lt;br/&gt;+ user feedback] --&gt; OT
+  OT --&gt; D[Dashboards + alerts]
+  OT --&gt; AU[(Immutable audit log&lt;br/&gt;redacted)]
+</pre>
+
+<p><strong>7. Scenario.</strong> Support agent costs doubled; traces show a new prompt version added a 6k-token example block uncached — found via tokens/request and cache-hit-rate metrics.</p>
+<p><strong>8. Recommended/alternatives.</strong> Trace + metrics + sampled quality evals. Alternative: log everything raw (privacy/cost problem) or only uptime metrics (blind to quality).</p>
+<p><strong>9. Governance.</strong> Audit evidence supports compliance (D5); access to logs is itself controlled.</p>
+<p><strong>10. Cost.</strong> Observability volume can rival inference cost — sample and tier storage.</p>
+<p><strong>11. Mistakes.</strong> Logging PII; no trace linking retrieval to answers; only monitoring HTTP 200s; no alert on cost anomalies.</p>
+<p><strong>12. Scenario question.</strong> <em>Quality complaints rise but dashboards are green.</em> → Add quality monitoring (sampled evals, feedback, retrieval metrics), not just availability.</p>
+<p><strong>13. Revision.</strong> Trace, measure, sample, redact, alert on quality/cost, keep audit logs separate.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 2; Usage and cost reporting in the Console/Admin API docs.</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

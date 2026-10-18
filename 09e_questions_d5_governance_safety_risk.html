@@ -1,0 +1,295 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 9e — Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 9e — Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</h1>
+<blockquote>
+<p>Original practice questions; not official or leaked. Objectives quoted from Exam Guide v1.0 §6 D5. Compliance items test architectural reasoning, not legal advice.</p>
+</blockquote>
+<hr />
+<h3>Q99 · D5 · Objective: Implement guardrails and safety controls · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An email-triage agent reads inbound customer emails and can send external emails. A penetration test shows an email with hidden instructions made the agent forward internal data.
+<strong>Question:</strong> Which response is best?
+A. Lengthen the system prompt with stronger warnings.
+B. Switch to a larger model.
+C. Ask users to avoid suspicious emails.
+D. Remove the unconstrained send capability (use draft-only plus approval), authorize tool calls outside the model, restrict egress, treat email content as untrusted data, and add screens and monitoring.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Layered controls with preventive capability reduction and enforcement outside the model address indirect injection.
+<strong>Why not the others:</strong> A and B rely on model behavior; C shifts burden to users.
+<strong>Architectural principle:</strong> Don't assume prompting alone is sufficient.
+<strong>Ref:</strong> https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks</p>
+<hr />
+<h3>Q100 · D5 · Objective: Implement guardrails and safety controls · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An assistant fetches web pages and passes their text to Claude.
+<strong>Question:</strong> How should the third-party content be delivered?
+A. Appended to the system prompt.
+B. In tool-result content with its origin labeled, with a policy stating such content is untrusted data that must not override instructions.
+C. As a message from the user role containing the text verbatim, unlabeled.
+D. Hidden in the first few tokens of the conversation.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Treating retrieved content as tool results (data) with provenance, and stating the policy, reduces the chance it's treated as instructions.
+<strong>Why not the others:</strong> A and C elevate untrusted text to instruction channels; D obscures provenance.
+<strong>Architectural principle:</strong> Separate trusted instructions from untrusted data.
+<strong>Ref:</strong> Mitigate jailbreaks and prompt injections docs</p>
+<hr />
+<h3>Q101 · D5 · Objective: Implement guardrails and safety controls · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A public chatbot sees attempts to jailbreak it. You want an inexpensive pre-filter.
+<strong>Question:</strong> Which design aligns with Anthropic's guardrail guidance?
+A. A lightweight model screens input and returns a constrained classification (e.g., structured output) before the main call, alongside input validation and a hardened system prompt.
+B. Rely only on the main model to refuse.
+C. Block all users who type unusual words.
+D. Disable logging.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Layered screening with a small model and constrained output is a recommended pattern.
+<strong>Why not the others:</strong> B is single-layer; C is blunt and error-prone; D removes monitoring.
+<strong>Architectural principle:</strong> Layered defenses.
+<strong>Ref:</strong> Mitigate jailbreaks docs</p>
+<hr />
+<h3>Q102 · D5 · Objective: Implement guardrails and safety controls · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> An agent can write files and call external URLs. A review flags exfiltration risk.
+<strong>Question:</strong> Which control provides the strongest preventive protection?
+A. A system-prompt rule not to exfiltrate data.
+B. A weekly review of logs.
+C. A network egress allow-list and tool-level path/URL restrictions enforced outside the model, with deny-by-default behavior.
+D. A user warning banner.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Technical enforcement stops the action regardless of model behavior.
+<strong>Why not the others:</strong> A relies on compliance; B is detective and late; D isn't a control.
+<strong>Architectural principle:</strong> Enforce at the boundary, deny by default.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q103 · D5 · Objective: Implement guardrails and safety controls · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which are <em>preventive</em> controls?
+A. Removing tools the workflow does not need.
+B. Immutable audit logs.
+C. Server-side authorization of every tool call with deny-by-default.
+D. Anomaly alerts on tool usage.
+E. Post-incident reviews.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> They stop or limit actions before they occur.
+<strong>Why not the others:</strong> B, D, and E detect or learn after the fact.
+<strong>Architectural principle:</strong> Prefer preventive controls; add detective ones.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q104 · D5 · Objective: Implement guardrails and safety controls · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A support bot occasionally echoes customers' full card numbers from tool results into replies.
+<strong>Question:</strong> Which fix best matches a safe design?
+A. Add an apology after leaks.
+B. Hope the model learns.
+C. Warn users not to paste cards.
+D. Minimize and mask sensitive fields before they enter the prompt, add an output screen for PII patterns, and block or route violations to review; fail closed if the screen is unavailable.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Data minimization plus output screening limits exposure; failing closed avoids leaks during outages.
+<strong>Why not the others:</strong> A and B don't prevent; C shifts burden.
+<strong>Architectural principle:</strong> Minimize data and screen outputs.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q105 · D5 · Objective: Identify risks, limitations, and failure modes of LLM systems · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An assistant has a tool that can delete customer accounts. A prompt injection triggers it.
+<strong>Question:</strong> Which risk category is this, and what is the primary mitigation?
+A. Hallucination; add citations.
+B. Excessive agency; apply least privilege by removing or tightly gating destructive capability and authorizing outside the model.
+C. Latency; add caching.
+D. Bias; add examples.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> The agent had more authority than needed.
+<strong>Why not the others:</strong> The symptoms don't match those categories.
+<strong>Architectural principle:</strong> Limit agency.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q106 · D5 · Objective: Identify risks, limitations, and failure modes of LLM systems · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A crafted document causes an agent to loop through thousands of tool calls, creating a surprise bill.
+<strong>Question:</strong> What is the best control?
+A. Step, token, time, and spend budgets with hard stops and alerts at the orchestrator.
+B. Ask the model to be efficient.
+C. Increase quotas.
+D. Remove monitoring.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Budgets enforce bounds regardless of model behavior.
+<strong>Why not the others:</strong> B isn't enforcement; C increases exposure; D hides it.
+<strong>Architectural principle:</strong> Bound autonomy and cost.
+<strong>Ref:</strong> Building effective agents</p>
+<hr />
+<h3>Q107 · D5 · Objective: Identify risks, limitations, and failure modes of LLM systems · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Reviewers accept AI recommendations 99% of the time and rarely read evidence.
+<strong>Question:</strong> What risk is this, and what design response fits?
+A. Hallucination; increase temperature.
+B. Latency; stream.
+C. Automation bias; show evidence and alternatives, measure override rates, sample and audit decisions.
+D. Token bloat; compress.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Over-reliance degrades oversight; design the review experience and measure it.
+<strong>Why not the others:</strong> Unrelated causes.
+<strong>Architectural principle:</strong> Design for human oversight effectiveness.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q108 · D5 · Objective: Apply human-in-the-loop validation strategies · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A procurement agent has low confidence on a $40,000 vendor change that cannot be easily reversed.
+<strong>Question:</strong> What should happen?
+A. Auto-execute and log.
+B. Auto-execute and notify later.
+C. Retry until confidence rises.
+D. Route to a human decision-maker with the evidence and alternatives; do not execute without approval.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Low confidence plus irreversibility and high cost warrants human decision.
+<strong>Why not the others:</strong> A–C act without oversight.
+<strong>Architectural principle:</strong> Route by confidence, reversibility, and cost.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q109 · D5 · Objective: Apply human-in-the-loop validation strategies · Difficulty: Expert</h3>
+<p><strong>Scenario:</strong> A design auto-approves actions when Claude states "confidence: 95%."
+<strong>Question:</strong> What is the flaw, and what is better?
+A. No flaw; self-reported confidence is reliable.
+B. Self-reported confidence is not a calibrated probability; derive confidence from validators, retrieval coverage, agreement across runs, and classifier scores, and calibrate against labeled outcomes.
+C. Use 99% instead.
+D. Ask the model twice and average the numbers.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Verbalized confidence can be miscalibrated; use measurable signals and calibration.
+<strong>Why not the others:</strong> A ignores calibration; C and D keep the same flaw.
+<strong>Architectural principle:</strong> Calibrated, signal-based confidence.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q110 · D5 · Objective: Apply human-in-the-loop validation strategies · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> The safety-screening service times out during a traffic spike.
+<strong>Question:</strong> What should the system do for outputs that require screening?
+A. Fail closed: hold or route to review and alert, rather than releasing unscreened outputs.
+B. Fail open to avoid user delays.
+C. Retry forever.
+D. Skip screening for premium users.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Safety controls default to deny when unavailable.
+<strong>Why not the others:</strong> B and D bypass safety; C blocks resources.
+<strong>Architectural principle:</strong> Fail closed for safety and security controls.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q111 · D5 · Objective: Apply human-in-the-loop validation strategies · Difficulty: Advanced</h3>
+<p><strong>Question (Select TWO):</strong> Which changes best reduce rubber-stamp approvals?
+A. Show the evidence and alternatives, not just the recommendation.
+B. Remove the review step entirely.
+C. Sample and audit approvals and track reviewer override and error rates.
+D. Hide the underlying data from reviewers.
+E. Require approvals within five seconds.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Evidence-rich review and oversight metrics improve review quality.
+<strong>Why not the others:</strong> B removes oversight; D worsens it; E pressures speed.
+<strong>Architectural principle:</strong> Make human review effective, not ceremonial.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q112 · D5 · Objective: Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A payer wants an assistant to summarize member calls containing PHI. Design freeze is next week.
+<strong>Question:</strong> What must happen before freezing the design?
+A. Build first and check compliance after launch.
+B. Assume the vendor's general certifications automatically cover your use.
+C. Confirm the deployment path and vendor terms support PHI (e.g., a business associate agreement and eligible services), apply minimum-necessary data flows, and map controls to evidence.
+D. Remove logging so PHI isn't stored.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Eligibility and data flows are architectural constraints; verify them early and with the proper documentation.
+<strong>Why not the others:</strong> A creates rework; B assumes coverage; D removes audit capability and doesn't address PHI in prompts.
+<strong>Architectural principle:</strong> Compliance by design with verified eligibility.
+<strong>Ref:</strong> Exam Guide D5; vendor compliance documentation</p>
+<hr />
+<h3>Q113 · D5 · Objective: Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A user in the EU requests erasure of their personal data. The system stores it in a CRM, a vector index, application logs, and a cache.
+<strong>Question:</strong> What must the architecture support?
+A. Deleting only the CRM record.
+B. Telling the user it can't be done.
+C. Waiting until logs rotate in a year, with no process.
+D. A tested deletion process covering source systems, embeddings/indexes, logs, caches, and backups per policy, with evidence of completion.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Erasure must reach every store holding the data.
+<strong>Why not the others:</strong> A–C leave data behind or are non-compliant.
+<strong>Architectural principle:</strong> Design data lifecycle and deletion across all stores.
+<strong>Ref:</strong> Exam Guide D5</p>
+<hr />
+<h3>Q114 · D5 · Objective: Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A federal agency requires services authorized at a specific FedRAMP impact level.
+<strong>Question:</strong> What is the appropriate architect action?
+A. Use any region; the cloud provider handles it.
+B. Verify that each service in the proposed deployment path holds the required authorization and that boundaries and data flows are within it; select the path accordingly.
+C. Use a consumer app.
+D. Ask the model whether it complies.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Authorization applies to specific services and boundaries and must be verified.
+<strong>Why not the others:</strong> A and C assume; D is not authoritative.
+<strong>Architectural principle:</strong> Verify authorization status for the exact deployment path.
+<strong>Ref:</strong> Exam Guide D5</p>
+<hr />
+<h3>Q115 · D5 · Objective: Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP) · Difficulty: Intermediate</h3>
+<p><strong>Question (Select TWO):</strong> Which implement the principle of data minimization?
+A. Filtering records to only the fields needed before building the prompt.
+B. Sending entire customer records "for context."
+C. Redacting identifiers not needed for the task in logs and indexes.
+D. Keeping all prompts forever.
+E. Adding more examples to the prompt.
+<strong>Correct answers:</strong> A, C
+<strong>Explanation:</strong> Limit data in prompts, logs, and indexes to what's necessary.
+<strong>Why not the others:</strong> B and D expand exposure; E is unrelated.
+<strong>Architectural principle:</strong> Minimize data by design.
+<strong>Ref:</strong> Exam Guide D5</p>
+<hr />
+<h3>Q116 · D5 · Objective: Ensure compliance with regulations (e.g., GDPR, HIPAA, FedRAMP) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> An auditor asks you to demonstrate that access controls work.
+<strong>Question:</strong> Which evidence is most convincing?
+A. Control test results (e.g., low-privilege and cross-tenant attempts denied), access logs, and approval records mapped to the control owner.
+B. A policy document stating the intent.
+C. A verbal assurance.
+D. A screenshot of the prompt.
+<strong>Correct answer:</strong> A
+<strong>Explanation:</strong> Evidence shows controls operate, not just that they're intended.
+<strong>Why not the others:</strong> B–D don't demonstrate operation.
+<strong>Architectural principle:</strong> Control → test → evidence.
+<strong>Ref:</strong> Prep Lesson 3</p>
+<hr />
+<h3>Q117 · D5 · Objective: Address ethical AI considerations (bias, fairness, transparency) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> A résumé-screening assistant ranks identical resumes differently when applicant names change.
+<strong>Question:</strong> What is the best response?
+A. Declare it neutral.
+B. Hide the ranking.
+C. Remove unnecessary identity attributes from inputs, test with counterfactual pairs and segment metrics, keep human decision-makers, and document limits.
+D. Only add a disclaimer.
+<strong>Correct answer:</strong> C
+<strong>Explanation:</strong> Measure, mitigate, and preserve oversight for consequential decisions.
+<strong>Why not the others:</strong> A ignores evidence; B hides the issue; D doesn't fix harm.
+<strong>Architectural principle:</strong> Fairness testing and human oversight.
+<strong>Ref:</strong> Exam Guide D5</p>
+<hr />
+<h3>Q118 · D5 · Objective: Address ethical AI considerations (bias, fairness, transparency) · Difficulty: Intermediate</h3>
+<p><strong>Scenario:</strong> A benefits assistant influences eligibility guidance.
+<strong>Question:</strong> Which transparency measures are most appropriate?
+A. Hide that AI is used.
+B. Provide only the final answer.
+C. Explain the system in a long technical paper.
+D. Disclose AI use, provide sources, state limitations, and offer a path to human review or appeal.
+<strong>Correct answer:</strong> D
+<strong>Explanation:</strong> Transparency builds appropriate trust and recourse.
+<strong>Why not the others:</strong> A and B obscure; C isn't user-facing.
+<strong>Architectural principle:</strong> Transparency and recourse.
+<strong>Ref:</strong> Exam Guide D5</p>
+<hr />
+<h3>Q119 · D5 · Objective: Address ethical AI considerations (bias, fairness, transparency) · Difficulty: Advanced</h3>
+<p><strong>Scenario:</strong> Overall accuracy is 95%, but it is 82% for one language group; the acceptance policy requires no segment below 90%.
+<strong>Question:</strong> What is the right decision?
+A. Ship; overall accuracy is high.
+B. Treat it as a gate failure: investigate causes (data, prompts, retrieval, model), mitigate, and re-test before release.
+C. Remove that segment from reporting.
+D. Add a disclaimer.
+<strong>Correct answer:</strong> B
+<strong>Explanation:</strong> Segment thresholds exist to prevent disparate quality.
+<strong>Why not the others:</strong> A, C, and D conceal or ignore the gap.
+<strong>Architectural principle:</strong> Gate on fairness metrics by segment.
+<strong>Ref:</strong> Exam Guide D4/D5</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

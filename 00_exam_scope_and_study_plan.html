@@ -1,0 +1,324 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</h1>
+<blockquote>
+<p>Independent study material. Not affiliated with or endorsed by Anthropic. All practice questions in this guide are <strong>original</strong>; none are leaked, official, or from the live item bank.
+Research date: 2026-10-18. The exam guide is "subject to change without notice" — re-check the official page before you book.</p>
+</blockquote>
+<hr />
+<h2>1. What is verified (official sources)</h2>
+<table>
+<thead>
+<tr>
+<th>Fact</th>
+<th>Value</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Credential</td>
+<td>Claude Certified Architect – Professional (code <strong>CCAR-P</strong>)</td>
+<td>Exam Guide v1.0 §5</td>
+</tr>
+<tr>
+<td>Items</td>
+<td><strong>63</strong></td>
+<td>Exam Guide §5</td>
+</tr>
+<tr>
+<td>Item format</td>
+<td><strong>Multiple-choice and multiple-response; each item states how many responses to select</strong></td>
+<td>Exam Guide §5</td>
+</tr>
+<tr>
+<td>Time</td>
+<td><strong>120 minutes</strong></td>
+<td>Exam Guide §5</td>
+</tr>
+<tr>
+<td>Passing score</td>
+<td><strong>720</strong> on a scaled 100–1,000 range; criterion-referenced</td>
+<td>Exam Guide §5, §9</td>
+</tr>
+<tr>
+<td>Fee</td>
+<td><strong>$175 USD</strong> per attempt</td>
+<td>Exam Guide §5; certification page</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>Proctored (online and/or Pearson VUE test center)</td>
+<td>Exam Guide §5, §10</td>
+</tr>
+<tr>
+<td>Validity</td>
+<td>12 months; free non-proctored renewal if on time</td>
+<td>Exam Guide §14</td>
+</tr>
+<tr>
+<td>Retakes</td>
+<td>Wait 14 / 30 / 90 days after 1st / 2nd / 3rd fail; max 4 attempts per rolling 12 months</td>
+<td>Exam Guide §11</td>
+</tr>
+<tr>
+<td>Prerequisites</td>
+<td>None mandatory. Recommended: 3+ yrs systems architecture/platform engineering; 6+ months production Claude/LLM work; end-to-end delivery experience</td>
+<td>Exam Guide §4</td>
+</tr>
+<tr>
+<td>Score report</td>
+<td>Pass/fail, scaled score, % correct per domain (domain % not used for pass/fail)</td>
+<td>Exam Guide §9</td>
+</tr>
+<tr>
+<td>Official sample questions</td>
+<td>3 (Domains 3, 2, 4)</td>
+<td>Exam Guide §8</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Official sources</strong>
+- Certification (registration) page: https://anthropic-partners.skilljar.com/claude-certified-architect-professional-certification
+- Certifications hub (links to the Exam Guide PDF): https://anthropic-partners.skilljar.com/page/partner-certifications
+- Prep course (free): https://anthropic-partners.skilljar.com/path/claude-certified-architect-professional</p>
+<h2>2. The official blueprint (7 domains)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Domain</th>
+<th>Weight</th>
+<th>Items (of 63, approx.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Solution Design &amp; Architecture</td>
+<td>17%</td>
+<td>~11</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Claude Models, Prompting &amp; Context Engineering</td>
+<td>13%</td>
+<td>~8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Integration</td>
+<td><strong>19%</strong></td>
+<td>~12</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Evaluation, Testing &amp; Optimization</td>
+<td>16%</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Governance, Safety &amp; Risk Management</td>
+<td>14%</td>
+<td>~9</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Stakeholder Communication &amp; Lifecycle Management</td>
+<td>14%</td>
+<td>~9</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Developer Productivity &amp; Operational Enablement</td>
+<td>7%</td>
+<td>~4</td>
+</tr>
+</tbody>
+</table>
+<p>(Item counts are my arithmetic from the weights; the guide says percentages are <em>approximate</em> proportions of scored items.)</p>
+<h3>Official task statements (verbatim structure from Exam Guide §6)</h3>
+<p><strong>D1 Solution Design &amp; Architecture:</strong> translate business problems into Claude-based solutions · design end-to-end architectures (input → processing → output → feedback loops) · select architectural patterns (workflow, agentic, augmented LLM) · design multi-agent systems and orchestration · apply decomposition techniques · align solutions to business value pillars (efficiency, transformation, productivity, cost, performance SLAs).</p>
+<p><strong>D2 Models, Prompting &amp; Context:</strong> select Claude models based on trade-offs · design system prompts, templates, guardrails · apply zero-shot / few-shot / chain-of-thought · optimize context windows and token usage · implement prompt reuse (caching, modular prompts, Skills).</p>
+<p><strong>D3 Integration:</strong> evaluate tool/agent configuration for capability bloat · analyze authN/authZ to find security gaps · evaluate accuracy–latency trade-offs · analyze observability challenges and choose monitoring at scale · design a RAG pipeline (chunking, indexing) · match retrieval strategy to data shape and query pattern · select integration mechanism (MCP, API/CLI, agent-to-agent) · evaluate progressive discovery vs. monolithic context.</p>
+<p><strong>D4 Evaluation, Testing &amp; Optimization:</strong> define metrics (accuracy, latency, cost, safety, security) · design eval datasets and test frameworks with mixed methodologies · A/B testing and iterative improvement · diagnose issues (prompt failure, hallucination, model mismatch) · optimize tokens/latency/cost-performance · monitor with logging and observability.</p>
+<p><strong>D5 Governance, Safety &amp; Risk:</strong> guardrails and safety controls · risks, limitations, failure modes · human-in-the-loop validation · compliance (e.g., GDPR, HIPAA, FedRAMP) · ethical AI (bias, fairness, transparency).</p>
+<p><strong>D6 Stakeholder Communication &amp; Lifecycle:</strong> structured discovery and requirements · communicate decisions and trade-offs · feedback loops and expectation alignment (incl. SLAs) · document architectures and give implementation guidance · lifecycle phases (discovery, design, handoff, monitoring, iteration).</p>
+<p><strong>D7 Developer Productivity &amp; Operational Enablement:</strong> configure Claude tools/environments for teams (e.g., Claude Code) · improve developer workflows with AI-assisted tooling · support debugging and operational issue resolution.</p>
+<h2>3. Important discrepancy: your five areas vs. the exam's seven domains</h2>
+<p>Your prompt lists five areas. Those match the <strong>five lessons of the official prep course</strong>, not the exam blueprint:</p>
+<table>
+<thead>
+<tr>
+<th>Prep-course lesson (official; duration)</th>
+<th>Maps to exam domains (my mapping from titles/descriptions — <em>inferred, not stated by Anthropic</em>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Claude Platform &amp; Solution Design (238 min)</td>
+<td>D1 + D2</td>
+</tr>
+<tr>
+<td>2. Enterprise Integration &amp; Production (158 min)</td>
+<td>D3 + part of D4 (budgets, observability, eval gates)</td>
+</tr>
+<tr>
+<td>3. Responsible AI, Safety &amp; Risk for Architects (114 min)</td>
+<td>D5</td>
+</tr>
+<tr>
+<td>4. Stakeholder Engagement, Lifecycle &amp; GTM (178 min)</td>
+<td>D6</td>
+</tr>
+<tr>
+<td>5. Team Enablement &amp; Operational Productivity (45 min)</td>
+<td>D7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gaps to know about</strong>
+1. <strong>Evaluation (D4, 16%)</strong> has no dedicated prep lesson. The course objective "build evaluations as acceptance criteria… the gate before any model or architecture change" touches it, but you must study it as its own domain. This guide does.
+2. <strong>Prep-course prerequisites</strong> (recommended, not required): Claude 101, Claude Code in Action, AI Fluency: Framework &amp; Foundations, Building with the Claude API, Introduction to Model Context Protocol, AI Capabilities and Limitations.
+3. <strong>RAG, compliance regimes (GDPR/HIPAA/FedRAMP), and the stakeholder domain</strong> are explicitly in the blueprint; make sure you cover them even though some prep lessons are brief.
+4. <strong>Go-to-market</strong> appears in the prep-course title but the Exam Guide's D6 task statements don't mention it explicitly. Treat GTM/positioning as <em>supplemental</em>.</p>
+<p><strong>How this guide is organized:</strong> by the 7 official domains (Parts 1–7), each tagged with the prep-course lesson it supports. Questions follow the official weights (see Part 9).</p>
+<h2>4. Official vs. supplemental material</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Items</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Official</strong></td>
+<td>Exam Guide v1.0; prep course; the 3 sample questions; Anthropic docs (API, models, prompt engineering, MCP, Skills) which the guide tells you to review</td>
+</tr>
+<tr>
+<td><strong>Supplemental (third-party; treat with care)</strong></td>
+<td>tutorialsdojo, findskill.ai, claudecertificationguide.com, Leanpub guides, first-taker blog posts. Useful for orientation, but some figures (e.g., "no official practice exam") are their claims, not Anthropic's</td>
+</tr>
+<tr>
+<td><strong>My own synthesis</strong></td>
+<td>Mermaid diagrams, templates, labs, case studies, all 150 questions, difficulty ratings</td>
+</tr>
+</tbody>
+</table>
+<p>Exam Guide §7 says no single course is required and Anthropic doesn't guarantee any resource ensures passing. It recommends: self-assess against the blueprint; review official docs; <strong>build and operate at least one end-to-end Claude solution including RAG, evaluation and observability</strong>; practice architectural decision-making; do the sample questions.</p>
+<h2>5. How the exam rewards thinking (from the three official samples)</h2>
+<p>All three official samples share a trap structure worth internalizing:</p>
+<ul>
+<li><strong>Sample 1 (least privilege):</strong> <em>remove</em> unneeded capability (B) beats <em>monitoring</em> it (logging) or <em>compensating</em> for it (confirmation prompts), and a bigger model doesn't change authorization scope.</li>
+<li><strong>Sample 2 (latency + cost):</strong> put static content first and <strong>enable prompt caching</strong> (C); don't truncate required policy, don't downsize blindly, don't move it to few-shot.</li>
+<li><strong>Sample 3 (confident wrong answers after document refresh):</strong> investigate <strong>retrieval/indexing</strong> first (B) — it's what changed.</li>
+</ul>
+<p>Pattern: <strong>find the root cause or the structural control; reject compensating-control theater.</strong> Expect distractors that are plausible, responsible-sounding, and wrong for the specific problem.</p>
+<h2>6. Study plan (8 weeks, ~6–8 h/week; compress if experienced)</h2>
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>Focus</th>
+<th>Deliverables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Part 0 + D1 (Solution Design) + Lab 1</td>
+<td>ADR for a vague requirement</td>
+</tr>
+<tr>
+<td>2</td>
+<td>D2 (Models/Prompting/Context) + Lab 2</td>
+<td>Prompt + cached-prefix design</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D3 (Integration — heaviest) + Labs 3–4</td>
+<td>Tool authZ matrix; RAG design</td>
+</tr>
+<tr>
+<td>4</td>
+<td>D4 (Evaluation) + Lab 5</td>
+<td>Eval dataset + regression gate</td>
+</tr>
+<tr>
+<td>5</td>
+<td>D5 (Governance/Safety) + Lab 6</td>
+<td>Control register for an agent</td>
+</tr>
+<tr>
+<td>6</td>
+<td>D6 (Stakeholders/Lifecycle) + Lab 7–8</td>
+<td>Exec summary, readiness checklist</td>
+</tr>
+<tr>
+<td>7</td>
+<td>D7 (Enablement) + case studies 1–6</td>
+<td>Runbook + onboarding plan</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Question bank in timed blocks (63 Qs / 120 min), review misses by domain</td>
+<td>Domain score sheet</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Timing rule of thumb:</strong> 120 min ÷ 63 ≈ 1.9 min per item. Practice 20-question blocks in ≤ 38 min.</p>
+<h2>7. Files in this guide</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00_Exam_Scope_and_Study_Plan.md</code></td>
+<td>This file</td>
+</tr>
+<tr>
+<td><code>01_D1_Solution_Design.md</code> … <code>07_D7_Enablement.md</code></td>
+<td>Curriculum, one file per official domain, 14-part framework per topic</td>
+</tr>
+<tr>
+<td><code>08_Labs.md</code></td>
+<td>Eight hands-on labs</td>
+</tr>
+<tr>
+<td><code>09_Question_Bank_*.md</code></td>
+<td>150 original MCQs + register</td>
+</tr>
+<tr>
+<td><code>10_Case_Studies.md</code></td>
+<td>Six enterprise case studies</td>
+</tr>
+</tbody>
+</table>
+<h2>8. Conventions used</h2>
+<ul>
+<li><strong>Pseudocode</strong> is labeled <code># PSEUDOCODE</code>. <strong>Executable</strong> snippets are labeled <code># EXECUTABLE</code> and use the Anthropic Python SDK (<code>pip install anthropic</code>); check the current SDK and model IDs in the docs before running.</li>
+<li>Model names: current API model strings at the time of writing are <code>claude-fable-5-1</code>, <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code>. <strong>Pricing, context windows, and minimum cacheable lengths change; always confirm on the models overview and pricing pages.</strong> The exam tests <em>selection trade-offs</em>, not memorized prices.</li>
+<li>Doc links: https://docs.claude.com (API/platform), https://platform.claude.com/docs (docs mirror), https://modelcontextprotocol.io (MCP spec), https://www.anthropic.com/research/building-effective-agents.</li>
+</ul>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>

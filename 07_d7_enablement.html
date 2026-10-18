@@ -1,0 +1,134 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Part 7 — Domain 7: Developer Productivity &amp; Operational Enablement (7%) | CCAR-P Study Guide</title><meta name="robots" content="index,follow">
+<style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--bd:#ddd;--ac:#1d4ed8;--cd:#f5f6f8}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e8e8e8;--mut:#9aa;--bd:#2c3138;--ac:#7aa7ff;--cd:#1a1f26}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif;display:flex;flex-wrap:wrap}
+nav{width:260px;padding:16px;border-right:1px solid var(--bd);box-sizing:border-box;font-size:14px}
+nav a{display:block;padding:4px 0;color:var(--mut);text-decoration:none}nav a:hover,nav a.on{color:var(--ac)}
+nav b{display:block;margin-bottom:8px}
+main{flex:1;min-width:0;max-width:900px;padding:16px 24px 64px;margin:0 auto}
+pre,code{background:var(--cd);border-radius:4px}pre{padding:12px;overflow:auto}code{padding:1px 4px}pre code{padding:0}
+table{border-collapse:collapse;display:block;overflow:auto}td,th{border:1px solid var(--bd);padding:6px 10px}
+blockquote{margin:0;padding:0 14px;border-left:3px solid var(--ac);color:var(--mut)}a{color:var(--ac)}
+.mermaid{background:var(--cd);padding:8px;overflow:auto}
+@media(max-width:760px){nav{width:100%;border-right:0;border-bottom:1px solid var(--bd)}}</style></head>
+<body><nav><b><a href="index.html">CCAR-P Study Guide</a></b><a href="00_exam_scope_and_study_plan.html">CCAR-P Study Guide — Part 0: Verified Exam Scope, Crosswalk, and Study Plan</a><a href="01_d1_solution_design.html">Domain 1: Solution Design &amp; Architecture (17%)</a><a href="02_d2_models_prompting_context.html">Domain 2: Claude Models, Prompting &amp; Context Engineering (13%)</a><a href="03_d3_integration.html">Domain 3: Integration (19%) — the heaviest domain</a><a href="04_d4_evaluation.html">Domain 4: Evaluation, Testing &amp; Optimization (16%)</a><a href="05_d5_governance_safety_risk.html">Domain 5: Governance, Safety &amp; Risk Management (14%)</a><a href="06_d6_stakeholder_lifecycle.html">Domain 6: Stakeholder Communication &amp; Lifecycle Management (14%)</a><a href="07_d7_enablement.html">Domain 7: Developer Productivity &amp; Operational Enablement (7%)</a><a href="08_labs.html">Eight Hands-On Architecture Labs</a><a href="09_question_register.html">Question Register (Q1–Q150)</a><a href="09a_questions_d1_solution_design.html">Question Bank: Domain 1, Solution Design &amp; Architecture (Q1–Q26)</a><a href="09b_questions_d2_models_prompting_context.html">Question Bank: Domain 2, Claude Models, Prompting &amp; Context Engineering (Q27–Q45)</a><a href="09c_questions_d3_integration.html">Question Bank: Domain 3, Integration (Q46–Q74)</a><a href="09d_questions_d4_evaluation.html">Question Bank: Domain 4, Evaluation, Testing &amp; Optimization (Q75–Q98)</a><a href="09e_questions_d5_governance_safety_risk.html">Question Bank: Domain 5, Governance, Safety &amp; Risk Management (Q99–Q119)</a><a href="09f_questions_d6_stakeholder_lifecycle.html">Question Bank: Domain 6, Stakeholder Communication &amp; Lifecycle Management (Q120–Q140)</a><a href="09g_questions_d7_enablement.html">Question Bank: Domain 7, Developer Productivity &amp; Operational Enablement (Q141–Q150)</a><a href="10_case_studies.html">Six Enterprise Architecture Case Studies</a></nav><main><h1>Part 7 — Domain 7: Developer Productivity &amp; Operational Enablement (7%)</h1>
+<p><em>Prep-course lesson: Team Enablement &amp; Operational Productivity (45 min). Official tasks: configure Claude tools and environments for teams (e.g., Claude Code) · improve developer workflows using AI-assisted tooling · support debugging and operational issue resolution.</em></p>
+<p>Topics: <strong>7.1</strong> Configuring Claude tools for teams · <strong>7.2</strong> Developer workflows and AI-assisted tooling · <strong>7.3</strong> Operations: runbooks, troubleshooting, incident ownership · <strong>7.4</strong> Onboarding, versioning, documentation standards, and continuous improvement</p>
+<blockquote>
+<p>Verify Claude Code specifics (file names, settings keys, hook events) against the current Claude Code docs at https://code.claude.com/docs — they evolve. The exam tests <em>what to standardize and why</em>.</p>
+</blockquote>
+<hr />
+<h2>7.1 Configuring Claude tools and environments for teams</h2>
+<p><strong>1. Objectives.</strong> Standardize shared configuration (project memory/instructions, permissions, skills, MCP servers, hooks) so behavior is consistent, reviewable, and secure across a team.</p>
+<p><strong>2. Prerequisites.</strong> Claude Code in Action course; D3 tool/MCP concepts.</p>
+<p><strong>3. Beginner.</strong> Instead of every developer configuring Claude differently, the team keeps shared settings in the repository (version controlled), so everyone gets the same rules, tools, and conventions.</p>
+<p><strong>4. Advanced.</strong> Typical layers in Claude Code (names per current docs; verify): <strong>project instructions file</strong> (<code>CLAUDE.md</code>, with user-level and directory-level variants forming a hierarchy) holding build/test commands, architecture notes, code style, and "do/don't" rules; <strong>settings with permission rules</strong> (allow/ask/deny for tools and commands — e.g., deny reading secrets, require approval for destructive commands); <strong>MCP server configuration</strong> shared at project scope (reviewed and pinned; credentials via environment, never committed); <strong>skills</strong> (project-scoped skills shared via version control; personal skills for individual use); <strong>hooks</strong> (deterministic scripts at lifecycle points — e.g., run formatter/linter, block dangerous commands — because hooks <em>enforce</em> where instructions only <em>request</em>); <strong>subagents/commands</strong> for repeatable roles and workflows; <strong>plugins</strong> to distribute bundles. Governance: managed/organization-level settings for security-critical policy; least-privilege defaults; allow-list MCP servers and skill sources; code-review changes to shared config like code.</p>
+<p><strong>5. Steps.</strong> (1) Create a project instructions file with commands, conventions, and architecture overview (keep it concise; link details). (2) Define permission policy (deny secrets, ask for writes/network). (3) Add team skills for recurring procedures (code review checklist, release notes). (4) Add hooks for enforced checks. (5) Pin and review MCP servers. (6) PR-review all config changes; document how to override locally.</p>
+<p><strong>6. Example instructions file (illustrative):</strong></p>
+<pre><code class="language-markdown"># Project: claims-assistant
+## Commands
+- Test: `pytest -q` · Lint: `ruff check .` · Evals: `make eval` (must pass before PR)
+## Architecture
+- app/ (API), pipelines/ (RAG ingest), prompts/ (versioned), evals/ (datasets + graders)
+## Rules
+- Never edit `prompts/` without running `make eval`. Prompts are versioned (see CHANGELOG).
+- Do not read `.env` or `secrets/`. Use the tool broker for all backend calls.
+- Write tests for every new tool; validate all tool arguments server-side.
+</code></pre>
+<p><strong>7. Scenario.</strong> Five developers get inconsistent code quality and one accidentally runs a destructive command. Fix: shared permission rules (deny/ask), a lint/format hook, and a team skill for PR review.</p>
+<p><strong>8. Recommended/alternatives.</strong> Version-controlled shared config + enforced hooks + least-privilege permissions. Alternative: each dev self-configures (drift, unsafe defaults); giant instruction files (bloat; tokens; ignored rules).</p>
+<p><strong>9. Security.</strong> Secrets via env/secret manager; permission denies for sensitive paths; vet third-party MCP servers/skills/plugins (supply chain); don't give agents prod credentials.</p>
+<p><strong>10. Cost/productivity.</strong> Concise instructions reduce tokens; skills load on demand; shared config reduces re-explaining.</p>
+<p><strong>11. Mistakes.</strong> Putting enforcement in prose instead of hooks/permissions; committing credentials; unreviewed MCP servers; instruction files that grow without pruning.</p>
+<p><strong>12. Scenario question.</strong> <em>Team wants to guarantee tests run after every edit.</em> → Use a hook (deterministic) rather than asking in the instructions file.</p>
+<p><strong>13. Revision.</strong> Shared, versioned, least-privilege config; hooks enforce; skills for procedures; vet dependencies.</p>
+<p><strong>14. Docs.</strong> Claude Code docs (settings, memory/CLAUDE.md, hooks, MCP, skills, plugins); Claude Code in Action course.</p>
+<hr />
+<h2>7.2 Improving developer workflows with AI-assisted tooling</h2>
+<p><strong>1. Objectives.</strong> Identify high-leverage workflows (exploration, test generation, refactoring, review, docs, CI); define guardrails and measure productivity.</p>
+<p><strong>2. Prerequisites.</strong> 7.1.</p>
+<p><strong>3. Beginner.</strong> Use Claude where it removes toil — understanding unfamiliar code, writing tests, drafting changes — while humans review and own outcomes.</p>
+<p><strong>4. Advanced.</strong> Good patterns: <strong>explore → plan → implement → verify</strong> (ask for a plan first on non-trivial changes; run tests and linters to verify); <strong>tests as the objective</strong> (give Claude a runnable success check); <strong>small, reviewable diffs</strong>; <strong>context hygiene</strong> (point to specific files, keep sessions focused, reset when drifting); <strong>parallel sessions/subagents</strong> for independent tasks; <strong>CI integration</strong> (automated review comments, test-failure triage) with least-privilege tokens; <strong>headless/non-interactive modes</strong> for scripted tasks. Guardrails: human review of all merged code; no secrets in prompts; license/IP policy; protected branches; evals for AI-assisted pipelines. <strong>Measure:</strong> cycle time, PR size/review time, defect rate, rework, adoption, developer satisfaction — avoid vanity metrics (lines generated).</p>
+<p><strong>5. Steps.</strong> (1) Interview devs for top toil. (2) Pilot 2–3 workflows with baseline metrics. (3) Write skills/commands for each. (4) Add verification (tests/hooks). (5) Review metrics; expand or drop.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  I[Issue] --&gt; X[Explore code] --&gt; P[Plan] --&gt; IM[Implement]
+  IM --&gt; V[Verify: tests, lint, hooks]
+  V -- fail --&gt; IM
+  V -- pass --&gt; PR[PR + human review] --&gt; M[Merge via CI gates]
+</pre>
+
+<p><strong>7. Scenario.</strong> Legacy module with no tests: Claude generates characterization tests first, then refactors against them; reviewers check test intent.</p>
+<p><strong>8. Recommended/alternatives.</strong> Verify-driven workflows. Alternative: accept large unreviewed diffs.</p>
+<p><strong>9. Security/governance.</strong> Treat AI-authored code as untrusted until reviewed; run SAST/dependency checks; restrict agent credentials.</p>
+<p><strong>10. Cost.</strong> Track token spend per team; use cheaper tiers for mechanical tasks.</p>
+<p><strong>11. Mistakes.</strong> No verification; vague prompts; giant sessions; measuring volume not outcomes.</p>
+<p><strong>12. Scenario question.</strong> <em>Developers merge Claude-generated changes with failing edge cases.</em> → Require tests/CI gates and human review; give Claude the failing test as the objective.</p>
+<p><strong>13. Revision.</strong> Plan→implement→verify; tests as objective; small diffs; measure outcomes.</p>
+<p><strong>14. Docs.</strong> Claude Code docs (workflows, headless mode, CI integration).</p>
+<hr />
+<h2>7.3 Operations: runbooks, troubleshooting, and incident ownership</h2>
+<p><strong>1. Objectives.</strong> Create runbooks; troubleshoot LLM-system incidents; assign ownership and escalation.</p>
+<p><strong>2. Prerequisites.</strong> D3.7, D4.4.</p>
+<p><strong>3. Beginner.</strong> When something breaks at 2 a.m., on-call needs a step-by-step guide and to know who owns what.</p>
+<p><strong>4. Advanced.</strong> Incident classes: <strong>quality regression</strong> (bad answers), <strong>safety/security event</strong> (injection success, data exposure), <strong>availability/latency</strong> (API errors, rate limits), <strong>cost spike</strong>, <strong>integration failure</strong> (tool/schema drift, expired tokens), <strong>data/index issue</strong> (stale retrieval). Each has triage steps: check recent changes → dashboards → traces → isolate component → mitigate (rollback prompt/model/config, disable tool, switch fallback, throttle) → communicate → root-cause → regression test → postmortem (blameless). <strong>Severity levels</strong> tied to impact; <strong>ownership matrix</strong> (RACI) covering prompts/config, retrieval/data, tools/integrations, platform/infra, safety/security, business owner. <strong>Kill switches</strong> for tools/features. Keep <strong>break-glass</strong> access audited.</p>
+<p><strong>5. Runbook template.</strong></p>
+<pre><code>Runbook: Elevated wrong-answer reports
+Owner: AI platform on-call | Severity guide: Sev2 if &gt;2% flagged in 1h
+1. Check changelog: any prompt/model/index/config change in last 24h? If yes → roll back; confirm.
+2. Dashboards: retrieval hit rate, tool error rate, cache hit rate, token/request.
+3. Pull 10 flagged traces: was correct context retrieved? tool args correct? output truncated?
+4. Index issue? Run index health job; compare doc counts/versions; re-index affected sources.
+5. Mitigation options: roll back prompt (cmd), switch to fallback model (flag), disable feature X (flag), route to human.
+6. Communicate: status page + stakeholders every 30 min.
+7. After: add failing cases to eval set; postmortem within 5 business days.
+Escalate: security lead if data exposure suspected; business owner if customer impact &gt; threshold.
+</code></pre>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart TD
+  A[Alert] --&gt; T[Triage: severity + recent changes]
+  T --&gt; I[Isolate component via traces]
+  I --&gt; M[Mitigate: rollback / flag off / fallback]
+  M --&gt; C[Communicate]
+  C --&gt; R[Root cause + regression test]
+  R --&gt; P[Blameless postmortem + actions]
+</pre>
+
+<p><strong>7. Scenario.</strong> Costs triple overnight: a prompt change moved examples above a cached prefix, destroying cache hits and increasing tokens. Runbook step "check changelog + cache hit rate" finds it in minutes.</p>
+<p><strong>8. Recommended/alternatives.</strong> Practiced runbooks with kill switches. Alternative: ad-hoc debugging in prod.</p>
+<p><strong>9. Governance.</strong> Security incidents follow the security incident-response process; preserve evidence.</p>
+<p><strong>10. Reliability.</strong> Measure MTTD/MTTR; run game days.</p>
+<p><strong>11. Mistakes.</strong> No named owner; no rollback path; fixing without adding a regression test; skipping postmortems.</p>
+<p><strong>12. Scenario question.</strong> <em>Support reports wrong answers started yesterday; nothing was "deployed".</em> → Check data/index refreshes, config flags, provider changes, and upstream data — "no deploy" isn't "no change".</p>
+<p><strong>13. Revision.</strong> Classify → triage → isolate → mitigate → communicate → root-cause → regress-test.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 5; Anthropic status/service pages; your incident-management policy.</p>
+<hr />
+<h2>7.4 Onboarding, versioning, documentation standards, and continuous improvement</h2>
+<p><strong>1. Objectives.</strong> Onboard teams, version prompts/config, set documentation standards, and run continuous improvement with change management.</p>
+<p><strong>2. Prerequisites.</strong> 7.1–7.3; D4.3.</p>
+<p><strong>3. Beginner.</strong> Treat prompts and configs like code: versioned, reviewed, tested, released.</p>
+<p><strong>4. Advanced.</strong> <strong>Versioning:</strong> prompts/templates, tool schemas, retrieval config, model IDs, eval datasets, and skills live in source control with semantic versions and a changelog; each release links to the eval run that approved it; deployments reference immutable versions (pin model IDs). <strong>Change management:</strong> PR review (including a domain expert for prompt changes), eval gate, canary, rollback; announce changes to support/ops. <strong>Documentation standards:</strong> README per component, ADRs, runbooks, data-flow diagrams, "how to add a tool/prompt/eval" guides, glossary; docs reviewed like code. <strong>Onboarding plan (first 30 days):</strong> week 1 overview + architecture walkthrough + sandbox access; week 2 shadow on-call, run evals locally; week 3 ship a small prompt/eval change through the gate; week 4 lead a runbook drill. <strong>Training and adoption:</strong> role-based sessions (developers, support, analysts), champions network, office hours, feedback channel, usage and satisfaction metrics. <strong>Continuous improvement:</strong> monthly scorecard review; failure-driven eval growth; deprecation calendar; quarterly architecture review; retire unused tools/prompts.</p>
+<p><strong>5. Steps.</strong> (1) Move prompts/configs into repo. (2) Add CI eval gates. (3) Write onboarding path and checklists. (4) Establish release cadence and change log. (5) Schedule reviews.</p>
+<p><strong>6. Diagram.</strong></p>
+<pre class="mermaid">flowchart LR
+  E[Edit prompt/config] --&gt; PR[Pull request + reviewer]
+  PR --&gt; CI[CI: evals + safety + cost gates]
+  CI --&gt; RL[Release vX.Y + changelog]
+  RL --&gt; CN[Canary] --&gt; PD[Production]
+  PD --&gt; FB[Feedback/incidents → new eval cases]
+  FB --&gt; E
+</pre>
+
+<p><strong>7. Scenario.</strong> A well-meaning analyst edits a production prompt in a console; quality drops; nobody knows what changed. Fix: prompts only change via PR+gate; console edits disabled.</p>
+<p><strong>8. Recommended/alternatives.</strong> Everything-as-code with eval gates. Alternative: prompts in a shared doc or console (no audit, no rollback).</p>
+<p><strong>9. Governance.</strong> Change history is audit evidence; separation of duties for high-risk changes.</p>
+<p><strong>10. Cost/time.</strong> Gates add minutes but prevent expensive regressions.</p>
+<p><strong>11. Mistakes.</strong> Unversioned prompts; no pinned model IDs; docs rot; training once then never.</p>
+<p><strong>12. Scenario question.</strong> <em>Two teams use different copies of "the" prompt and results diverge.</em> → Single versioned source of truth with a release process.</p>
+<p><strong>13. Revision.</strong> Version everything; gate changes; onboarding path; owners; continuous improvement loop.</p>
+<p><strong>14. Docs.</strong> Prep Lesson 5; Exam Guide §6 D7.</p>
+<hr><p style="color:var(--mut);font-size:13px">Unofficial study material. Practice questions are original and are not official or leaked exam items. Verify exam details at the official Anthropic certification pages.</p></main>
+<script type="module">import m from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+m.initialize({startOnLoad:false,theme:matchMedia("(prefers-color-scheme:dark)").matches?"dark":"default"});await m.run({querySelector:".mermaid"});</script>
+</body></html>
